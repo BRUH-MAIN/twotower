@@ -1,0 +1,38 @@
+[
+  {
+    "name": "size_rfs_ms_thresh01_s42__WLE__multiclass",
+    "seed": 42,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "input_mode": "torchvision",
+    "multiscale_sizes": [256, 320, 384],
+    "size_rfs_threshold": 0.1
+  },
+  {
+    "name": "size_rfs_ms_thresh03_s42__WLE__multiclass",
+    "seed": 42,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "input_mode": "torchvision",
+    "multiscale_sizes": [256, 320, 384],
+    "size_rfs_threshold": 0.3
+  },
+  {
+    "name": "size_rfs_ms_thresh04_s42__WLE__multiclass",
+    "seed": 42,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "input_mode": "torchvision",
+    "multiscale_sizes": [256, 320, 384],
+    "size_rfs_threshold": 0.4
+  }
+]

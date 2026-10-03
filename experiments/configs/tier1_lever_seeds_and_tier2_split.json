@@ -1,0 +1,65 @@
+[
+  {
+    "name": "tier1_ema_only_s7",
+    "seed": 7,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "ema": true
+  },
+  {
+    "name": "tier1_ema_only_s123",
+    "seed": 123,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "ema": true
+  },
+  {
+    "name": "tier1_multiscale_only_s7",
+    "seed": 7,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "input_mode": "torchvision",
+    "multiscale_sizes": [256, 320, 384]
+  },
+  {
+    "name": "tier1_multiscale_only_s123",
+    "seed": 123,
+    "modality": "WLE",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "input_mode": "torchvision",
+    "multiscale_sizes": [256, 320, 384]
+  },
+  {
+    "name": "tier2_eus_seesaw_only_s42",
+    "seed": 42,
+    "modality": "EUS",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "loss_fn": "seesaw",
+    "seesaw_p": 0.8
+  },
+  {
+    "name": "tier2_eus_augment_only_s42",
+    "seed": 42,
+    "modality": "EUS",
+    "task": "multiclass",
+    "backbone": "fasterrcnn_mobilenet_320",
+    "epochs": 100,
+    "early_stop_patience": 15,
+    "augment": {"ops": ["flip", "color", "rotate", "speckle_noise", "ultrasound_gain"]}
+  }
+]

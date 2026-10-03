@@ -1,0 +1,19 @@
+{
+  "run_names": [
+    "dinov3_vits16__WLE__binary__freeze-partial__os-none__loss-ce__s42",
+    "dinov3_vits16__WLE__binary__freeze-partial__os-none__loss-ce__s123",
+    "dinov3_vits16__WLE__binary__freeze-partial__os-none__loss-ce__s7"
+  ],
+  "modality": "WLE",
+  "task": "binary",
+  "individual_bal": [
+    0.7954679724534799,
+    0.8134227376712814,
+    0.810099997641565
+  ],
+  "individual_bal_mean": 0.8063302359221088,
+  "individual_bal_std": 0.0077996464053486396,
+  "ensemble_accuracy": 0.850550230741924,
+  "ensemble_balanced_accuracy": 0.820916959505672,
+  "delta_vs_mean_individual": 0.014586723583563166
+}

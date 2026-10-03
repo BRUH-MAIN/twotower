@@ -1,0 +1,36 @@
+{
+  "checkpoint": "runs/loco_center3_style_s7/best_model.pth",
+  "modality": "WLE",
+  "task": "binary",
+  "held_out_centers": [
+    "Center-3"
+  ],
+  "n_images": 368,
+  "n_patients": 68,
+  "AP@0.5": 0.12097972090608716,
+  "precision": 0.4942528735632184,
+  "recall": 0.11497326203208556,
+  "f1": 0.18655097613882865,
+  "per_class": {
+    "NET": {
+      "AP@0.5": 0.23587540951939984,
+      "AP@0.5_conf": 0.08423634741315429,
+      "precision": 0.5443037974683544,
+      "recall": 0.15412186379928317,
+      "f1": 0.24022346368715083,
+      "tp": 43,
+      "fp": 36,
+      "fn": 236
+    },
+    "non-NET": {
+      "AP@0.5": 0.006084032292774487,
+      "AP@0.5_conf": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0,
+      "fp": 8,
+      "fn": 95
+    }
+  }
+}

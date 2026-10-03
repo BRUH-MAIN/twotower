@@ -1,0 +1,132 @@
+{
+  "comparison": [
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "exp3_trained_classifier": {
+        "full": 0.7061,
+        "ret_bg_patch": 0.947,
+        "ret_boxmap": 0.475
+      },
+      "resnet_svm": {
+        "full": 0.6475,
+        "bg_patch": 0.6327,
+        "boxmap": 0.5971,
+        "ret_bg_patch": 0.9,
+        "ret_boxmap": 0.658
+      },
+      "dinov3_svm": {
+        "full": 0.7374,
+        "bg_patch": 0.6795,
+        "boxmap": 0.6192,
+        "ret_bg_patch": 0.756,
+        "ret_boxmap": 0.502
+      },
+      "dinov3_minus_resnet_gap": {
+        "full": 0.0899,
+        "bg_patch": 0.0468,
+        "boxmap": 0.0221
+      },
+      "dinov3_minus_resnet_ret_gap": {
+        "ret_bg_patch": -0.144,
+        "ret_boxmap": -0.156
+      }
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "exp3_trained_classifier": {
+        "full": 0.3259,
+        "ret_bg_patch": 0.79,
+        "ret_boxmap": 0.796
+      },
+      "resnet_svm": {
+        "full": 0.2979,
+        "bg_patch": 0.2933,
+        "boxmap": 0.2849,
+        "ret_bg_patch": 0.953,
+        "ret_boxmap": 0.867
+      },
+      "dinov3_svm": {
+        "full": 0.3819,
+        "bg_patch": 0.3257,
+        "boxmap": 0.3327,
+        "ret_bg_patch": 0.691,
+        "ret_boxmap": 0.73
+      },
+      "dinov3_minus_resnet_gap": {
+        "full": 0.084,
+        "bg_patch": 0.0324,
+        "boxmap": 0.0478
+      },
+      "dinov3_minus_resnet_ret_gap": {
+        "ret_bg_patch": -0.262,
+        "ret_boxmap": -0.137
+      }
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "exp3_trained_classifier": {
+        "full": 0.6787,
+        "ret_bg_patch": 0.679,
+        "ret_boxmap": 0.929
+      },
+      "resnet_svm": {
+        "full": 0.5725,
+        "bg_patch": 0.5395,
+        "boxmap": 0.6083,
+        "ret_bg_patch": 0.545,
+        "ret_boxmap": 1.494
+      },
+      "dinov3_svm": {
+        "full": 0.6042,
+        "bg_patch": 0.5886,
+        "boxmap": 0.6233,
+        "ret_bg_patch": 0.85,
+        "ret_boxmap": 1.183
+      },
+      "dinov3_minus_resnet_gap": {
+        "full": 0.0317,
+        "bg_patch": 0.0491,
+        "boxmap": 0.015
+      },
+      "dinov3_minus_resnet_ret_gap": {
+        "ret_bg_patch": 0.305,
+        "ret_boxmap": -0.311
+      }
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "exp3_trained_classifier": {
+        "full": 0.3222,
+        "ret_bg_patch": 0.75,
+        "ret_boxmap": 1.89
+      },
+      "resnet_svm": {
+        "full": 0.239,
+        "bg_patch": 0.2338,
+        "boxmap": 0.2923,
+        "ret_bg_patch": 0.867,
+        "ret_boxmap": 2.367
+      },
+      "dinov3_svm": {
+        "full": 0.2464,
+        "bg_patch": 0.2477,
+        "boxmap": 0.3212,
+        "ret_bg_patch": 1.028,
+        "ret_boxmap": 2.612
+      },
+      "dinov3_minus_resnet_gap": {
+        "full": 0.0074,
+        "bg_patch": 0.0139,
+        "boxmap": 0.0289
+      },
+      "dinov3_minus_resnet_ret_gap": {
+        "ret_bg_patch": 0.161,
+        "ret_boxmap": 0.245
+      }
+    }
+  ]
+}

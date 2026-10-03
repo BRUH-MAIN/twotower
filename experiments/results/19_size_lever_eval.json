@@ -1,0 +1,530 @@
+[
+  {
+    "run": "size_rfs_ms_s42__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_ms",
+    "overall": 0.4131,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.3806,
+        "f1": 0.6525,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.3773,
+        "f1": 0.6972,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.4483,
+        "f1": 0.7383,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s123__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_ms",
+    "overall": 0.3874,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2933,
+        "f1": 0.4074,
+        "n": 187
+      },
+      "tertile2": {
+        "AP@0.5": 0.4429,
+        "f1": 0.5096,
+        "n": 187
+      },
+      "tertile3": {
+        "AP@0.5": 0.4073,
+        "f1": 0.4712,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s7__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_ms",
+    "overall": 0.46,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.3404,
+        "f1": 0.6786,
+        "n": 194
+      },
+      "tertile2": {
+        "AP@0.5": 0.3806,
+        "f1": 0.74,
+        "n": 193
+      },
+      "tertile3": {
+        "AP@0.5": 0.4541,
+        "f1": 0.689,
+        "n": 194
+      }
+    }
+  },
+  {
+    "run": "tier1_multiscale_only_s42",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "ms_only",
+    "overall": 0.4076,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2996,
+        "f1": 0.6277,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.4192,
+        "f1": 0.7263,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.4385,
+        "f1": 0.7376,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "tier1_multiscale_only_s123",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "ms_only",
+    "overall": 0.4214,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2102,
+        "f1": 0.4192,
+        "n": 187
+      },
+      "tertile2": {
+        "AP@0.5": 0.4018,
+        "f1": 0.573,
+        "n": 187
+      },
+      "tertile3": {
+        "AP@0.5": 0.5255,
+        "f1": 0.6633,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "tier1_multiscale_only_s7",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "ms_only",
+    "overall": 0.4591,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.3039,
+        "f1": 0.601,
+        "n": 194
+      },
+      "tertile2": {
+        "AP@0.5": 0.4082,
+        "f1": 0.603,
+        "n": 193
+      },
+      "tertile3": {
+        "AP@0.5": 0.5184,
+        "f1": 0.5991,
+        "n": 194
+      }
+    }
+  },
+  {
+    "run": "ms_only_s42__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "ms_only",
+    "overall": 0.6474,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.4276,
+        "f1": 0.6185,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.6639,
+        "f1": 0.7581,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.7912,
+        "f1": 0.7107,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "ms_only_s123__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "ms_only",
+    "overall": 0.6551,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.4711,
+        "f1": 0.6467,
+        "n": 187
+      },
+      "tertile2": {
+        "AP@0.5": 0.6976,
+        "f1": 0.7132,
+        "n": 187
+      },
+      "tertile3": {
+        "AP@0.5": 0.7316,
+        "f1": 0.7053,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "ms_only_s7__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "ms_only",
+    "overall": 0.7107,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.5258,
+        "f1": 0.7259,
+        "n": 194
+      },
+      "tertile2": {
+        "AP@0.5": 0.6979,
+        "f1": 0.755,
+        "n": 193
+      },
+      "tertile3": {
+        "AP@0.5": 0.7475,
+        "f1": 0.6925,
+        "n": 194
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s42__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "size_rfs_ms",
+    "overall": 0.6314,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.4509,
+        "f1": 0.6735,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.6361,
+        "f1": 0.7475,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.7745,
+        "f1": 0.7517,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s123__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "size_rfs_ms",
+    "overall": 0.6565,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.4973,
+        "f1": 0.6749,
+        "n": 187
+      },
+      "tertile2": {
+        "AP@0.5": 0.6887,
+        "f1": 0.7044,
+        "n": 187
+      },
+      "tertile3": {
+        "AP@0.5": 0.7484,
+        "f1": 0.7475,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s7__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "size_rfs_ms",
+    "overall": 0.7315,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.5599,
+        "f1": 0.6392,
+        "n": 194
+      },
+      "tertile2": {
+        "AP@0.5": 0.713,
+        "f1": 0.7711,
+        "n": 193
+      },
+      "tertile3": {
+        "AP@0.5": 0.7816,
+        "f1": 0.7005,
+        "n": 194
+      }
+    }
+  },
+  {
+    "run": "ms_only_s456__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "ms_only",
+    "overall": 0.6625,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.5179,
+        "f1": 0.6319,
+        "n": 186
+      },
+      "tertile2": {
+        "AP@0.5": 0.6251,
+        "f1": 0.71,
+        "n": 186
+      },
+      "tertile3": {
+        "AP@0.5": 0.729,
+        "f1": 0.7235,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "ms_only_s789__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "ms_only",
+    "overall": 0.6848,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.5347,
+        "f1": 0.5866,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.6124,
+        "f1": 0.6207,
+        "n": 188
+      },
+      "tertile3": {
+        "AP@0.5": 0.8255,
+        "f1": 0.7333,
+        "n": 189
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s456__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "size_rfs_ms",
+    "overall": 0.6593,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.5188,
+        "f1": 0.6505,
+        "n": 186
+      },
+      "tertile2": {
+        "AP@0.5": 0.6352,
+        "f1": 0.6891,
+        "n": 186
+      },
+      "tertile3": {
+        "AP@0.5": 0.7148,
+        "f1": 0.6786,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_s789__WLE__binary",
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "size_rfs_ms",
+    "overall": 0.6789,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.5142,
+        "f1": 0.6203,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.6045,
+        "f1": 0.67,
+        "n": 188
+      },
+      "tertile3": {
+        "AP@0.5": 0.8137,
+        "f1": 0.74,
+        "n": 189
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_anchors_s42__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_ms_anchors",
+    "overall": 0.3879,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2538,
+        "f1": 0.64,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.3669,
+        "f1": 0.7208,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.4251,
+        "f1": 0.7482,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_anchors_s123__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_ms_anchors",
+    "overall": 0.432,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2218,
+        "f1": 0.4874,
+        "n": 187
+      },
+      "tertile2": {
+        "AP@0.5": 0.4208,
+        "f1": 0.6284,
+        "n": 187
+      },
+      "tertile3": {
+        "AP@0.5": 0.4763,
+        "f1": 0.6715,
+        "n": 187
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_anchors_s7__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_ms_anchors",
+    "overall": 0.431,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.4098,
+        "f1": 0.6791,
+        "n": 194
+      },
+      "tertile2": {
+        "AP@0.5": 0.3905,
+        "f1": 0.7417,
+        "n": 193
+      },
+      "tertile3": {
+        "AP@0.5": 0.395,
+        "f1": 0.6417,
+        "n": 194
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_thresh01_s42__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_thresh01",
+    "overall": 0.4215,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2561,
+        "f1": 0.6632,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.4183,
+        "f1": 0.7291,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.4499,
+        "f1": 0.7363,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_thresh03_s42__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_thresh03",
+    "overall": 0.3998,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.3733,
+        "f1": 0.5646,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.3874,
+        "f1": 0.6404,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.4268,
+        "f1": 0.5969,
+        "n": 190
+      }
+    }
+  },
+  {
+    "run": "size_rfs_ms_thresh04_s42__WLE__multiclass",
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "size_rfs_thresh04",
+    "overall": 0.4017,
+    "bands": {
+      "tertile1": {
+        "AP@0.5": 0.2724,
+        "f1": 0.5974,
+        "n": 189
+      },
+      "tertile2": {
+        "AP@0.5": 0.415,
+        "f1": 0.6941,
+        "n": 189
+      },
+      "tertile3": {
+        "AP@0.5": 0.4273,
+        "f1": 0.6822,
+        "n": 190
+      }
+    }
+  }
+]

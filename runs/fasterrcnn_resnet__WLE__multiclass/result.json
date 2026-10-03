@@ -1,0 +1,112 @@
+{
+  "run_name": "fasterrcnn_resnet__WLE__multiclass",
+  "model": "fasterrcnn_resnet",
+  "paper_name": "Fasterrcnn_Resnet",
+  "modality": "WLE",
+  "task": "multiclass",
+  "img_size": 640,
+  "batch_size": 4,
+  "epochs": 100,
+  "epochs_run": 45,
+  "learning_rate": 0.001,
+  "input_mode": "reference",
+  "augment": [
+    "flip",
+    "color",
+    "rotate"
+  ],
+  "hard_negatives": 0.0,
+  "split_level": "patient",
+  "joint_split": false,
+  "class_weighting": true,
+  "loss_fn": "weighted_ce",
+  "seesaw_p": null,
+  "seed": 42,
+  "auto_anchors": null,
+  "rpn_fg_iou_thresh": null,
+  "rpn_bg_iou_thresh": null,
+  "box_fg_iou_thresh": null,
+  "box_bg_iou_thresh": null,
+  "multiscale_sizes": null,
+  "ema": false,
+  "ema_decay": null,
+  "rfs_threshold": 0.0,
+  "best_epoch": 30,
+  "elapsed_sec": 7832.876273393631,
+  "split": {
+    "train": {
+      "images": 2249,
+      "patients": 513,
+      "by_subtype": {
+        "Leiomyoma": 112,
+        "Lipoma": 362,
+        "NET_G1": 1392,
+        "NET_G2": 155,
+        "NonNeoplasm": 228
+      }
+    },
+    "val": {
+      "images": 568,
+      "patients": 128,
+      "by_subtype": {
+        "Leiomyoma": 25,
+        "Lipoma": 91,
+        "NET_G1": 357,
+        "NET_G2": 41,
+        "NonNeoplasm": 54
+      }
+    }
+  },
+  "best": {
+    "AP@0.5": 0.28088529198710277,
+    "AP@0.5_conf": 0.22721464560241575,
+    "precision": 0.4032073310423826,
+    "recall": 0.5925925925925926,
+    "f1": 0.4798909338786639,
+    "tp": 352,
+    "fp": 521,
+    "fn": 242,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.6115978450419448,
+        "AP@0.5_conf": 0.5068014051492686,
+        "precision": 0.6328828828828829,
+        "recall": 0.678743961352657,
+        "f1": 0.655011655011655,
+        "tp": 281,
+        "fp": 163,
+        "fn": 133
+      },
+      "Leiomyoma": {
+        "AP@0.5": 0.09472990777338607,
+        "AP@0.5_conf": 0.057692870736348996,
+        "precision": 0.10638297872340426,
+        "recall": 0.18518518518518517,
+        "f1": 0.13513513513513514,
+        "tp": 5,
+        "fp": 42,
+        "fn": 22
+      },
+      "Lipoma": {
+        "AP@0.5": 0.32464228750002516,
+        "AP@0.5_conf": 0.2792984038616945,
+        "precision": 0.2264957264957265,
+        "recall": 0.5463917525773195,
+        "f1": 0.3202416918429003,
+        "tp": 53,
+        "fp": 181,
+        "fn": 44
+      },
+      "NonNeoplasm": {
+        "AP@0.5": 0.09257112763305492,
+        "AP@0.5_conf": 0.06506590266235092,
+        "precision": 0.08783783783783784,
+        "recall": 0.23214285714285715,
+        "f1": 0.12745098039215688,
+        "tp": 13,
+        "fp": 135,
+        "fn": 43
+      }
+    }
+  }
+}

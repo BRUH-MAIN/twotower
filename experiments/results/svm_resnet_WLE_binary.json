@@ -1,0 +1,14 @@
+{
+  "backbone": "resnet",
+  "dinov3_model": null,
+  "modality": "WLE",
+  "task": "binary",
+  "kernel": "rbf",
+  "C": 1.0,
+  "accuracy": 0.7319,
+  "balanced_accuracy": 0.6447,
+  "majority_baseline": 0.6892,
+  "chance_balanced": 0.5,
+  "n_folds": 5,
+  "embedding_dim": 2048
+}

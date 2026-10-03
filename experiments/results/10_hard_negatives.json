@@ -1,0 +1,46 @@
+[
+  {
+    "task": "multiclass",
+    "arm": "baseline",
+    "run": "hn00__WLE__multiclass",
+    "AP50": 0.4,
+    "f1": 0.5012,
+    "det_full": 1.137,
+    "det_free": 0.204,
+    "ratio": 0.18,
+    "score_free": 0.191
+  },
+  {
+    "task": "multiclass",
+    "arm": "hard-neg",
+    "run": "hn30__WLE__multiclass",
+    "AP50": 0.3544,
+    "f1": 0.6608,
+    "det_full": 1.162,
+    "det_free": 0.063,
+    "ratio": 0.055,
+    "score_free": 0.058
+  },
+  {
+    "task": "binary",
+    "arm": "baseline",
+    "run": "fasterrcnn_mobilenet_320__WLE__binary",
+    "AP50": 0.6458,
+    "f1": 0.7378,
+    "det_full": 1.083,
+    "det_free": 0.366,
+    "ratio": 0.338,
+    "score_free": 0.349
+  },
+  {
+    "task": "binary",
+    "arm": "hard-neg",
+    "run": "hn30__WLE__binary",
+    "AP50": 0.6342,
+    "f1": 0.6774,
+    "det_full": 1.148,
+    "det_free": 0.055,
+    "ratio": 0.048,
+    "score_free": 0.064
+  }
+]

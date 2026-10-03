@@ -1,0 +1,14 @@
+{
+  "backbone": "dinov3",
+  "dinov3_model": "facebook/dinov3-vits16-pretrain-lvd1689m",
+  "modality": "WLE",
+  "task": "subtype",
+  "kernel": "rbf",
+  "C": 1.0,
+  "accuracy": 0.647,
+  "balanced_accuracy": 0.3813,
+  "majority_baseline": 0.6206,
+  "chance_balanced": 0.2,
+  "n_folds": 5,
+  "embedding_dim": 384
+}

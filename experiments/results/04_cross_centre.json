@@ -1,0 +1,90 @@
+[
+  {
+    "acc": 0.7489,
+    "bal": 0.6848,
+    "majority": 0.6623,
+    "chance": 0.5,
+    "n_train": 1815,
+    "n_val": 462,
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "internal"
+  },
+  {
+    "acc": 0.6815,
+    "bal": 0.6322,
+    "majority": 0.737,
+    "chance": 0.5,
+    "n_train": 1815,
+    "n_val": 540,
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "external"
+  },
+  {
+    "acc": 0.5823,
+    "bal": 0.3952,
+    "majority": 0.5801,
+    "chance": 0.2,
+    "n_train": 1815,
+    "n_val": 462,
+    "modality": "WLE",
+    "task": "subtype",
+    "arm": "internal"
+  },
+  {
+    "acc": 0.6519,
+    "bal": 0.3005,
+    "majority": 0.7167,
+    "chance": 0.2,
+    "n_train": 1815,
+    "n_val": 540,
+    "modality": "WLE",
+    "task": "subtype",
+    "arm": "external"
+  },
+  {
+    "acc": 0.78,
+    "bal": 0.6359,
+    "majority": 0.81,
+    "chance": 0.5,
+    "n_train": 1198,
+    "n_val": 300,
+    "modality": "EUS",
+    "task": "binary",
+    "arm": "internal"
+  },
+  {
+    "acc": 0.7454,
+    "bal": 0.6353,
+    "majority": 0.727,
+    "chance": 0.5,
+    "n_train": 1198,
+    "n_val": 597,
+    "modality": "EUS",
+    "task": "binary",
+    "arm": "external"
+  },
+  {
+    "acc": 0.6267,
+    "bal": 0.2357,
+    "majority": 0.7433,
+    "chance": 0.2,
+    "n_train": 1198,
+    "n_val": 300,
+    "modality": "EUS",
+    "task": "subtype",
+    "arm": "internal"
+  },
+  {
+    "acc": 0.5745,
+    "bal": 0.2612,
+    "majority": 0.7136,
+    "chance": 0.2,
+    "n_train": 1198,
+    "n_val": 597,
+    "modality": "EUS",
+    "task": "subtype",
+    "arm": "external"
+  }
+]

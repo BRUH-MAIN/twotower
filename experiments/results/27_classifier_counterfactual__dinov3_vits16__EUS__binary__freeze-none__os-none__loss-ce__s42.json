@@ -1,0 +1,60 @@
+{
+  "target": {
+    "run_name": "dinov3_vits16__EUS__binary__freeze-none__os-none__loss-ce__s42",
+    "modality": "EUS",
+    "task": "binary",
+    "chance": 0.5,
+    "full": 0.5,
+    "lesion": 0.5,
+    "bg_mask": 0.5,
+    "bg_patch": 0.5,
+    "boxmap": 0.5,
+    "ret_lesion": null,
+    "ret_bg_mask": null,
+    "ret_bg_patch": null,
+    "ret_boxmap": null,
+    "per_fold": [
+      {
+        "fold": 0,
+        "full": 0.5,
+        "lesion": 0.5,
+        "bg_mask": 0.5,
+        "bg_patch": 0.5,
+        "boxmap": 0.5
+      },
+      {
+        "fold": 1,
+        "full": 0.5,
+        "lesion": 0.5,
+        "bg_mask": 0.5,
+        "bg_patch": 0.5,
+        "boxmap": 0.5
+      },
+      {
+        "fold": 2,
+        "full": 0.5,
+        "lesion": 0.5,
+        "bg_mask": 0.5,
+        "bg_patch": 0.5,
+        "boxmap": 0.5
+      },
+      {
+        "fold": 3,
+        "full": 0.5,
+        "lesion": 0.5,
+        "bg_mask": 0.5,
+        "bg_patch": 0.5,
+        "boxmap": 0.5
+      },
+      {
+        "fold": 4,
+        "full": 0.5,
+        "lesion": 0.5,
+        "bg_mask": 0.5,
+        "bg_patch": 0.5,
+        "boxmap": 0.5
+      }
+    ]
+  },
+  "baseline": null
+}

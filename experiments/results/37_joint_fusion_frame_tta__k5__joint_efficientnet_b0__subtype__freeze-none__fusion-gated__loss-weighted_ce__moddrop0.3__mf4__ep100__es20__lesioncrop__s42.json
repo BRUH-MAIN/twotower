@@ -1,0 +1,37 @@
+{
+  "run_name": "joint_efficientnet_b0__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__s42",
+  "k": 5,
+  "task": "subtype",
+  "plain_mean": 0.55528,
+  "plain_std": 0.034292471476987454,
+  "tta_mean": 0.53568,
+  "tta_std": 0.047581315660666645,
+  "delta": -0.01959999999999995,
+  "per_fold": [
+    {
+      "fold": 0,
+      "plain": 0.547,
+      "tta": 0.6118
+    },
+    {
+      "fold": 1,
+      "plain": 0.5821,
+      "tta": 0.5571
+    },
+    {
+      "fold": 2,
+      "plain": 0.6042,
+      "tta": 0.5381
+    },
+    {
+      "fold": 3,
+      "plain": 0.507,
+      "tta": 0.48
+    },
+    {
+      "fold": 4,
+      "plain": 0.5361,
+      "tta": 0.4914
+    }
+  ]
+}

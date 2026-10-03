@@ -1,0 +1,31 @@
+{
+  "n_val": 568,
+  "candidates": [
+    {
+      "run": "fasterrcnn_mobilenet_320__WLE__multiclass",
+      "weight": 1.0,
+      "AP@0.5": 0.3806
+    },
+    {
+      "run": "fasterrcnn_resnet__WLE__multiclass",
+      "weight": 1.0,
+      "AP@0.5": 0.2773
+    },
+    {
+      "run": "fasterrcnn_resnet50_fpn_v2__WLE__multiclass",
+      "weight": 1.0,
+      "AP@0.5": 0.2624
+    },
+    {
+      "run": "size_rfs_ms_s42__WLE__multiclass",
+      "weight": 1.0,
+      "AP@0.5": 0.4351
+    },
+    {
+      "run": "dinov3_wle_multiclass_s42",
+      "weight": 0.5,
+      "AP@0.5": 0.3743
+    }
+  ],
+  "ensemble_AP@0.5": 0.3207
+}

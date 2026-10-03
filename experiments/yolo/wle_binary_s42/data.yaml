@@ -1,0 +1,7 @@
+path: /home/rohan/CADSEL/experiments/yolo/wle_binary_s42
+train: images/train
+val: images/val
+nc: 2
+names:
+- NET
+- non-NET

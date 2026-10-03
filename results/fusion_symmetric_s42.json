@@ -1,0 +1,245 @@
+{
+  "checkpoint": {
+    "wle": "runs/wle_resnet_backbone/best_model.pth",
+    "eus": "runs/eus_radimagenet_backbone/best_model.pth"
+  },
+  "task": "subtype",
+  "folds": 5,
+  "paired_only": false,
+  "fusion": "symmetric",
+  "classes": [
+    "NET_G1",
+    "NET_G2",
+    "Leiomyoma",
+    "Lipoma",
+    "NonNeoplasm"
+  ],
+  "seed": 42,
+  "protocol": "patient-level cross-validation; NOT comparable to Table 4/5 AP",
+  "ablations": {
+    "wle_only": {
+      "folds": [
+        {
+          "acc": 0.3561,
+          "bal": 0.3545,
+          "macro_f1": 0.2859,
+          "epoch": 12,
+          "n_train": 509,
+          "n_val": 132
+        },
+        {
+          "acc": 0.4427,
+          "bal": 0.401,
+          "macro_f1": 0.3285,
+          "epoch": 17,
+          "n_train": 510,
+          "n_val": 131
+        },
+        {
+          "acc": 0.4109,
+          "bal": 0.4306,
+          "macro_f1": 0.3355,
+          "epoch": 4,
+          "n_train": 512,
+          "n_val": 129
+        },
+        {
+          "acc": 0.4683,
+          "bal": 0.4959,
+          "macro_f1": 0.3407,
+          "epoch": 3,
+          "n_train": 515,
+          "n_val": 126
+        },
+        {
+          "acc": 0.1951,
+          "bal": 0.3855,
+          "macro_f1": 0.216,
+          "epoch": 3,
+          "n_train": 518,
+          "n_val": 123
+        }
+      ],
+      "acc": {
+        "mean": 0.3746,
+        "std": 0.0973
+      },
+      "bal": {
+        "mean": 0.4135,
+        "std": 0.048
+      },
+      "macro_f1": {
+        "mean": 0.3013,
+        "std": 0.0469
+      }
+    },
+    "eus_only": {
+      "folds": [
+        {
+          "acc": 0.1744,
+          "bal": 0.3119,
+          "macro_f1": 0.1529,
+          "epoch": 20,
+          "n_train": 335,
+          "n_val": 86
+        },
+        {
+          "acc": 0.1529,
+          "bal": 0.3471,
+          "macro_f1": 0.1713,
+          "epoch": 43,
+          "n_train": 336,
+          "n_val": 85
+        },
+        {
+          "acc": 0.2941,
+          "bal": 0.2686,
+          "macro_f1": 0.1886,
+          "epoch": 47,
+          "n_train": 336,
+          "n_val": 85
+        },
+        {
+          "acc": 0.1786,
+          "bal": 0.3933,
+          "macro_f1": 0.1727,
+          "epoch": 35,
+          "n_train": 337,
+          "n_val": 84
+        },
+        {
+          "acc": 0.4321,
+          "bal": 0.3684,
+          "macro_f1": 0.1996,
+          "epoch": 14,
+          "n_train": 340,
+          "n_val": 81
+        }
+      ],
+      "acc": {
+        "mean": 0.2464,
+        "std": 0.1052
+      },
+      "bal": {
+        "mean": 0.3379,
+        "std": 0.0437
+      },
+      "macro_f1": {
+        "mean": 0.177,
+        "std": 0.016
+      }
+    },
+    "fused": {
+      "folds": [
+        {
+          "acc": 0.3106,
+          "bal": 0.3852,
+          "macro_f1": 0.2727,
+          "epoch": 13,
+          "n_train": 509,
+          "n_val": 132
+        },
+        {
+          "acc": 0.5191,
+          "bal": 0.4327,
+          "macro_f1": 0.3687,
+          "epoch": 34,
+          "n_train": 510,
+          "n_val": 131
+        },
+        {
+          "acc": 0.5581,
+          "bal": 0.433,
+          "macro_f1": 0.3798,
+          "epoch": 7,
+          "n_train": 512,
+          "n_val": 129
+        },
+        {
+          "acc": 0.5714,
+          "bal": 0.4162,
+          "macro_f1": 0.3795,
+          "epoch": 5,
+          "n_train": 515,
+          "n_val": 126
+        },
+        {
+          "acc": 0.3008,
+          "bal": 0.3938,
+          "macro_f1": 0.2486,
+          "epoch": 4,
+          "n_train": 518,
+          "n_val": 123
+        }
+      ],
+      "acc": {
+        "mean": 0.452,
+        "std": 0.1207
+      },
+      "bal": {
+        "mean": 0.4122,
+        "std": 0.0197
+      },
+      "macro_f1": {
+        "mean": 0.3299,
+        "std": 0.0572
+      }
+    },
+    "fused_moddrop": {
+      "folds": [
+        {
+          "acc": 0.3409,
+          "bal": 0.3902,
+          "macro_f1": 0.3032,
+          "epoch": 12,
+          "n_train": 509,
+          "n_val": 132
+        },
+        {
+          "acc": 0.4656,
+          "bal": 0.4162,
+          "macro_f1": 0.3633,
+          "epoch": 14,
+          "n_train": 510,
+          "n_val": 131
+        },
+        {
+          "acc": 0.5116,
+          "bal": 0.4584,
+          "macro_f1": 0.3997,
+          "epoch": 16,
+          "n_train": 512,
+          "n_val": 129
+        },
+        {
+          "acc": 0.4762,
+          "bal": 0.4863,
+          "macro_f1": 0.3844,
+          "epoch": 14,
+          "n_train": 515,
+          "n_val": 126
+        },
+        {
+          "acc": 0.2846,
+          "bal": 0.4074,
+          "macro_f1": 0.2561,
+          "epoch": 13,
+          "n_train": 518,
+          "n_val": 123
+        }
+      ],
+      "acc": {
+        "mean": 0.4158,
+        "std": 0.0873
+      },
+      "bal": {
+        "mean": 0.4317,
+        "std": 0.0353
+      },
+      "macro_f1": {
+        "mean": 0.3413,
+        "std": 0.0538
+      }
+    }
+  }
+}

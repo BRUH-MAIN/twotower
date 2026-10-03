@@ -1,0 +1,44 @@
+[
+  {
+    "mechanism": "Centre predicts the label",
+    "review_section": "7.1",
+    "verdict": "NOT PRESENT",
+    "evidence": "Cramer's V = 0.099 (negligible); a probe on centre alone reaches chance (lift +0.003). Center-1 supplies 537/641 patients, so there is little centre variation for a model to exploit."
+  },
+  {
+    "mechanism": "Acquisition site is encoded in the pixels",
+    "review_section": "7.1",
+    "verdict": "PRESENT (strong)",
+    "evidence": "Centre is decodable from global image statistics with balanced accuracy up to 0.81 against a 0.167 chance floor (max lift +0.643). Still +0.476 after removing geometry, i.e. colour/exposure alone carry a site signature."
+  },
+  {
+    "mechanism": "Label leaks through global appearance",
+    "review_section": "3, 4.4",
+    "verdict": "NOT PRESENT",
+    "evidence": "No probe on colour/exposure/geometry statistics beat chance by more than +0.102 for the lesion class. Whatever shortcut exists is spatial, not a global colour or exposure cue."
+  },
+  {
+    "mechanism": "Label predictable from non-lesion pixels",
+    "review_section": "4.2",
+    "verdict": "PRESENT (strong)",
+    "evidence": "Training on a lesion-free crop \u2014 a region the annotation never touches, carrying no marker \u2014 retains 68%-95% of full-image balanced accuracy across all four modality/task combinations."
+  },
+  {
+    "mechanism": "Annotation geometry alone is diagnostic",
+    "review_section": "3 (annotation artefacts)",
+    "verdict": "PRESENT (strong)",
+    "evidence": "A black canvas showing only the white bounding rectangle retains 48%-189% of full-image performance. Lesion size and position are themselves strongly class-associated, so a detector is rewarded for box priors independent of appearance."
+  },
+  {
+    "mechanism": "Performance collapses on an unseen site",
+    "review_section": "4.5",
+    "verdict": "PARTIAL",
+    "evidence": "Training on Center-1 and testing on Centers 2-6 retains 52%-171% of internal balanced accuracy. External n is small (~100 patients) with a different class mix, so prevalence shift contributes alongside any site shortcut."
+  },
+  {
+    "mechanism": "Image-level splitting inflates results",
+    "review_section": "CAD-SEL Usage Notes",
+    "verdict": "PRESENT",
+    "evidence": "Splitting by image rather than patient raises balanced accuracy by +0.142 to +0.577, because 366 of 379 validation patients also appear in training. Not shortcut learning per se, but the largest single source of over-optimistic numbers on this dataset."
+  }
+]

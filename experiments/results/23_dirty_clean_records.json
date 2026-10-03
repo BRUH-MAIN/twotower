@@ -1,0 +1,2946 @@
+[
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/1.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.2891154867948117,
+    "layout": "standard",
+    "area_frac": 0.12325804600808377,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/2.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.4321911022590066,
+    "layout": "standard",
+    "area_frac": 0.18687000672448947,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/3.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.43446635688412427,
+    "layout": "standard",
+    "area_frac": 0.1979155060080577,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/4.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.3028633315530236,
+    "layout": "standard",
+    "area_frac": 0.16239629820764986,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/5.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.2601004618481822,
+    "layout": "standard",
+    "area_frac": 0.09743423586146767,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/6.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.13524727705403178,
+    "layout": "standard",
+    "area_frac": 0.18967197914365647,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/7.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.3778295778295778,
+    "layout": "standard",
+    "area_frac": 0.09308517542817799,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-19/8.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 6.305070853233713e-06,
+    "layout": "standard",
+    "area_frac": 0.153143878511982,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/1.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.2271021132512586,
+    "layout": "standard",
+    "area_frac": 0.25944079712567175,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/2.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.21223853041632051,
+    "layout": "standard",
+    "area_frac": 0.2611060367931223,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/3.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.4188583573995177,
+    "layout": "standard",
+    "area_frac": 0.25314315397178144,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/4.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.38868278747066626,
+    "layout": "standard",
+    "area_frac": 0.23647231973735233,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/5.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.3552713106605322,
+    "layout": "standard",
+    "area_frac": 0.4173728357993052,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/6.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.3974689289205418,
+    "layout": "standard",
+    "area_frac": 0.27593104939744667,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/7.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.4899828604075414,
+    "layout": "standard",
+    "area_frac": 0.20222918535937887,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-20/8.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.206992512861713,
+    "layout": "standard",
+    "area_frac": 0.09956396480857331,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-21/1.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 1.0,
+    "layout": "standard",
+    "area_frac": 0.05183501347830084,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-21/2.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.24875314644861712,
+    "layout": "standard",
+    "area_frac": 0.18526677066167818,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-21/3.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.9504179331306991,
+    "layout": "standard",
+    "area_frac": 0.09653961242310327,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-21/4.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.8561417825716718,
+    "layout": "standard",
+    "area_frac": 0.027281586041210948,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Leiomyoma/Leiomyoma-21/5.tiff",
+    "subtype": "Leiomyoma",
+    "black_frac": 0.9870913057373518,
+    "layout": "standard",
+    "area_frac": 0.06953261377386553,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.0005867764935122449,
+    "layout": "standard",
+    "area_frac": 0.08697837137831724,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.645704828552725,
+    "layout": "standard",
+    "area_frac": 0.10469274739052888,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.4938666666666667,
+    "layout": "standard",
+    "area_frac": 0.11773873098372623,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.9211195217142715,
+    "layout": "standard",
+    "area_frac": 0.15487457442380909,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/5.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.5056947608200456,
+    "layout": "standard",
+    "area_frac": 0.07634164325774251,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/6.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.9469179389312977,
+    "layout": "standard",
+    "area_frac": 0.05055005387626437,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/7.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.7552551663132289,
+    "layout": "standard",
+    "area_frac": 0.12199296245864859,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-83/8.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.5332738714632576,
+    "layout": "standard",
+    "area_frac": 0.0973386684886965,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-84/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.12349274997514534,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-84/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.13157869455691318,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-84/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.12787225245671874,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-84/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.1299877025462963,
+    "layout": "standard",
+    "area_frac": 0.13321063548162607,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-84/5.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.004305977710233029,
+    "layout": "standard",
+    "area_frac": 0.08370441632172815,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-84/6.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.016676672384219556,
+    "layout": "standard",
+    "area_frac": 0.11261484296665754,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-85/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.4131980716075176,
+    "layout": "standard",
+    "area_frac": 0.41674423614129963,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-85/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.320370705668551,
+    "layout": "standard",
+    "area_frac": 0.28724926276509277,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-85/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.29077017555403073,
+    "layout": "standard",
+    "area_frac": 0.30743351118267465,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-85/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.316926311477385,
+    "layout": "standard",
+    "area_frac": 0.48045447224166243,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-86/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 4.5896297316214016e-05,
+    "layout": "standard",
+    "area_frac": 0.08420323437905093,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-86/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 5.7474567503879534e-05,
+    "layout": "standard",
+    "area_frac": 0.08374838078798234,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-87/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.12692527498888756,
+    "layout": "standard",
+    "area_frac": 0.2734799045340945,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-87/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.04214909727639297,
+    "layout": "standard",
+    "area_frac": 0.2043230524132472,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-87/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.9555177172364673,
+    "layout": "standard",
+    "area_frac": 0.08670280075756191,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-87/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.9512539984238098,
+    "layout": "standard",
+    "area_frac": 0.08318811969432319,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-87/5.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.9033844547936406,
+    "layout": "standard",
+    "area_frac": 0.09614476462091187,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-87/6.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.8741240875912408,
+    "layout": "standard",
+    "area_frac": 0.1057654121205269,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-88/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.1743321917808219,
+    "layout": "standard",
+    "area_frac": 0.16922775892284514,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-88/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.0016115197671094015,
+    "layout": "standard",
+    "area_frac": 0.22275532622065924,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-88/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.09589808436768604,
+    "layout": "standard",
+    "area_frac": 0.2607772022745484,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-88/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.02885839615840471,
+    "layout": "standard",
+    "area_frac": 0.19747714523052504,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.34051117232935413,
+    "layout": "standard",
+    "area_frac": 0.12589609800362977,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.6320695935843414,
+    "layout": "standard",
+    "area_frac": 0.44374348477331516,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.45391052395774384,
+    "layout": "standard",
+    "area_frac": 0.3272855987843604,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.31677878214561,
+    "layout": "standard",
+    "area_frac": 0.4405687296410588,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/5.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.48082108366326176,
+    "layout": "standard",
+    "area_frac": 0.4286995095822262,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/6.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.4819736202400571,
+    "layout": "standard",
+    "area_frac": 0.45791155946808954,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-89/7.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.4892043308573587,
+    "layout": "standard",
+    "area_frac": 0.42869950958222625,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-90/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.6728294907869656,
+    "layout": "standard",
+    "area_frac": 0.42455557664994203,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-90/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.6744084893244459,
+    "layout": "standard",
+    "area_frac": 0.43022388377932125,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-90/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.8850522422561258,
+    "layout": "standard",
+    "area_frac": 0.2605504326366377,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-90/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.8760111549063555,
+    "layout": "standard",
+    "area_frac": 0.1497340544776512,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-90/5.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.4286894626737028,
+    "layout": "standard",
+    "area_frac": 0.3378240647558098,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-91/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.13613389617540342,
+    "layout": "standard",
+    "area_frac": 0.13684331754002566,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-91/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.3679310344827586,
+    "layout": "standard",
+    "area_frac": 0.0825098572120605,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-91/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.09458758574535721,
+    "layout": "standard",
+    "area_frac": 0.05766191267317888,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-92/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.5239654750244858,
+    "layout": "standard",
+    "area_frac": 0.6461809928145487,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-92/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.4024388031463412,
+    "layout": "standard",
+    "area_frac": 0.5582258833660505,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-92/3.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.0051752078633842844,
+    "layout": "standard",
+    "area_frac": 0.11827730035322942,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-92/4.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.30740754898189804,
+    "layout": "standard",
+    "area_frac": 0.40400833559137683,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-92/5.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.2619233407648774,
+    "layout": "standard",
+    "area_frac": 0.33721325996966733,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-93/1.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.2712275816586367,
+    "layout": "standard",
+    "area_frac": 0.3161507443745454,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/Lipoma/Lipoma-93/2.tiff",
+    "subtype": "Lipoma",
+    "black_frac": 0.48186472582140355,
+    "layout": "standard",
+    "area_frac": 0.2723765475719374,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6001261185201399,
+    "layout": "standard",
+    "area_frac": 0.09235313616765148,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.45558312132273543,
+    "layout": "standard",
+    "area_frac": 0.09147810128941712,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4018041284152507,
+    "layout": "standard",
+    "area_frac": 0.10564317543543907,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7697281008150126,
+    "layout": "standard",
+    "area_frac": 0.0704987228327856,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.9156754955855405,
+    "layout": "standard",
+    "area_frac": 0.029040667076005455,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6107293362704722,
+    "layout": "standard",
+    "area_frac": 0.12063361301299412,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5755654857879946,
+    "layout": "standard",
+    "area_frac": 0.05235764663966176,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-357/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6814110651693254,
+    "layout": "standard",
+    "area_frac": 0.07727883602123922,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.45916792168674697,
+    "layout": "standard",
+    "area_frac": 0.12827126259458985,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.44379996354451473,
+    "layout": "standard",
+    "area_frac": 0.07408874941586045,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.21502657359599048,
+    "layout": "standard",
+    "area_frac": 0.06367357224199183,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.28463814669657744,
+    "layout": "standard",
+    "area_frac": 0.11072798398695663,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.31389782174574643,
+    "layout": "standard",
+    "area_frac": 0.12594604957188985,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 7.999817147036639e-05,
+    "layout": "standard",
+    "area_frac": 0.12657983892006905,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.31353771109258743,
+    "layout": "standard",
+    "area_frac": 0.0783406361721339,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-358/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.1983906983906984,
+    "layout": "standard",
+    "area_frac": 0.10002952483997582,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.00202020202020202,
+    "layout": "standard",
+    "area_frac": 0.11437921847045429,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 6.224557122760716e-06,
+    "layout": "standard",
+    "area_frac": 0.07758006776018592,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0035629896779007584,
+    "layout": "standard",
+    "area_frac": 0.07746562178156133,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 7.353319656158773e-06,
+    "layout": "standard",
+    "area_frac": 0.06541302965765265,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06347460089469759,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.009182736455463728,
+    "layout": "standard",
+    "area_frac": 0.07717950683499959,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-359/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06840531514044296,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-360/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.00015579085346527206,
+    "layout": "standard",
+    "area_frac": 0.08961120126310253,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-360/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.14601923353435226,
+    "layout": "standard",
+    "area_frac": 0.22837695034549302,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-360/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.022726199055092877,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-360/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "wide",
+    "area_frac": 0.044436858877992556,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-360/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 2.047491566894109e-05,
+    "layout": "wide",
+    "area_frac": 0.09410494044068035,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-361/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "wide",
+    "area_frac": 0.13733624027269992,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-361/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.19708224198110194,
+    "layout": "wide",
+    "area_frac": 0.1663243474313904,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-361/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5059621278918419,
+    "layout": "wide",
+    "area_frac": 0.18370151805855067,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-361/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.33674985145573383,
+    "layout": "standard",
+    "area_frac": 0.29888746062412713,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-361/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.2691748808366884,
+    "layout": "standard",
+    "area_frac": 0.10436872681927051,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.8926390649820021,
+    "layout": "standard",
+    "area_frac": 0.06626422162367349,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3950874078050241,
+    "layout": "standard",
+    "area_frac": 0.0933236159484838,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7208117083040113,
+    "layout": "standard",
+    "area_frac": 0.08757049845817412,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4908118507118122,
+    "layout": "standard",
+    "area_frac": 0.062438674801014483,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7010305736860185,
+    "layout": "standard",
+    "area_frac": 0.028188721305326882,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.40501601836281287,
+    "layout": "standard",
+    "area_frac": 0.15683308620806702,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-362/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4239840457555689,
+    "layout": "standard",
+    "area_frac": 0.06410123792951744,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-363/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.20449115028969594,
+    "layout": "standard",
+    "area_frac": 0.27969166601132134,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-363/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.12590387907731124,
+    "layout": "standard",
+    "area_frac": 0.17105620509309177,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-363/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.18109607428362684,
+    "layout": "standard",
+    "area_frac": 0.2838090132162987,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-363/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0001313795975870879,
+    "layout": "standard",
+    "area_frac": 0.17273713040414132,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-363/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0071410602135256445,
+    "layout": "standard",
+    "area_frac": 0.10949412949220318,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-364/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.030821732618351593,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-364/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.04320335693080608,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-364/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.04051387643312677,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-364/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.036603638830117836,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-364/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.033785406606485824,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-365/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.10067431253015216,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-365/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.10261035700188585,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-365/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.1527589773812045,
+    "layout": "standard",
+    "area_frac": 0.3142257400613099,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-365/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.15833800029405984,
+    "layout": "standard",
+    "area_frac": 0.2919087742295027,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-365/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0010306090899721736,
+    "layout": "standard",
+    "area_frac": 0.16828776414827534,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-365/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0008310474448846896,
+    "layout": "wide",
+    "area_frac": 0.23728826097777353,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-366/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7051036989840018,
+    "layout": "standard",
+    "area_frac": 0.3901016721652917,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-366/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7980029582258303,
+    "layout": "standard",
+    "area_frac": 0.10083637134743142,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-366/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.43111018431631504,
+    "layout": "standard",
+    "area_frac": 0.3329435496815341,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-366/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4209447806132889,
+    "layout": "standard",
+    "area_frac": 0.16448427384040393,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-366/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5989242492155984,
+    "layout": "standard",
+    "area_frac": 0.05403106001108353,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7698939321548017,
+    "layout": "standard",
+    "area_frac": 0.2525536633299508,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7972606390982292,
+    "layout": "standard",
+    "area_frac": 0.22440712672916652,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7525466009183864,
+    "layout": "standard",
+    "area_frac": 0.2245219129832479,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.9843293203319351,
+    "layout": "standard",
+    "area_frac": 0.10620560350498842,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.16227248483678944,
+    "layout": "standard",
+    "area_frac": 0.17974396470221735,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.14337568058076225,
+    "layout": "standard",
+    "area_frac": 0.09731718214188774,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.15046296296296297,
+    "layout": "standard",
+    "area_frac": 0.0688460320287996,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-367/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.16061666302208616,
+    "layout": "standard",
+    "area_frac": 0.057195899800017824,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-368/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.9997086247086248,
+    "layout": "standard",
+    "area_frac": 0.08270152530363913,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-368/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.9970432828819041,
+    "layout": "standard",
+    "area_frac": 0.07813322332353843,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-368/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6292362643134783,
+    "layout": "standard",
+    "area_frac": 0.1375259176472901,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-368/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.07249395323837678,
+    "layout": "standard",
+    "area_frac": 0.10804415669533546,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5437654403171645,
+    "layout": "standard",
+    "area_frac": 0.19563586329395713,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.45951827209923063,
+    "layout": "standard",
+    "area_frac": 0.1962390889729578,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.40202992427698203,
+    "layout": "standard",
+    "area_frac": 0.2112688833974312,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.37312534209085935,
+    "layout": "standard",
+    "area_frac": 0.20274122127129932,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3984538582227928,
+    "layout": "standard",
+    "area_frac": 0.33818394073023333,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.38779307341907826,
+    "layout": "standard",
+    "area_frac": 0.2879413183632297,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3788791635506964,
+    "layout": "standard",
+    "area_frac": 0.27470263705917314,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-369/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.2790308181959323,
+    "layout": "standard",
+    "area_frac": 0.24874665659941608,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0619352709452238,
+    "layout": "standard",
+    "area_frac": 0.5021317312156606,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/10.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4801310779391448,
+    "layout": "standard",
+    "area_frac": 0.2862654784990891,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/11.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.03086261816478564,
+    "layout": "standard",
+    "area_frac": 0.3563442444864031,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/12.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.07447759630272058,
+    "layout": "standard",
+    "area_frac": 0.4142372196319275,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/13.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6263736581027782,
+    "layout": "standard",
+    "area_frac": 0.16666048739949457,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/14.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0027536231884057972,
+    "layout": "standard",
+    "area_frac": 0.2794607489181384,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/15.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 3.8485221674876844e-06,
+    "layout": "standard",
+    "area_frac": 0.2506909852479792,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/16.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.33414858348402654,
+    "layout": "standard",
+    "area_frac": 0.3203230091446359,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-370/17.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.06655364284472266,
+    "layout": "standard",
+    "area_frac": 0.27721184419324474,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-371/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.44589084065244666,
+    "layout": "standard",
+    "area_frac": 0.4891611869715343,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-371/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6291828035705852,
+    "layout": "standard",
+    "area_frac": 0.3269769295130734,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-371/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.1854911051212938,
+    "layout": "standard",
+    "area_frac": 0.44724534730025456,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-371/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6716694391059287,
+    "layout": "standard",
+    "area_frac": 0.2986667778934757,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-371/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5951194971678426,
+    "layout": "standard",
+    "area_frac": 0.23269326675399032,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-372/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.15059956535481658,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-372/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0001067149203697904,
+    "layout": "standard",
+    "area_frac": 0.20806278913961734,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-372/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.1702972399150743,
+    "layout": "standard",
+    "area_frac": 0.13610488007936736,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-372/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5527033112896726,
+    "layout": "standard",
+    "area_frac": 0.24391299194378951,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-373/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 1.0,
+    "layout": "standard",
+    "area_frac": 0.055220184686394586,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-373/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.979510627780524,
+    "layout": "standard",
+    "area_frac": 0.05843897783521289,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-373/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 1.0,
+    "layout": "standard",
+    "area_frac": 0.0689227063354753,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-373/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.04048655851140553,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-373/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.04735617039766298,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.029020293470724254,
+    "layout": "wide",
+    "area_frac": 0.2903185920296246,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "ambiguous",
+    "area_frac": 0.12180188672764822,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 5.240842937178016e-06,
+    "layout": "wide",
+    "area_frac": 0.09206951925063524,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0019264848796661522,
+    "layout": "wide",
+    "area_frac": 0.16874497683730844,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.00014665531270697323,
+    "layout": "standard",
+    "area_frac": 0.10187599530571113,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0012162759840778417,
+    "layout": "standard",
+    "area_frac": 0.0568415027169105,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-374/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.33520913154533843,
+    "layout": "standard",
+    "area_frac": 0.08467852965392647,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-375/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.050763944393697163,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-375/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.22320878867169464,
+    "layout": "standard",
+    "area_frac": 0.1001140040931355,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-375/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0009659849964032474,
+    "layout": "standard",
+    "area_frac": 0.04680007559786396,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-375/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0005794582065768506,
+    "layout": "standard",
+    "area_frac": 0.07317389758313685,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-376/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06351751813668183,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-376/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.034886949150748074,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-376/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.017892644135188866,
+    "layout": "standard",
+    "area_frac": 0.09850460751872651,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-376/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0008916123593684142,
+    "layout": "standard",
+    "area_frac": 0.059563514966070735,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-376/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.17849636780646905,
+    "layout": "standard",
+    "area_frac": 0.11066275356192785,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.15736322060889646,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 8.393818199772873e-05,
+    "layout": "standard",
+    "area_frac": 0.19569308628326942,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 1.1541524481497012e-05,
+    "layout": "standard",
+    "area_frac": 0.1252754293520097,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.015974388843180542,
+    "layout": "standard",
+    "area_frac": 0.17763923315523059,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.08475448942599281,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 5.20074890784273e-06,
+    "layout": "standard",
+    "area_frac": 0.09276112415036956,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.10556707841309182,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-377/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06097670702632422,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-378/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5514923508610086,
+    "layout": "standard",
+    "area_frac": 0.20057099746961546,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-378/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.09173061950839728,
+    "layout": "standard",
+    "area_frac": 0.05213016294727532,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-378/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6507106209824851,
+    "layout": "standard",
+    "area_frac": 0.08155218312002048,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-379/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.052108684642536866,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-379/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.07290208838390329,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-380/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.316924275022769,
+    "layout": "standard",
+    "area_frac": 0.14576460556781382,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-380/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.28106147458692005,
+    "layout": "standard",
+    "area_frac": 0.3724574806912582,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-381/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.8958914396052349,
+    "layout": "standard",
+    "area_frac": 0.026909110724121298,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-381/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.9782787806156842,
+    "layout": "standard",
+    "area_frac": 0.038840879067614936,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-381/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.028640106150819127,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-381/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.39610470036950646,
+    "layout": "standard",
+    "area_frac": 0.04671811883628819,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-382/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.40811777512829817,
+    "layout": "standard",
+    "area_frac": 0.03718063730568386,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-382/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.004008281573498965,
+    "layout": "wide",
+    "area_frac": 0.029104620754849583,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-382/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0007914523149980214,
+    "layout": "wide",
+    "area_frac": 0.026788615802625447,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-382/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 5.956872244946587e-05,
+    "layout": "wide",
+    "area_frac": 0.024396520338623905,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-382/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0002619782266984922,
+    "layout": "wide",
+    "area_frac": 0.033127906565078795,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-382/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.13768767803979523,
+    "layout": "wide",
+    "area_frac": 0.044988515088378596,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-383/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5926379391384774,
+    "layout": "standard",
+    "area_frac": 0.12716855658175907,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-383/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5733445910290238,
+    "layout": "standard",
+    "area_frac": 0.11423616099717307,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-383/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.003221804439524364,
+    "layout": "standard",
+    "area_frac": 0.25224370547117564,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-383/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.1985985994179931,
+    "layout": "standard",
+    "area_frac": 0.2355298240095337,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-383/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0037530887220849456,
+    "layout": "standard",
+    "area_frac": 0.041522431619756515,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-383/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.003484353237447184,
+    "layout": "standard",
+    "area_frac": 0.10275103018394541,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-384/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3784737004666383,
+    "layout": "standard",
+    "area_frac": 0.23128101705309356,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-384/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6218835732097172,
+    "layout": "standard",
+    "area_frac": 0.208626137343105,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-384/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3964573108448143,
+    "layout": "standard",
+    "area_frac": 0.290349447770742,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-384/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5719495737860006,
+    "layout": "standard",
+    "area_frac": 0.24256825169494983,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-384/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4365310583176533,
+    "layout": "standard",
+    "area_frac": 0.1619529812099893,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-385/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.45626604732429177,
+    "layout": "standard",
+    "area_frac": 0.09055538058675586,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-385/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.24735251930295724,
+    "layout": "standard",
+    "area_frac": 0.18941286320624168,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-385/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4412960738021022,
+    "layout": "standard",
+    "area_frac": 0.11483057444939107,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-385/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.1949115590292061,
+    "layout": "standard",
+    "area_frac": 0.11740890063364061,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5161628191808361,
+    "layout": "standard",
+    "area_frac": 0.34229361631900634,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.8968712306736357,
+    "layout": "standard",
+    "area_frac": 0.13201614909509413,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.8936890498746168,
+    "layout": "standard",
+    "area_frac": 0.06909675959463349,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7412267080745342,
+    "layout": "standard",
+    "area_frac": 0.14885266833567162,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.8293792683457306,
+    "layout": "standard",
+    "area_frac": 0.0555645732665912,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.14920464397451846,
+    "layout": "standard",
+    "area_frac": 0.05108634194446798,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.02884572344222558,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-386/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.08192270839987224,
+    "layout": "standard",
+    "area_frac": 0.04230811097855161,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-387/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.05645455208105547,
+    "layout": "standard",
+    "area_frac": 0.21155106627204795,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-387/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.8624483800338129,
+    "layout": "standard",
+    "area_frac": 0.22620247675162464,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-387/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.1825827715322528,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-387/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.29208724008164305,
+    "layout": "standard",
+    "area_frac": 0.24196950375999124,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.11621273841967004,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.09856659909048153,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.13985775446176738,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5092098699105875,
+    "layout": "standard",
+    "area_frac": 0.12566168452986778,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.12230812001454203,
+    "layout": "standard",
+    "area_frac": 0.09017389399134038,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.00034465458194271755,
+    "layout": "standard",
+    "area_frac": 0.11070502569835863,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06902999944043592,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-388/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.11896659478032566,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5572698776879104,
+    "layout": "standard",
+    "area_frac": 0.274713265941149,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5906348408981651,
+    "layout": "standard",
+    "area_frac": 0.08905089282608597,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7319635803063879,
+    "layout": "standard",
+    "area_frac": 0.1001521527526772,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.509065144552305,
+    "layout": "standard",
+    "area_frac": 0.14555144189834382,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.068108849626401,
+    "layout": "standard",
+    "area_frac": 0.09910783319772722,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.2778091524360181,
+    "layout": "standard",
+    "area_frac": 0.10759352565450091,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.33695290737924305,
+    "layout": "standard",
+    "area_frac": 0.08857403458181654,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 7.890013215772136e-06,
+    "layout": "standard",
+    "area_frac": 0.12221876800624294,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-389/9.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.39904190491845626,
+    "layout": "standard",
+    "area_frac": 0.08205317295520916,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.05105005934025881,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.693803928497806,
+    "layout": "standard",
+    "area_frac": 0.03269973413144312,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5226372112735749,
+    "layout": "standard",
+    "area_frac": 0.09099409017148367,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.35942472899566874,
+    "layout": "standard",
+    "area_frac": 0.06042125119308839,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3905521623409591,
+    "layout": "standard",
+    "area_frac": 0.06278075161290178,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.00010375596596804317,
+    "layout": "standard",
+    "area_frac": 0.09781007524990996,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-390/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0001099246231155779,
+    "layout": "standard",
+    "area_frac": 0.0922032945742567,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-391/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.949642258053473,
+    "layout": "standard",
+    "area_frac": 0.07020135989195878,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-391/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.9963741415953777,
+    "layout": "standard",
+    "area_frac": 0.0901691254088977,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-391/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "ambiguous",
+    "area_frac": 0.029312398579009684,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-391/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "ambiguous",
+    "area_frac": 0.03152703828779437,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-391/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "ambiguous",
+    "area_frac": 0.025634665146265508,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-391/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.17700211781316183,
+    "layout": "ambiguous",
+    "area_frac": 0.030788123327924216,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-392/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.019605927373391955,
+    "layout": "standard",
+    "area_frac": 0.029486529534397322,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-392/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.003480047270928379,
+    "layout": "standard",
+    "area_frac": 0.1405515832071794,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-392/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.001483836777954425,
+    "layout": "standard",
+    "area_frac": 0.11802351426283467,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-392/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0037016257488698434,
+    "layout": "standard",
+    "area_frac": 0.07465454243159328,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-392/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.001943133600348971,
+    "layout": "standard",
+    "area_frac": 0.07312144317626726,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-393/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.09290380160267366,
+    "layout": "standard",
+    "area_frac": 0.050785403014689305,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-393/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.061781754127541263,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-393/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.04202455767971459,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-393/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5838950735202629,
+    "layout": "standard",
+    "area_frac": 0.06602817679276016,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-393/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.046990622764579264,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.05479816514021617,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.062361800904074054,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.4229048260313991,
+    "layout": "standard",
+    "area_frac": 0.22396819974623022,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.11833958952859162,
+    "layout": "standard",
+    "area_frac": 0.059365530214824026,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.10994797672117157,
+    "layout": "standard",
+    "area_frac": 0.10614149230070064,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.15160134178539086,
+    "layout": "standard",
+    "area_frac": 0.07550573439761413,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-394/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.04908405332383243,
+    "layout": "standard",
+    "area_frac": 0.08125902911472423,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 1.0485019528348872e-05,
+    "layout": "standard",
+    "area_frac": 0.2762630552350245,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.21601678465403062,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 7.0878754802035635e-06,
+    "layout": "standard",
+    "area_frac": 0.2720476283556831,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.037264254132089544,
+    "layout": "standard",
+    "area_frac": 0.30164995788145993,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.13451258402734761,
+    "layout": "standard",
+    "area_frac": 0.21025633706325647,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.3836410670329725,
+    "layout": "standard",
+    "area_frac": 0.38477453300974396,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 4.3346116187989556e-05,
+    "layout": "standard",
+    "area_frac": 0.18888831913754536,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-395/8.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.24518030040208927,
+    "layout": "standard",
+    "area_frac": 0.3996501259397273,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-396/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.16666195637214937,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-396/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.11175649812697266,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-396/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.11530432346433689,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-396/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.1788995056736977,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-396/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.31393205499091165,
+    "layout": "standard",
+    "area_frac": 0.11322753523651746,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-397/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.07835976643492647,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.1274069857038938,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.11999660858794747,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.13132914476300947,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.10681624671634185,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.10952957012623458,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06544879402597287,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-398/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.05046743035569851,
+    "layout": "standard",
+    "area_frac": 0.0256130534958388,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-399/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.02187129950440766,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-399/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.025738423734439967,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-399/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.024684567014604617,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-399/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.04283856037394006,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5597617934034101,
+    "layout": "standard",
+    "area_frac": 0.22337933889015749,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0027958013373811934,
+    "layout": "standard",
+    "area_frac": 0.24309279576364623,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.38065486623565065,
+    "layout": "standard",
+    "area_frac": 0.21728081345494527,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6822203389830509,
+    "layout": "standard",
+    "area_frac": 0.1996128610511638,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7353331799708611,
+    "layout": "standard",
+    "area_frac": 0.1570534990525219,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.7105188377043421,
+    "layout": "standard",
+    "area_frac": 0.18676680091163578,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-400/7.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5509122952519179,
+    "layout": "standard",
+    "area_frac": 0.09326981461793114,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-401/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.05341246290801187,
+    "layout": "standard",
+    "area_frac": 0.1151994146505976,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-401/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.0807893237441189,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-401/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "wide",
+    "area_frac": 0.012426531704644098,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-401/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "wide",
+    "area_frac": 0.013981631539094408,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-401/5.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "wide",
+    "area_frac": 0.042515573455613596,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-401/6.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.0,
+    "layout": "wide",
+    "area_frac": 0.0601852169874181,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-402/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.17273717567835215,
+    "layout": "standard",
+    "area_frac": 0.3405769266396361,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-402/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.07995546914705669,
+    "layout": "standard",
+    "area_frac": 0.2989990265393497,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-402/3.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 8.070528734925406e-05,
+    "layout": "standard",
+    "area_frac": 0.12541907865317897,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-402/4.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.19869126749107177,
+    "layout": "standard",
+    "area_frac": 0.30368942942907634,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.07561753471432317,
+    "layout": "standard",
+    "area_frac": 0.44551414865349176,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/10.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.35670858435576136,
+    "layout": "standard",
+    "area_frac": 0.45376369582032844,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/11.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.24199676862220737,
+    "layout": "standard",
+    "area_frac": 0.5193939314472095,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/12.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.2903009218745362,
+    "layout": "standard",
+    "area_frac": 0.471546829576263,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/13.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.24481406958743285,
+    "layout": "standard",
+    "area_frac": 0.374001417237533,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/14.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.38563321606969964,
+    "layout": "standard",
+    "area_frac": 0.31916122288949805,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-403/15.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.35231719280455004,
+    "layout": "standard",
+    "area_frac": 0.3500234884586127,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-404/1.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.5284768419731392,
+    "layout": "standard",
+    "area_frac": 0.0922434587714695,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G1/NET_G1-404/2.tiff",
+    "subtype": "NET_G1",
+    "black_frac": 0.6744468390804598,
+    "layout": "standard",
+    "area_frac": 0.06713419604945883,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G2/NET_G2-42/1.tiff",
+    "subtype": "NET_G2",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.07520054512128173,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G2/NET_G2-42/2.tiff",
+    "subtype": "NET_G2",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.07995005323420479,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G2/NET_G2-42/3.tiff",
+    "subtype": "NET_G2",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.05506971204378512,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G2/NET_G2-42/4.tiff",
+    "subtype": "NET_G2",
+    "black_frac": 0.8589801691935838,
+    "layout": "standard",
+    "area_frac": 0.07001961498966319,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G2/NET_G2-42/5.tiff",
+    "subtype": "NET_G2",
+    "black_frac": 0.3449335657127865,
+    "layout": "standard",
+    "area_frac": 0.051376414222606706,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NET_G2/NET_G2-42/6.tiff",
+    "subtype": "NET_G2",
+    "black_frac": 0.8434181862858601,
+    "layout": "standard",
+    "area_frac": 0.10200910917397757,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-61/1.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.3868367743367743,
+    "layout": "standard",
+    "area_frac": 0.6950032623580868,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-62/1.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.09961091864543145,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-62/2.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.2113766492407269,
+    "layout": "standard",
+    "area_frac": 0.07754668768308702,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-62/3.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0346351178464501,
+    "layout": "standard",
+    "area_frac": 0.10969647051172891,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/1.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06823841475494874,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/2.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.10652059460489478,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/3.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.040599710917095286,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/4.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.058637254901960784,
+    "layout": "standard",
+    "area_frac": 0.049214606437406695,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/5.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.056543466314242063,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/6.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.06768049060915354,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/7.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.5541222459132907,
+    "layout": "standard",
+    "area_frac": 0.06789606928915701,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-63/8.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.2802642796248934,
+    "layout": "standard",
+    "area_frac": 0.04075241771363799,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-64/1.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.6690464011691634,
+    "layout": "standard",
+    "area_frac": 0.0658406152625184,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-64/2.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.0,
+    "layout": "standard",
+    "area_frac": 0.030700133766062888,
+    "bucket": "clean"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-64/3.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.22406375735066542,
+    "layout": "standard",
+    "area_frac": 0.062301529613794926,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-64/4.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.1778243863726546,
+    "layout": "standard",
+    "area_frac": 0.04260489983424799,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-65/1.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.9639458420176756,
+    "layout": "standard",
+    "area_frac": 0.05972649509474023,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-65/2.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.3993225482443955,
+    "layout": "standard",
+    "area_frac": 0.13547390304644832,
+    "bucket": "dirty"
+  },
+  {
+    "image": "/home/rohan/CADSEL/CAD-SEL-Dataset/Images/Center-3/WLE-Set/NonNeoplasm/NonNeoplasm-65/3.tiff",
+    "subtype": "NonNeoplasm",
+    "black_frac": 0.4455807663854508,
+    "layout": "standard",
+    "area_frac": 0.5223052192394768,
+    "bucket": "dirty"
+  }
+]

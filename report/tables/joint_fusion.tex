@@ -1,0 +1,84 @@
+\begingroup\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{L{5.4cm}L{1.3cm}ccc}
+\caption{Joint end-to-end two-tower fusion runs (\S\ref{sec:fusion2}): accuracy, balanced accuracy, and macro-F1 as logged in \texttt{experiments/results/joint\_fusion\_runs/*.json} (5-fold mean $\pm$ std). Precision, recall, ROC-AUC, and PR-AUC were not logged for this architecture (no confusion matrix or class-probability curve was saved per fold) --- reported as \nl{} rather than fabricated.}\label{tab:app-jointfusion}\\
+\toprule
+\textbf{Run} & \textbf{Ablation} & \textbf{Accuracy} & \textbf{Bal.\ Acc.} & \textbf{F1 (macro)} \\ & & \multicolumn{3}{c}{\scriptsize(Prec./Rec./ROC-AUC/PR-AUC: \nl{})} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Run} & \textbf{Ablation} & \textbf{Accuracy} & \textbf{Bal.\ Acc.} & \textbf{F1 (macro)} \\ & & \multicolumn{3}{c}{\scriptsize(Prec./Rec./ROC-AUC/PR-AUC: \nl{})} \\
+\midrule
+\endhead
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_bgremove0.3\_\_s42}} & eus\_only & 0.690$\pm$0.123 & 0.566$\pm$0.084 & 0.519$\pm$0.104 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_bgremove0.3\_\_s42}} & fused & 0.815$\pm$0.020 & 0.779$\pm$0.041 & 0.775$\pm$0.028 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_bgremove0.3\_\_s42}} & wle\_only & 0.760$\pm$0.019 & 0.757$\pm$0.032 & 0.730$\pm$0.021 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_bgremove0.5\_\_s42}} & eus\_only & 0.696$\pm$0.069 & 0.640$\pm$0.080 & 0.600$\pm$0.073 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_bgremove0.5\_\_s42}} & fused & 0.813$\pm$0.023 & 0.763$\pm$0.042 & 0.766$\pm$0.036 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_bgremove0.5\_\_s42}} & wle\_only & 0.771$\pm$0.028 & 0.736$\pm$0.035 & 0.729$\pm$0.032 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s123}} & eus\_only & 0.744$\pm$0.020 & 0.725$\pm$0.036 & 0.685$\pm$0.021 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s123}} & fused & 0.821$\pm$0.030 & 0.794$\pm$0.012 & 0.788$\pm$0.023 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s123}} & wle\_only & 0.784$\pm$0.053 & 0.768$\pm$0.030 & 0.750$\pm$0.041 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & eus\_only & 0.770$\pm$0.021 & 0.682$\pm$0.064 & 0.664$\pm$0.050 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & fused & 0.844$\pm$0.035 & 0.817$\pm$0.033 & 0.813$\pm$0.039 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & wle\_only & 0.776$\pm$0.098 & 0.768$\pm$0.061 & 0.748$\pm$0.087 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s7}} & eus\_only & 0.658$\pm$0.056 & 0.710$\pm$0.046 & 0.625$\pm$0.043 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s7}} & fused & 0.833$\pm$0.022 & 0.822$\pm$0.017 & 0.806$\pm$0.022 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s7}} & wle\_only & 0.806$\pm$0.041 & 0.783$\pm$0.048 & 0.773$\pm$0.047 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s123}} & eus\_only & 0.687$\pm$0.049 & 0.650$\pm$0.052 & 0.617$\pm$0.046 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s123}} & fused & 0.828$\pm$0.008 & 0.808$\pm$0.025 & 0.797$\pm$0.014 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s123}} & wle\_only & 0.780$\pm$0.006 & 0.773$\pm$0.019 & 0.750$\pm$0.007 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & eus\_only & 0.707$\pm$0.082 & 0.608$\pm$0.030 & 0.592$\pm$0.031 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & fused & 0.809$\pm$0.028 & 0.803$\pm$0.041 & 0.780$\pm$0.032 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & wle\_only & 0.753$\pm$0.037 & 0.766$\pm$0.043 & 0.728$\pm$0.035 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s7}} & eus\_only & 0.746$\pm$0.032 & 0.601$\pm$0.049 & 0.598$\pm$0.047 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s7}} & fused & 0.839$\pm$0.020 & 0.792$\pm$0.015 & 0.800$\pm$0.021 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s7}} & wle\_only & 0.785$\pm$0.032 & 0.754$\pm$0.031 & 0.746$\pm$0.032 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-symmetric\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & eus\_only & 0.710$\pm$0.096 & 0.732$\pm$0.062 & 0.664$\pm$0.082 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-symmetric\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & fused & 0.818$\pm$0.050 & 0.812$\pm$0.026 & 0.793$\pm$0.045 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-none\_\_fusion-symmetric\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & wle\_only & 0.795$\pm$0.025 & 0.779$\pm$0.017 & 0.763$\pm$0.022 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s42}} & eus\_only & 0.739$\pm$0.045 & 0.585$\pm$0.073 & 0.578$\pm$0.066 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s42}} & fused & 0.800$\pm$0.044 & 0.753$\pm$0.061 & 0.753$\pm$0.056 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s42}} & wle\_only & 0.740$\pm$0.037 & 0.719$\pm$0.061 & 0.701$\pm$0.045 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_paired\_\_s42}} & eus\_only & 0.503$\pm$0.076 & 0.628$\pm$0.063 & 0.495$\pm$0.071 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_paired\_\_s42}} & fused & 0.770$\pm$0.062 & 0.763$\pm$0.043 & 0.717$\pm$0.051 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_paired\_\_s42}} & wle\_only & 0.782$\pm$0.033 & 0.699$\pm$0.057 & 0.693$\pm$0.047 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s123}} & eus\_only & 0.735$\pm$0.061 & 0.566$\pm$0.075 & 0.525$\pm$0.085 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s123}} & fused & 0.811$\pm$0.024 & 0.761$\pm$0.018 & 0.765$\pm$0.023 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s123}} & wle\_only & 0.755$\pm$0.047 & 0.722$\pm$0.017 & 0.712$\pm$0.035 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & eus\_only & 0.716$\pm$0.054 & 0.641$\pm$0.113 & 0.590$\pm$0.104 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & fused & 0.779$\pm$0.059 & 0.749$\pm$0.073 & 0.740$\pm$0.069 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & wle\_only & 0.679$\pm$0.128 & 0.687$\pm$0.088 & 0.647$\pm$0.120 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s7}} & eus\_only & 0.687$\pm$0.050 & 0.610$\pm$0.028 & 0.596$\pm$0.034 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s7}} & fused & 0.814$\pm$0.036 & 0.769$\pm$0.043 & 0.771$\pm$0.044 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s7}} & wle\_only & 0.767$\pm$0.051 & 0.737$\pm$0.051 & 0.727$\pm$0.054 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-symmetric\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & eus\_only & 0.571$\pm$0.120 & 0.598$\pm$0.053 & 0.507$\pm$0.063 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-symmetric\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & fused & 0.779$\pm$0.029 & 0.759$\pm$0.031 & 0.743$\pm$0.021 \\
+\texttt{\scriptsize \seqsplit{binary\_\_freeze-partial\_\_fusion-symmetric\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & wle\_only & 0.748$\pm$0.045 & 0.714$\pm$0.038 & 0.705$\pm$0.041 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s123}} & eus\_only & 0.614$\pm$0.083 & 0.371$\pm$0.050 & 0.296$\pm$0.036 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s123}} & fused & 0.510$\pm$0.085 & 0.513$\pm$0.058 & 0.401$\pm$0.014 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s123}} & wle\_only & 0.416$\pm$0.083 & 0.469$\pm$0.069 & 0.347$\pm$0.020 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & eus\_only & 0.566$\pm$0.177 & 0.371$\pm$0.038 & 0.286$\pm$0.034 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & fused & 0.549$\pm$0.044 & 0.555$\pm$0.034 & 0.453$\pm$0.027 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s42}} & wle\_only & 0.464$\pm$0.057 & 0.527$\pm$0.041 & 0.408$\pm$0.038 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s7}} & eus\_only & 0.531$\pm$0.126 & 0.350$\pm$0.049 & 0.260$\pm$0.042 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s7}} & fused & 0.551$\pm$0.091 & 0.557$\pm$0.035 & 0.460$\pm$0.057 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-none\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_lesioncrop\_\_s7}} & wle\_only & 0.465$\pm$0.077 & 0.518$\pm$0.035 & 0.401$\pm$0.034 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s123}} & eus\_only & 0.460$\pm$0.174 & 0.232$\pm$0.068 & 0.210$\pm$0.039 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s123}} & fused & 0.508$\pm$0.059 & 0.481$\pm$0.051 & 0.407$\pm$0.054 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s123}} & wle\_only & 0.411$\pm$0.045 & 0.445$\pm$0.051 & 0.351$\pm$0.047 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s42}} & eus\_only & 0.437$\pm$0.144 & 0.242$\pm$0.033 & 0.189$\pm$0.026 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s42}} & fused & 0.430$\pm$0.081 & 0.510$\pm$0.048 & 0.391$\pm$0.042 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s42}} & wle\_only & 0.325$\pm$0.045 & 0.464$\pm$0.036 & 0.310$\pm$0.033 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s7}} & eus\_only & 0.493$\pm$0.118 & 0.303$\pm$0.082 & 0.258$\pm$0.046 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s7}} & fused & 0.481$\pm$0.039 & 0.528$\pm$0.035 & 0.418$\pm$0.022 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_blr1e-05\_\_s7}} & wle\_only & 0.381$\pm$0.062 & 0.502$\pm$0.015 & 0.354$\pm$0.027 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & eus\_only & 0.450$\pm$0.053 & 0.318$\pm$0.077 & 0.225$\pm$0.055 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & fused & 0.500$\pm$0.040 & 0.496$\pm$0.037 & 0.404$\pm$0.029 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_ep100\_\_es20\_\_s42}} & wle\_only & 0.396$\pm$0.051 & 0.459$\pm$0.055 & 0.346$\pm$0.036 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_s42}} & eus\_only & 0.387$\pm$0.061 & 0.251$\pm$0.057 & 0.185$\pm$0.038 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_s42}} & fused & 0.492$\pm$0.047 & 0.501$\pm$0.015 & 0.395$\pm$0.023 \\
+\texttt{\scriptsize \seqsplit{subtype\_\_freeze-partial\_\_fusion-gated\_\_loss-weighted\_ce\_\_moddrop0.3\_\_mf4\_\_s42}} & wle\_only & 0.398$\pm$0.052 & 0.464$\pm$0.040 & 0.349$\pm$0.044 \\
+\bottomrule
+\end{longtable}
+\endgroup

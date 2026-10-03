@@ -1,0 +1,244 @@
+{
+  "checkpoint": {
+    "wle": "runs/wle_resnet_backbone/best_model.pth",
+    "eus": "runs/eus_radimagenet_backbone/best_model.pth"
+  },
+  "task": "subtype",
+  "folds": 5,
+  "paired_only": false,
+  "classes": [
+    "NET_G1",
+    "NET_G2",
+    "Leiomyoma",
+    "Lipoma",
+    "NonNeoplasm"
+  ],
+  "seed": 42,
+  "protocol": "patient-level cross-validation; NOT comparable to Table 4/5 AP",
+  "ablations": {
+    "wle_only": {
+      "folds": [
+        {
+          "acc": 0.4697,
+          "bal": 0.3793,
+          "macro_f1": 0.3372,
+          "epoch": 16,
+          "n_train": 509,
+          "n_val": 132
+        },
+        {
+          "acc": 0.3664,
+          "bal": 0.4284,
+          "macro_f1": 0.3059,
+          "epoch": 11,
+          "n_train": 510,
+          "n_val": 131
+        },
+        {
+          "acc": 0.4961,
+          "bal": 0.4219,
+          "macro_f1": 0.3781,
+          "epoch": 4,
+          "n_train": 512,
+          "n_val": 129
+        },
+        {
+          "acc": 0.254,
+          "bal": 0.526,
+          "macro_f1": 0.2782,
+          "epoch": 7,
+          "n_train": 515,
+          "n_val": 126
+        },
+        {
+          "acc": 0.3659,
+          "bal": 0.3735,
+          "macro_f1": 0.2805,
+          "epoch": 5,
+          "n_train": 518,
+          "n_val": 123
+        }
+      ],
+      "acc": {
+        "mean": 0.3904,
+        "std": 0.0863
+      },
+      "bal": {
+        "mean": 0.4258,
+        "std": 0.0547
+      },
+      "macro_f1": {
+        "mean": 0.316,
+        "std": 0.0377
+      }
+    },
+    "eus_only": {
+      "folds": [
+        {
+          "acc": 0.4767,
+          "bal": 0.3771,
+          "macro_f1": 0.3107,
+          "epoch": 22,
+          "n_train": 335,
+          "n_val": 86
+        },
+        {
+          "acc": 0.2235,
+          "bal": 0.4,
+          "macro_f1": 0.1825,
+          "epoch": 13,
+          "n_train": 336,
+          "n_val": 85
+        },
+        {
+          "acc": 0.2824,
+          "bal": 0.3495,
+          "macro_f1": 0.2236,
+          "epoch": 38,
+          "n_train": 336,
+          "n_val": 85
+        },
+        {
+          "acc": 0.2381,
+          "bal": 0.3467,
+          "macro_f1": 0.1622,
+          "epoch": 22,
+          "n_train": 337,
+          "n_val": 84
+        },
+        {
+          "acc": 0.2593,
+          "bal": 0.4718,
+          "macro_f1": 0.229,
+          "epoch": 49,
+          "n_train": 340,
+          "n_val": 81
+        }
+      ],
+      "acc": {
+        "mean": 0.296,
+        "std": 0.0925
+      },
+      "bal": {
+        "mean": 0.389,
+        "std": 0.0458
+      },
+      "macro_f1": {
+        "mean": 0.2216,
+        "std": 0.0511
+      }
+    },
+    "fused": {
+      "folds": [
+        {
+          "acc": 0.2576,
+          "bal": 0.3727,
+          "macro_f1": 0.2495,
+          "epoch": 4,
+          "n_train": 509,
+          "n_val": 132
+        },
+        {
+          "acc": 0.5038,
+          "bal": 0.3936,
+          "macro_f1": 0.3377,
+          "epoch": 4,
+          "n_train": 510,
+          "n_val": 131
+        },
+        {
+          "acc": 0.4496,
+          "bal": 0.403,
+          "macro_f1": 0.3322,
+          "epoch": 11,
+          "n_train": 512,
+          "n_val": 129
+        },
+        {
+          "acc": 0.3651,
+          "bal": 0.5114,
+          "macro_f1": 0.3431,
+          "epoch": 11,
+          "n_train": 515,
+          "n_val": 126
+        },
+        {
+          "acc": 0.3902,
+          "bal": 0.4142,
+          "macro_f1": 0.3264,
+          "epoch": 5,
+          "n_train": 518,
+          "n_val": 123
+        }
+      ],
+      "acc": {
+        "mean": 0.3933,
+        "std": 0.0832
+      },
+      "bal": {
+        "mean": 0.419,
+        "std": 0.0482
+      },
+      "macro_f1": {
+        "mean": 0.3178,
+        "std": 0.0346
+      }
+    },
+    "fused_moddrop": {
+      "folds": [
+        {
+          "acc": 0.3712,
+          "bal": 0.3485,
+          "macro_f1": 0.2914,
+          "epoch": 10,
+          "n_train": 509,
+          "n_val": 132
+        },
+        {
+          "acc": 0.458,
+          "bal": 0.4138,
+          "macro_f1": 0.3437,
+          "epoch": 18,
+          "n_train": 510,
+          "n_val": 131
+        },
+        {
+          "acc": 0.5814,
+          "bal": 0.4127,
+          "macro_f1": 0.3981,
+          "epoch": 4,
+          "n_train": 512,
+          "n_val": 129
+        },
+        {
+          "acc": 0.5873,
+          "bal": 0.4849,
+          "macro_f1": 0.4158,
+          "epoch": 7,
+          "n_train": 515,
+          "n_val": 126
+        },
+        {
+          "acc": 0.3821,
+          "bal": 0.4216,
+          "macro_f1": 0.2815,
+          "epoch": 4,
+          "n_train": 518,
+          "n_val": 123
+        }
+      ],
+      "acc": {
+        "mean": 0.476,
+        "std": 0.0934
+      },
+      "bal": {
+        "mean": 0.4163,
+        "std": 0.0432
+      },
+      "macro_f1": {
+        "mean": 0.3461,
+        "std": 0.0543
+      }
+    }
+  }
+}

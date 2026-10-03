@@ -1,0 +1,83 @@
+[
+  {
+    "arm": "plain_control",
+    "run": "eus_plain_control_s42",
+    "val_AP50": 0.3861,
+    "det_per_full_image": 0.887,
+    "det_per_lesion_free_crop": 0.108,
+    "mean_top_score_lesion_free": 0.12,
+    "hallucination_ratio": 0.122
+  },
+  {
+    "arm": "plain_control",
+    "run": "eus_plain_control_s123",
+    "val_AP50": 0.3239,
+    "det_per_full_image": 0.936,
+    "det_per_lesion_free_crop": 0.142,
+    "mean_top_score_lesion_free": 0.161,
+    "hallucination_ratio": 0.151
+  },
+  {
+    "arm": "plain_control",
+    "run": "eus_plain_control_s7",
+    "val_AP50": 0.4413,
+    "det_per_full_image": 0.761,
+    "det_per_lesion_free_crop": 0.041,
+    "mean_top_score_lesion_free": 0.064,
+    "hallucination_ratio": 0.054
+  },
+  {
+    "arm": "real_copypaste",
+    "run": "fasterrcnn_mobilenet_320__EUS__multiclass",
+    "val_AP50": 0.3163,
+    "det_per_full_image": 0.271,
+    "det_per_lesion_free_crop": 0.018,
+    "mean_top_score_lesion_free": 0.091,
+    "hallucination_ratio": 0.068
+  },
+  {
+    "arm": "real_copypaste",
+    "run": "eus_realcp_s123",
+    "val_AP50": 0.3446,
+    "det_per_full_image": 0.944,
+    "det_per_lesion_free_crop": 0.149,
+    "mean_top_score_lesion_free": 0.153,
+    "hallucination_ratio": 0.158
+  },
+  {
+    "arm": "real_copypaste",
+    "run": "eus_realcp_s7",
+    "val_AP50": 0.4397,
+    "det_per_full_image": 0.917,
+    "det_per_lesion_free_crop": 0.085,
+    "mean_top_score_lesion_free": 0.117,
+    "hallucination_ratio": 0.093
+  },
+  {
+    "arm": "gan_copypaste",
+    "run": "eus_gancp_s42",
+    "val_AP50": 0.3362,
+    "det_per_full_image": 0.529,
+    "det_per_lesion_free_crop": 0.009,
+    "mean_top_score_lesion_free": 0.087,
+    "hallucination_ratio": 0.017
+  },
+  {
+    "arm": "gan_copypaste",
+    "run": "eus_gancp_s123",
+    "val_AP50": 0.349,
+    "det_per_full_image": 0.822,
+    "det_per_lesion_free_crop": 0.066,
+    "mean_top_score_lesion_free": 0.071,
+    "hallucination_ratio": 0.08
+  },
+  {
+    "arm": "gan_copypaste",
+    "run": "eus_gancp_s7",
+    "val_AP50": 0.4436,
+    "det_per_full_image": 0.972,
+    "det_per_lesion_free_crop": 0.094,
+    "mean_top_score_lesion_free": 0.102,
+    "hallucination_ratio": 0.097
+  }
+]

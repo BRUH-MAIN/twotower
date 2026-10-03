@@ -1,0 +1,38 @@
+flowchart LR
+    subgraph DP["1. Data Prep"]
+        direction TB
+        DP1["CAD-SEL-Dataset<br/>6 centers, WLE + EUS<br/>TIFF images + bbox labels"]
+        DP2["build_manifest()<br/>→ patient-level manifest"]
+        DP3["Patient-grouped, subtype-<br/>stratified split (5-fold CV)"]
+        DP4["split.json recorded<br/>per run"]
+        DP1 --> DP2 --> DP3 --> DP4
+    end
+
+    subgraph PP["2. Preprocessing"]
+        direction TB
+        PP1["Resize:<br/>RandomResizedCrop (train)<br/>fixed Resize (eval)"]
+        PP2["Normalize: per-modality<br/>mean/std (ImageNet stats<br/>for DINOv3)"]
+        PP3["Augment: h-flip, color<br/>jitter, ±15° rotation"]
+        PP4["Optional: lesion-crop,<br/>bg-remove, EUS speckle noise"]
+        PP1 --> PP2 --> PP3 --> PP4
+    end
+
+    subgraph TR["3. Training"]
+        direction TB
+        TR1["Backbone + task head<br/>(detector or classifier)"]
+        TR2["Loss: weighted CE /<br/>seesaw / group DRO"]
+        TR3["AdamW + LR warmup +<br/>ReduceLROnPlateau,<br/>grad-norm clip 1.0"]
+        TR4["Checkpoint on best<br/>validation metric"]
+        TR1 --> TR2 --> TR3 --> TR4
+    end
+
+    subgraph TS["4. Testing"]
+        direction TB
+        TS1["Patient-level held-out<br/>eval (5-fold CV)"]
+        TS2["Balanced accuracy (cls.) /<br/>AP@0.5, P/R/F1 (det.)"]
+        TS3["TTA / multi-seed<br/>ensembling"]
+        TS4["Results → MODELS_TESTED.md,<br/>RESULTS.md"]
+        TS1 --> TS2 --> TS3 --> TS4
+    end
+
+    DP --> PP --> TR --> TS

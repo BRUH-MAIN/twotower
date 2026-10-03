@@ -1,0 +1,12 @@
+flowchart TD
+    W["WLE frames → EfficientNet-B0<br/>(trainable, + per-step augmentation)"]
+    E["EUS frames → EfficientNet-B0<br/>(trainable, + per-step augmentation)"]
+
+    W --> WP["AttentionPool → 256-d"]
+    E --> EP["AttentionPool → 256-d"]
+
+    WP --> FUSE["GatedFusion<br/>modality dropout p=0.3"]
+    EP --> FUSE
+
+    FUSE --> CLS["Classifier MLP → n classes"]
+    CLS --> OUT["NET / non-NET<br/>or 5-way subtype"]

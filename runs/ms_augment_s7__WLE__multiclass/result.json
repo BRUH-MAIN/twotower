@@ -1,0 +1,103 @@
+{
+  "run_name": "ms_augment_s7__WLE__multiclass",
+  "model": "fasterrcnn_mobilenet_320",
+  "paper_name": "Fasterrcnn_Mobilenet_320",
+  "modality": "WLE",
+  "task": "multiclass",
+  "img_size": 320,
+  "batch_size": 16,
+  "epochs": 100,
+  "epochs_run": 20,
+  "learning_rate": 0.001,
+  "input_mode": "reference",
+  "augment": [
+    "flip",
+    "color",
+    "rotate",
+    "scale_crop",
+    "copy_paste"
+  ],
+  "hard_negatives": 0.0,
+  "split_level": "patient",
+  "joint_split": false,
+  "class_weighting": true,
+  "seed": 7,
+  "best_epoch": 5,
+  "elapsed_sec": 2235.967296600342,
+  "split": {
+    "train": {
+      "images": 2236,
+      "patients": 513,
+      "by_subtype": {
+        "Leiomyoma": 107,
+        "Lipoma": 368,
+        "NET_G1": 1385,
+        "NET_G2": 152,
+        "NonNeoplasm": 224
+      }
+    },
+    "val": {
+      "images": 581,
+      "patients": 128,
+      "by_subtype": {
+        "Leiomyoma": 30,
+        "Lipoma": 85,
+        "NET_G1": 364,
+        "NET_G2": 44,
+        "NonNeoplasm": 58
+      }
+    }
+  },
+  "best": {
+    "AP@0.5": 0.4604106236071441,
+    "AP@0.5_conf": 0.25651070410704474,
+    "precision": 0.5778546712802768,
+    "recall": 0.2751235584843493,
+    "f1": 0.3727678571428572,
+    "tp": 167,
+    "fp": 122,
+    "fn": 440,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.7855257405206906,
+        "AP@0.5_conf": 0.21054808198014596,
+        "precision": 0.8839285714285714,
+        "recall": 0.23349056603773585,
+        "f1": 0.3694029850746269,
+        "tp": 99,
+        "fp": 13,
+        "fn": 325
+      },
+      "Leiomyoma": {
+        "AP@0.5": 0.38219890452043387,
+        "AP@0.5_conf": 0.3615066632713691,
+        "precision": 0.19791666666666666,
+        "recall": 0.5757575757575758,
+        "f1": 0.29457364341085274,
+        "tp": 19,
+        "fp": 77,
+        "fn": 14
+      },
+      "Lipoma": {
+        "AP@0.5": 0.5709405503199145,
+        "AP@0.5_conf": 0.45398807117666395,
+        "precision": 0.620253164556962,
+        "recall": 0.5384615384615384,
+        "f1": 0.5764705882352941,
+        "tp": 49,
+        "fp": 30,
+        "fn": 42
+      },
+      "NonNeoplasm": {
+        "AP@0.5": 0.10297729906753737,
+        "AP@0.5_conf": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 2,
+        "fn": 59
+      }
+    }
+  }
+}

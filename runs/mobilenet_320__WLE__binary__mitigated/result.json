@@ -1,0 +1,81 @@
+{
+  "run_name": "mobilenet_320__WLE__binary__mitigated",
+  "model": "fasterrcnn_mobilenet_320",
+  "paper_name": "Fasterrcnn_Mobilenet_320",
+  "modality": "WLE",
+  "task": "binary",
+  "img_size": 320,
+  "batch_size": 16,
+  "epochs": 100,
+  "epochs_run": 24,
+  "learning_rate": 0.001,
+  "input_mode": "reference",
+  "augment": [
+    "flip",
+    "color",
+    "rotate",
+    "scale_crop",
+    "copy_paste"
+  ],
+  "split_level": "patient",
+  "class_weighting": true,
+  "seed": 42,
+  "best_epoch": 9,
+  "elapsed_sec": 1271.4431364536285,
+  "split": {
+    "train": {
+      "images": 2249,
+      "patients": 513,
+      "by_subtype": {
+        "Leiomyoma": 112,
+        "Lipoma": 362,
+        "NET_G1": 1392,
+        "NET_G2": 155,
+        "NonNeoplasm": 228
+      }
+    },
+    "val": {
+      "images": 568,
+      "patients": 128,
+      "by_subtype": {
+        "Leiomyoma": 25,
+        "Lipoma": 91,
+        "NET_G1": 357,
+        "NET_G2": 41,
+        "NonNeoplasm": 54
+      }
+    }
+  },
+  "best": {
+    "AP@0.5": 0.6340184505886464,
+    "AP@0.5_conf": 0.5602360701232618,
+    "precision": 0.6856240126382307,
+    "recall": 0.7306397306397306,
+    "f1": 0.7074164629176855,
+    "tp": 434,
+    "fp": 199,
+    "fn": 160,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.7979645761410069,
+        "AP@0.5_conf": 0.7151664735933614,
+        "precision": 0.7918660287081339,
+        "recall": 0.7995169082125604,
+        "f1": 0.7956730769230769,
+        "tp": 331,
+        "fp": 87,
+        "fn": 83
+      },
+      "non-NET": {
+        "AP@0.5": 0.4700723250362858,
+        "AP@0.5_conf": 0.40530566665316226,
+        "precision": 0.4790697674418605,
+        "recall": 0.5722222222222222,
+        "f1": 0.5215189873417722,
+        "tp": 103,
+        "fp": 112,
+        "fn": 77
+      }
+    }
+  }
+}

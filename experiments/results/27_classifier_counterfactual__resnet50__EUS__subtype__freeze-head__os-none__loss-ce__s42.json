@@ -1,0 +1,60 @@
+{
+  "target": {
+    "run_name": "resnet50__EUS__subtype__freeze-head__os-none__loss-ce__s42",
+    "modality": "EUS",
+    "task": "subtype",
+    "chance": 0.2,
+    "full": 0.2,
+    "lesion": 0.2,
+    "bg_mask": 0.2,
+    "bg_patch": 0.2,
+    "boxmap": 0.2,
+    "ret_lesion": null,
+    "ret_bg_mask": null,
+    "ret_bg_patch": null,
+    "ret_boxmap": null,
+    "per_fold": [
+      {
+        "fold": 0,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 1,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 2,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 3,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 4,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      }
+    ]
+  },
+  "baseline": null
+}

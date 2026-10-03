@@ -1,0 +1,62 @@
+[
+  {
+    "label": "existing_s42",
+    "sweep": "A",
+    "base": "mobilenet_320__WLE__multiclass__tier1",
+    "finetuned": "mobilenet_320__WLE__multiclass__tier1__finetune_rare",
+    "base_AP@0.5": 0.4106,
+    "finetuned_AP@0.5": 0.3992,
+    "delta_AP@0.5": -0.0114,
+    "base_Leiomyoma_AP@0.5": 0.1751,
+    "finetuned_Leiomyoma_AP@0.5": 0.1468,
+    "delta_Leiomyoma_AP@0.5": -0.0282
+  },
+  {
+    "label": "sweepA_s123",
+    "sweep": "A",
+    "base": "mobilenet_320__WLE__multiclass__tier1",
+    "finetuned": "mobilenet_320__WLE__multiclass__tier1__finetune_rare_s123",
+    "base_AP@0.5": 0.4106,
+    "finetuned_AP@0.5": 0.3988,
+    "delta_AP@0.5": -0.0118,
+    "base_Leiomyoma_AP@0.5": 0.1751,
+    "finetuned_Leiomyoma_AP@0.5": 0.1488,
+    "delta_Leiomyoma_AP@0.5": -0.0262
+  },
+  {
+    "label": "sweepA_s7",
+    "sweep": "A",
+    "base": "mobilenet_320__WLE__multiclass__tier1",
+    "finetuned": "mobilenet_320__WLE__multiclass__tier1__finetune_rare_s7",
+    "base_AP@0.5": 0.4106,
+    "finetuned_AP@0.5": 0.3989,
+    "delta_AP@0.5": -0.0117,
+    "base_Leiomyoma_AP@0.5": 0.1751,
+    "finetuned_Leiomyoma_AP@0.5": 0.1463,
+    "delta_Leiomyoma_AP@0.5": -0.0287
+  },
+  {
+    "label": "sweepB_tier1_all_s123",
+    "sweep": "B",
+    "base": "tier1_all_s123",
+    "finetuned": "tier1_all_s123__finetune_rare",
+    "base_AP@0.5": 0.442,
+    "finetuned_AP@0.5": 0.4418,
+    "delta_AP@0.5": -0.0002,
+    "base_Leiomyoma_AP@0.5": 0.1441,
+    "finetuned_Leiomyoma_AP@0.5": 0.1563,
+    "delta_Leiomyoma_AP@0.5": 0.0122
+  },
+  {
+    "label": "sweepB_tier1_all_s7",
+    "sweep": "B",
+    "base": "tier1_all_s7",
+    "finetuned": "tier1_all_s7__finetune_rare",
+    "base_AP@0.5": 0.4487,
+    "finetuned_AP@0.5": 0.4536,
+    "delta_AP@0.5": 0.0048,
+    "base_Leiomyoma_AP@0.5": 0.142,
+    "finetuned_Leiomyoma_AP@0.5": 0.2057,
+    "delta_Leiomyoma_AP@0.5": 0.0637
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "run_name": "dfr_center_loco3_s7",
+  "finetuned_from": "runs/loco_holdout_center3_binary/best_model.pth",
+  "model": "fasterrcnn_mobilenet_320",
+  "modality": "WLE",
+  "task": "binary",
+  "balance_by": "center",
+  "target_per_class": null,
+  "target_per_center": null,
+  "centers": "Center-1,Center-2,Center-4,Center-5,Center-6",
+  "subset_size": 40,
+  "learning_rate": 0.0001,
+  "epochs": 10,
+  "seed": 7,
+  "split_seed": 42,
+  "elapsed_sec": 60.4705274105072,
+  "best": {
+    "AP@0.5": 0.6530240926659087,
+    "AP@0.5_conf": 0.5459085261532821,
+    "precision": 0.6180124223602484,
+    "recall": 0.7019400352733686,
+    "f1": 0.6573080099091659,
+    "tp": 398,
+    "fp": 246,
+    "fn": 169,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.7414624493046575,
+        "AP@0.5_conf": 0.6136411725174038,
+        "precision": 0.7598870056497176,
+        "recall": 0.7192513368983957,
+        "f1": 0.739010989010989,
+        "tp": 269,
+        "fp": 85,
+        "fn": 105
+      },
+      "non-NET": {
+        "AP@0.5": 0.5645857360271598,
+        "AP@0.5_conf": 0.47817587978916043,
+        "precision": 0.44482758620689655,
+        "recall": 0.6683937823834197,
+        "f1": 0.5341614906832298,
+        "tp": 129,
+        "fp": 161,
+        "fn": 64
+      }
+    }
+  }
+}

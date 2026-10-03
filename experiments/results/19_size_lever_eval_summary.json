@@ -1,0 +1,154 @@
+{
+  "binary/ms_only": {
+    "n_seeds": 5,
+    "overall_mean": 0.6721,
+    "overall_std": 0.022989127865145297,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.49542,
+        "std": 0.04040353449885295
+      },
+      "tertile2": {
+        "mean": 0.65938,
+        "std": 0.03562928009376556
+      },
+      "tertile3": {
+        "mean": 0.7649600000000001,
+        "std": 0.03758854080700659
+      }
+    }
+  },
+  "binary/size_rfs_ms": {
+    "n_seeds": 5,
+    "overall_mean": 0.67152,
+    "overall_std": 0.03357561019549759,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.50822,
+        "std": 0.03527987528322625
+      },
+      "tertile2": {
+        "mean": 0.6555,
+        "std": 0.03949161936411317
+      },
+      "tertile3": {
+        "mean": 0.7666,
+        "std": 0.033227398333303196
+      }
+    }
+  },
+  "multiclass/ms_only": {
+    "n_seeds": 3,
+    "overall_mean": 0.4293666666666667,
+    "overall_std": 0.021766385909368496,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.2712333333333334,
+        "std": 0.04319277202907398
+      },
+      "tertile2": {
+        "mean": 0.40973333333333334,
+        "std": 0.007185788443556887
+      },
+      "tertile3": {
+        "mean": 0.4941333333333333,
+        "std": 0.039445348972414404
+      }
+    }
+  },
+  "multiclass/size_rfs_ms": {
+    "n_seeds": 3,
+    "overall_mean": 0.42016666666666663,
+    "overall_std": 0.03005709381974393,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.3381,
+        "std": 0.03567716356438667
+      },
+      "tertile2": {
+        "mean": 0.4002666666666667,
+        "std": 0.03017640726719395
+      },
+      "tertile3": {
+        "mean": 0.4365666666666666,
+        "std": 0.02082967967961955
+      }
+    }
+  },
+  "multiclass/size_rfs_ms_anchors": {
+    "n_seeds": 3,
+    "overall_mean": 0.4169666666666667,
+    "overall_std": 0.020557291218013665,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.2951333333333333,
+        "std": 0.08212727250365062
+      },
+      "tertile2": {
+        "mean": 0.3927333333333334,
+        "std": 0.022061177565024848
+      },
+      "tertile3": {
+        "mean": 0.4321333333333333,
+        "std": 0.033561121686989076
+      }
+    }
+  },
+  "multiclass/size_rfs_thresh01": {
+    "n_seeds": 1,
+    "overall_mean": 0.4215,
+    "overall_std": 0.0,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.2561,
+        "std": 0.0
+      },
+      "tertile2": {
+        "mean": 0.4183,
+        "std": 0.0
+      },
+      "tertile3": {
+        "mean": 0.4499,
+        "std": 0.0
+      }
+    }
+  },
+  "multiclass/size_rfs_thresh03": {
+    "n_seeds": 1,
+    "overall_mean": 0.3998,
+    "overall_std": 0.0,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.3733,
+        "std": 0.0
+      },
+      "tertile2": {
+        "mean": 0.3874,
+        "std": 0.0
+      },
+      "tertile3": {
+        "mean": 0.4268,
+        "std": 0.0
+      }
+    }
+  },
+  "multiclass/size_rfs_thresh04": {
+    "n_seeds": 1,
+    "overall_mean": 0.4017,
+    "overall_std": 0.0,
+    "tertiles": {
+      "tertile1": {
+        "mean": 0.2724,
+        "std": 0.0
+      },
+      "tertile2": {
+        "mean": 0.415,
+        "std": 0.0
+      },
+      "tertile3": {
+        "mean": 0.4273,
+        "std": 0.0
+      }
+    }
+  }
+}

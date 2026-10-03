@@ -1,0 +1,12 @@
+flowchart TD
+    W["WLE DINOv3 checkpoint (frozen)<br/>CLS token + posterior → 389-d,<br/>cached per frame (.npz)"]
+    E["EUS DINOv3 checkpoint (frozen)<br/>CLS token + posterior → 389-d,<br/>cached per frame (.npz)"]
+
+    W --> WP["AttentionPool → 256-d"]
+    E --> EP["AttentionPool → 256-d"]
+
+    WP --> FUSE["GatedFusion<br/>(only trainable part)"]
+    EP --> FUSE
+
+    FUSE --> CLS["Classifier MLP → n classes"]
+    CLS --> OUT["balanced accuracy<br/>(wle_only / eus_only / fused<br/>trained separately)"]

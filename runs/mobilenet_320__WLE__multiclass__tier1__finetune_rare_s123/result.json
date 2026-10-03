@@ -1,0 +1,66 @@
+{
+  "run_name": "mobilenet_320__WLE__multiclass__tier1__finetune_rare_s123",
+  "finetuned_from": "runs/mobilenet_320__WLE__multiclass__tier1/best_model.pth",
+  "model": "fasterrcnn_mobilenet_320",
+  "modality": "WLE",
+  "task": "multiclass",
+  "target_per_class": null,
+  "subset_size": 436,
+  "learning_rate": 0.0001,
+  "epochs": 10,
+  "seed": 123,
+  "split_seed": 42,
+  "elapsed_sec": 510.55053520202637,
+  "best": {
+    "AP@0.5": 0.39880573427909355,
+    "AP@0.5_conf": 0.26924882322250204,
+    "precision": 0.6097560975609756,
+    "recall": 0.5050505050505051,
+    "f1": 0.5524861878453039,
+    "tp": 300,
+    "fp": 192,
+    "fn": 294,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.7848904648550974,
+        "AP@0.5_conf": 0.4884680407052996,
+        "precision": 0.8513011152416357,
+        "recall": 0.5531400966183575,
+        "f1": 0.670571010248902,
+        "tp": 229,
+        "fp": 40,
+        "fn": 185
+      },
+      "Leiomyoma": {
+        "AP@0.5": 0.14883583451158083,
+        "AP@0.5_conf": 0.09677836566725455,
+        "precision": 0.21052631578947367,
+        "recall": 0.2962962962962963,
+        "f1": 0.24615384615384617,
+        "tp": 8,
+        "fp": 30,
+        "fn": 19
+      },
+      "Lipoma": {
+        "AP@0.5": 0.4816909853945537,
+        "AP@0.5_conf": 0.3945530785900993,
+        "precision": 0.44660194174757284,
+        "recall": 0.4742268041237113,
+        "f1": 0.46,
+        "tp": 46,
+        "fp": 57,
+        "fn": 51
+      },
+      "NonNeoplasm": {
+        "AP@0.5": 0.17980565235514243,
+        "AP@0.5_conf": 0.0971958079273547,
+        "precision": 0.2073170731707317,
+        "recall": 0.30357142857142855,
+        "f1": 0.24637681159420288,
+        "tp": 17,
+        "fp": 65,
+        "fn": 39
+      }
+    }
+  }
+}

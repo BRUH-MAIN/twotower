@@ -1,0 +1,207 @@
+{
+  "source": "/home/rohan/CADSEL/results/fusion_predictions.json",
+  "task": "subtype",
+  "n_paired_patients": 421,
+  "overall": {
+    "aggregate": {
+      "n": 421,
+      "wle_only_acc": 0.3777,
+      "fused_acc": 0.4204,
+      "fused_moddrop_acc": 0.5226,
+      "fused_minus_wle": 0.0428,
+      "fused_moddrop_minus_wle": 0.1449,
+      "wle_only_bal_acc": 0.4396,
+      "fused_bal_acc": 0.4187,
+      "fused_moddrop_bal_acc": 0.3911,
+      "fused_minus_wle_bal": -0.0209,
+      "fused_moddrop_minus_wle_bal": -0.0486
+    },
+    "tertiles": [
+      {
+        "tertile": "low_wle_confidence",
+        "n": 141,
+        "wle_confidence_range": [
+          0.2179,
+          0.4309
+        ],
+        "wle_only_acc": 0.4043,
+        "fused_acc": 0.4539,
+        "fused_moddrop_acc": 0.5887,
+        "fused_minus_wle": 0.0496,
+        "fused_moddrop_minus_wle": 0.1844
+      },
+      {
+        "tertile": "mid",
+        "n": 140,
+        "wle_confidence_range": [
+          0.4314,
+          0.6644
+        ],
+        "wle_only_acc": 0.35,
+        "fused_acc": 0.4714,
+        "fused_moddrop_acc": 0.5286,
+        "fused_minus_wle": 0.1214,
+        "fused_moddrop_minus_wle": 0.1786
+      },
+      {
+        "tertile": "high_wle_confidence",
+        "n": 140,
+        "wle_confidence_range": [
+          0.6709,
+          0.9997
+        ],
+        "wle_only_acc": 0.3786,
+        "fused_acc": 0.3357,
+        "fused_moddrop_acc": 0.45,
+        "fused_minus_wle": -0.0429,
+        "fused_moddrop_minus_wle": 0.0714
+      }
+    ]
+  },
+  "by_group": {
+    "Leiomyoma": {
+      "n": 14,
+      "aggregate": {
+        "n": 14,
+        "wle_only_acc": 0.5,
+        "fused_acc": 0.3571,
+        "fused_moddrop_acc": 0.5,
+        "fused_minus_wle": -0.1429,
+        "fused_moddrop_minus_wle": 0.0
+      },
+      "tertiles": null,
+      "tertile_note": "not sliced: n=14 below viability threshold, or 'Leiomyoma' not in the viable-groups list for subtype"
+    },
+    "Lipoma": {
+      "n": 49,
+      "aggregate": {
+        "n": 49,
+        "wle_only_acc": 0.6327,
+        "fused_acc": 0.6531,
+        "fused_moddrop_acc": 0.4694,
+        "fused_minus_wle": 0.0204,
+        "fused_moddrop_minus_wle": -0.1633
+      },
+      "tertiles": [
+        {
+          "tertile": "low_wle_confidence",
+          "n": 17,
+          "wle_confidence_range": [
+            0.2701,
+            0.5666
+          ],
+          "wle_only_acc": 0.4706,
+          "fused_acc": 0.5294,
+          "fused_moddrop_acc": 0.2941,
+          "fused_minus_wle": 0.0588,
+          "fused_moddrop_minus_wle": -0.1765
+        },
+        {
+          "tertile": "mid",
+          "n": 16,
+          "wle_confidence_range": [
+            0.5684,
+            0.8665
+          ],
+          "wle_only_acc": 0.625,
+          "fused_acc": 0.625,
+          "fused_moddrop_acc": 0.375,
+          "fused_minus_wle": 0.0,
+          "fused_moddrop_minus_wle": -0.25
+        },
+        {
+          "tertile": "high_wle_confidence",
+          "n": 16,
+          "wle_confidence_range": [
+            0.8763,
+            0.9935
+          ],
+          "wle_only_acc": 0.8125,
+          "fused_acc": 0.8125,
+          "fused_moddrop_acc": 0.75,
+          "fused_minus_wle": 0.0,
+          "fused_moddrop_minus_wle": -0.0625
+        }
+      ]
+    },
+    "NET_G1": {
+      "n": 299,
+      "aggregate": {
+        "n": 299,
+        "wle_only_acc": 0.3278,
+        "fused_acc": 0.398,
+        "fused_moddrop_acc": 0.592,
+        "fused_minus_wle": 0.0702,
+        "fused_moddrop_minus_wle": 0.2642
+      },
+      "tertiles": [
+        {
+          "tertile": "low_wle_confidence",
+          "n": 100,
+          "wle_confidence_range": [
+            0.2179,
+            0.4244
+          ],
+          "wle_only_acc": 0.41,
+          "fused_acc": 0.49,
+          "fused_moddrop_acc": 0.72,
+          "fused_minus_wle": 0.08,
+          "fused_moddrop_minus_wle": 0.31
+        },
+        {
+          "tertile": "mid",
+          "n": 100,
+          "wle_confidence_range": [
+            0.4255,
+            0.645
+          ],
+          "wle_only_acc": 0.27,
+          "fused_acc": 0.47,
+          "fused_moddrop_acc": 0.65,
+          "fused_minus_wle": 0.2,
+          "fused_moddrop_minus_wle": 0.38
+        },
+        {
+          "tertile": "high_wle_confidence",
+          "n": 99,
+          "wle_confidence_range": [
+            0.647,
+            0.9997
+          ],
+          "wle_only_acc": 0.303,
+          "fused_acc": 0.2323,
+          "fused_moddrop_acc": 0.404,
+          "fused_minus_wle": -0.0707,
+          "fused_moddrop_minus_wle": 0.101
+        }
+      ]
+    },
+    "NET_G2": {
+      "n": 26,
+      "aggregate": {
+        "n": 26,
+        "wle_only_acc": 0.1923,
+        "fused_acc": 0.2308,
+        "fused_moddrop_acc": 0.0,
+        "fused_minus_wle": 0.0385,
+        "fused_moddrop_minus_wle": -0.1923
+      },
+      "tertiles": null,
+      "tertile_note": "not sliced: n=26 below viability threshold, or 'NET_G2' not in the viable-groups list for subtype"
+    },
+    "NonNeoplasm": {
+      "n": 33,
+      "aggregate": {
+        "n": 33,
+        "wle_only_acc": 0.5455,
+        "fused_acc": 0.4545,
+        "fused_moddrop_acc": 0.3939,
+        "fused_minus_wle": -0.0909,
+        "fused_moddrop_minus_wle": -0.1515
+      },
+      "tertiles": null,
+      "tertile_note": "not sliced: n=33 below viability threshold, or 'NonNeoplasm' not in the viable-groups list for subtype"
+    }
+  },
+  "headline_question": "Does fused's advantage over wle_only concentrate in the low-WLE-confidence tertile (clinically expected: EUS should help most exactly where WLE is uncertain), or is it flat/absent across tertiles?"
+}

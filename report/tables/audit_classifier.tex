@@ -1,0 +1,805 @@
+\begingroup\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{cL{1.1cm}L{1.5cm}L{5.6cm}ccc}
+\caption{Shortcut-learning-audit and classifier-level mitigation probes (Experiments 1--5, 7, 12--14, 17--18): accuracy and balanced accuracy as logged in each experiment's own \texttt{experiments/results/*.json}. These ResNet-18 probe scripts predate Track~A's infrastructure and never saved a confusion matrix, class-probability scores, or a checkpoint (they resume from JSON only, per \texttt{experiments/README.md}) --- precision, recall, F1, ROC-AUC, and PR-AUC were never computed for these runs, and backfilling them would require fully retraining every one of the $\sim$150 individual model fits below. Reported honestly as \nl{} rather than estimated.}\label{tab:app-auditclf}\\
+\toprule
+\textbf{Exp.} & \textbf{Mod.} & \textbf{Task} & \textbf{Configuration} & \textbf{Acc.} & \textbf{Bal.\ Acc.} & \textbf{P/R/F1/ROC/PR-AUC} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Exp.} & \textbf{Mod.} & \textbf{Task} & \textbf{Configuration} & \textbf{Acc.} & \textbf{Bal.\ Acc.} & \textbf{P/R/F1/ROC/PR-AUC} \\
+\midrule
+\endhead
+01 & -- & category & metadata: centre only & 0.123 & 0.203 & \nl{} \\
+01 & -- & category & metadata: demographics & 0.251 & 0.268 & \nl{} \\
+01 & -- & category & metadata: lesion size & 0.474 & 0.402 & \nl{} \\
+01 & -- & category & metadata: location & 0.309 & 0.403 & \nl{} \\
+01 & -- & category & metadata: all metadata & 0.602 & 0.387 & \nl{} \\
+01 & -- & is\_net & metadata: centre only & 0.395 & 0.496 & \nl{} \\
+01 & -- & is\_net & metadata: lesion size & 0.743 & 0.679 & \nl{} \\
+01 & -- & is\_net & metadata: all metadata & 0.844 & 0.805 & \nl{} \\
+01 & WLE & subtype & geometry: None & 0.207 & 0.208 & \nl{} \\
+01 & WLE & is\_net & geometry: None & 0.567 & 0.541 & \nl{} \\
+01 & WLE & center & geometry: None & 0.846 & 0.832 & \nl{} \\
+01 & EUS & subtype & geometry: None & 0.139 & 0.268 & \nl{} \\
+01 & EUS & is\_net & geometry: None & 0.705 & 0.578 & \nl{} \\
+01 & EUS & center & geometry: None & 0.977 & 0.897 & \nl{} \\
+02 & WLE & center & A/MLP & 0.952 & 0.754 & \nl{} \\
+02 & WLE & center & A/RF & 0.974 & 0.809 & \nl{} \\
+02 & EUS & center & A/MLP & 0.942 & 0.696 & \nl{} \\
+02 & EUS & center & A/RF & 0.972 & 0.782 & \nl{} \\
+02 & WLE & subtype & B/MLP & 0.478 & 0.248 & \nl{} \\
+02 & WLE & subtype & B/RF & 0.646 & 0.254 & \nl{} \\
+02 & WLE & is\_net & B/MLP & 0.642 & 0.579 & \nl{} \\
+02 & WLE & is\_net & B/RF & 0.728 & 0.603 & \nl{} \\
+02 & EUS & subtype & B/MLP & 0.454 & 0.228 & \nl{} \\
+02 & EUS & subtype & B/RF & 0.629 & 0.198 & \nl{} \\
+02 & EUS & is\_net & B/MLP & 0.630 & 0.528 & \nl{} \\
+02 & EUS & is\_net & B/RF & 0.723 & 0.514 & \nl{} \\
+02 & WLE & subtype & C/RF & 0.643 & 0.253 & \nl{} \\
+02 & WLE & is\_net & C/RF & 0.716 & 0.588 & \nl{} \\
+02 & WLE & center & C/RF & 0.956 & 0.642 & \nl{} \\
+02 & EUS & subtype & C/RF & 0.608 & 0.199 & \nl{} \\
+02 & EUS & is\_net & C/RF & 0.711 & 0.496 & \nl{} \\
+02 & EUS & center & C/RF & 0.733 & 0.447 & \nl{} \\
+03 & WLE & binary & full & 0.775 & 0.706 & \nl{} \\
+03 & WLE & binary & lesion & 0.805 & 0.754 & \nl{} \\
+03 & WLE & binary & bg\_mask & 0.736 & 0.667 & \nl{} \\
+03 & WLE & binary & bg\_patch & 0.757 & 0.695 & \nl{} \\
+03 & WLE & binary & boxmap & 0.680 & 0.598 & \nl{} \\
+03 & WLE & subtype & full & 0.435 & 0.326 & \nl{} \\
+03 & WLE & subtype & lesion & 0.664 & 0.448 & \nl{} \\
+03 & WLE & subtype & bg\_mask & 0.317 & 0.347 & \nl{} \\
+03 & WLE & subtype & bg\_patch & 0.252 & 0.299 & \nl{} \\
+03 & WLE & subtype & boxmap & 0.319 & 0.300 & \nl{} \\
+03 & EUS & binary & full & 0.775 & 0.679 & \nl{} \\
+03 & EUS & binary & lesion & 0.855 & 0.749 & \nl{} \\
+03 & EUS & binary & bg\_mask & 0.793 & 0.766 & \nl{} \\
+03 & EUS & binary & bg\_patch & 0.561 & 0.621 & \nl{} \\
+03 & EUS & binary & boxmap & 0.717 & 0.666 & \nl{} \\
+03 & EUS & subtype & full & 0.694 & 0.322 & \nl{} \\
+03 & EUS & subtype & lesion & 0.395 & 0.599 & \nl{} \\
+03 & EUS & subtype & bg\_mask & 0.522 & 0.396 & \nl{} \\
+03 & EUS & subtype & bg\_patch & 0.375 & 0.292 & \nl{} \\
+03 & EUS & subtype & boxmap & 0.223 & 0.431 & \nl{} \\
+04 & WLE & binary & internal & 0.749 & 0.685 & \nl{} \\
+04 & WLE & binary & external & 0.681 & 0.632 & \nl{} \\
+04 & WLE & subtype & internal & 0.582 & 0.395 & \nl{} \\
+04 & WLE & subtype & external & 0.652 & 0.300 & \nl{} \\
+04 & EUS & binary & internal & 0.780 & 0.636 & \nl{} \\
+04 & EUS & binary & external & 0.745 & 0.635 & \nl{} \\
+04 & EUS & subtype & internal & 0.627 & 0.236 & \nl{} \\
+04 & EUS & subtype & external & 0.575 & 0.261 & \nl{} \\
+05 & WLE & binary & patient & 0.775 & 0.706 & \nl{} \\
+05 & WLE & subtype & patient & 0.435 & 0.326 & \nl{} \\
+05 & WLE & binary & image & 0.883 & 0.849 & \nl{} \\
+05 & WLE & subtype & image & 0.801 & 0.682 & \nl{} \\
+05 & EUS & binary & patient & 0.775 & 0.679 & \nl{} \\
+05 & EUS & subtype & patient & 0.694 & 0.322 & \nl{} \\
+05 & EUS & binary & image & 0.967 & 0.954 & \nl{} \\
+05 & EUS & subtype & image & 0.950 & 0.900 & \nl{} \\
+07 & WLE & binary & baseline / full & \nl{} & 0.706 & \nl{} \\
+07 & WLE & binary & baseline / bg\_patch & \nl{} & 0.642 & \nl{} \\
+07 & WLE & binary & baseline / boxmap & \nl{} & 0.500 & \nl{} \\
+07 & WLE & binary & scale / full & \nl{} & 0.693 & \nl{} \\
+07 & WLE & binary & scale / bg\_patch & \nl{} & 0.632 & \nl{} \\
+07 & WLE & binary & scale / boxmap & \nl{} & 0.564 & \nl{} \\
+07 & WLE & binary & bgswap / full & \nl{} & 0.553 & \nl{} \\
+07 & WLE & binary & bgswap / bg\_patch & \nl{} & 0.497 & \nl{} \\
+07 & WLE & binary & bgswap / boxmap & \nl{} & 0.463 & \nl{} \\
+07 & WLE & binary & both / full & \nl{} & 0.637 & \nl{} \\
+07 & WLE & binary & both / bg\_patch & \nl{} & 0.525 & \nl{} \\
+07 & WLE & binary & both / boxmap & \nl{} & 0.500 & \nl{} \\
+07 & WLE & subtype & baseline / full & \nl{} & 0.326 & \nl{} \\
+07 & WLE & subtype & baseline / bg\_patch & \nl{} & 0.257 & \nl{} \\
+07 & WLE & subtype & baseline / boxmap & \nl{} & 0.184 & \nl{} \\
+07 & WLE & subtype & scale / full & \nl{} & 0.324 & \nl{} \\
+07 & WLE & subtype & scale / bg\_patch & \nl{} & 0.198 & \nl{} \\
+07 & WLE & subtype & scale / boxmap & \nl{} & 0.169 & \nl{} \\
+07 & WLE & subtype & bgswap / full & \nl{} & 0.311 & \nl{} \\
+07 & WLE & subtype & bgswap / bg\_patch & \nl{} & 0.204 & \nl{} \\
+07 & WLE & subtype & bgswap / boxmap & \nl{} & 0.302 & \nl{} \\
+07 & WLE & subtype & both / full & \nl{} & 0.368 & \nl{} \\
+07 & WLE & subtype & both / bg\_patch & \nl{} & 0.204 & \nl{} \\
+07 & WLE & subtype & both / boxmap & \nl{} & 0.237 & \nl{} \\
+07 & EUS & binary & baseline / full & \nl{} & 0.679 & \nl{} \\
+07 & EUS & binary & baseline / bg\_patch & \nl{} & 0.585 & \nl{} \\
+07 & EUS & binary & baseline / boxmap & \nl{} & 0.500 & \nl{} \\
+07 & EUS & binary & scale / full & \nl{} & 0.697 & \nl{} \\
+07 & EUS & binary & scale / bg\_patch & \nl{} & 0.536 & \nl{} \\
+07 & EUS & binary & scale / boxmap & \nl{} & 0.412 & \nl{} \\
+07 & EUS & binary & bgswap / full & \nl{} & 0.591 & \nl{} \\
+07 & EUS & binary & bgswap / bg\_patch & \nl{} & 0.515 & \nl{} \\
+07 & EUS & binary & bgswap / boxmap & \nl{} & 0.524 & \nl{} \\
+07 & EUS & binary & both / full & \nl{} & 0.577 & \nl{} \\
+07 & EUS & binary & both / bg\_patch & \nl{} & 0.537 & \nl{} \\
+07 & EUS & binary & both / boxmap & \nl{} & 0.538 & \nl{} \\
+07 & EUS & subtype & baseline / full & \nl{} & 0.322 & \nl{} \\
+07 & EUS & subtype & baseline / bg\_patch & \nl{} & 0.244 & \nl{} \\
+07 & EUS & subtype & baseline / boxmap & \nl{} & 0.330 & \nl{} \\
+07 & EUS & subtype & scale / full & \nl{} & 0.278 & \nl{} \\
+07 & EUS & subtype & scale / bg\_patch & \nl{} & 0.257 & \nl{} \\
+07 & EUS & subtype & scale / boxmap & \nl{} & 0.155 & \nl{} \\
+07 & EUS & subtype & bgswap / full & \nl{} & 0.304 & \nl{} \\
+07 & EUS & subtype & bgswap / bg\_patch & \nl{} & 0.266 & \nl{} \\
+07 & EUS & subtype & bgswap / boxmap & \nl{} & 0.244 & \nl{} \\
+07 & EUS & subtype & both / full & \nl{} & 0.255 & \nl{} \\
+07 & EUS & subtype & both / bg\_patch & \nl{} & 0.233 & \nl{} \\
+07 & EUS & subtype & both / boxmap & \nl{} & 0.216 & \nl{} \\
+12 & WLE & subtype & baseline (s42) / full & \nl{} & 0.349 & \nl{} \\
+12 & WLE & subtype & baseline (s42) / bg\_patch & \nl{} & 0.222 & \nl{} \\
+12 & WLE & subtype & baseline (s42) / boxmap & \nl{} & 0.236 & \nl{} \\
+12 & WLE & subtype & presweep\_l0.3\_bg\_patch (s42) / full & \nl{} & 0.352 & \nl{} \\
+12 & WLE & subtype & presweep\_l0.3\_bg\_patch (s42) / bg\_patch & \nl{} & 0.219 & \nl{} \\
+12 & WLE & subtype & presweep\_l0.3\_bg\_patch (s42) / boxmap & \nl{} & 0.232 & \nl{} \\
+12 & WLE & subtype & presweep\_l0.3\_bg\_patch-boxmap (s42) / full & \nl{} & 0.366 & \nl{} \\
+12 & WLE & subtype & presweep\_l0.3\_bg\_patch-boxmap (s42) / bg\_patch & \nl{} & 0.270 & \nl{} \\
+12 & WLE & subtype & presweep\_l0.3\_bg\_patch-boxmap (s42) / boxmap & \nl{} & 0.203 & \nl{} \\
+12 & WLE & subtype & presweep\_l1.0\_bg\_patch (s42) / full & \nl{} & 0.352 & \nl{} \\
+12 & WLE & subtype & presweep\_l1.0\_bg\_patch (s42) / bg\_patch & \nl{} & 0.219 & \nl{} \\
+12 & WLE & subtype & presweep\_l1.0\_bg\_patch (s42) / boxmap & \nl{} & 0.232 & \nl{} \\
+12 & WLE & subtype & presweep\_l1.0\_bg\_patch-boxmap (s42) / full & \nl{} & 0.366 & \nl{} \\
+12 & WLE & subtype & presweep\_l1.0\_bg\_patch-boxmap (s42) / bg\_patch & \nl{} & 0.270 & \nl{} \\
+12 & WLE & subtype & presweep\_l1.0\_bg\_patch-boxmap (s42) / boxmap & \nl{} & 0.203 & \nl{} \\
+12 & WLE & subtype & presweep\_l3.0\_bg\_patch (s42) / full & \nl{} & 0.352 & \nl{} \\
+12 & WLE & subtype & presweep\_l3.0\_bg\_patch (s42) / bg\_patch & \nl{} & 0.219 & \nl{} \\
+12 & WLE & subtype & presweep\_l3.0\_bg\_patch (s42) / boxmap & \nl{} & 0.232 & \nl{} \\
+12 & WLE & subtype & presweep\_l3.0\_bg\_patch-boxmap (s42) / full & \nl{} & 0.366 & \nl{} \\
+12 & WLE & subtype & presweep\_l3.0\_bg\_patch-boxmap (s42) / bg\_patch & \nl{} & 0.270 & \nl{} \\
+12 & WLE & subtype & presweep\_l3.0\_bg\_patch-boxmap (s42) / boxmap & \nl{} & 0.203 & \nl{} \\
+12 & WLE & binary & baseline (s42) / full & \nl{} & 0.728 & \nl{} \\
+12 & WLE & binary & baseline (s42) / bg\_patch & \nl{} & 0.653 & \nl{} \\
+12 & WLE & binary & baseline (s42) / boxmap & \nl{} & 0.511 & \nl{} \\
+12 & WLE & binary & baseline (s7) / full & \nl{} & 0.722 & \nl{} \\
+12 & WLE & binary & baseline (s7) / bg\_patch & \nl{} & 0.572 & \nl{} \\
+12 & WLE & binary & baseline (s7) / boxmap & \nl{} & 0.499 & \nl{} \\
+12 & WLE & binary & baseline (s123) / full & \nl{} & 0.705 & \nl{} \\
+12 & WLE & binary & baseline (s123) / bg\_patch & \nl{} & 0.619 & \nl{} \\
+12 & WLE & binary & baseline (s123) / boxmap & \nl{} & 0.509 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s42) / full & \nl{} & 0.692 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s42) / bg\_patch & \nl{} & 0.589 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s42) / boxmap & \nl{} & 0.503 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s7) / full & \nl{} & 0.700 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s7) / bg\_patch & \nl{} & 0.592 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s7) / boxmap & \nl{} & 0.481 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s123) / full & \nl{} & 0.699 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s123) / bg\_patch & \nl{} & 0.567 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s42) / full & \nl{} & 0.667 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s42) / bg\_patch & \nl{} & 0.558 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s42) / boxmap & \nl{} & 0.462 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s7) / full & \nl{} & 0.660 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s7) / bg\_patch & \nl{} & 0.580 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s7) / boxmap & \nl{} & 0.502 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s123) / full & \nl{} & 0.693 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s123) / bg\_patch & \nl{} & 0.532 & \nl{} \\
+12 & WLE & binary & adv\_bgpatch\_boxmap (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & WLE & subtype & baseline (s7) / full & \nl{} & 0.359 & \nl{} \\
+12 & WLE & subtype & baseline (s7) / bg\_patch & \nl{} & 0.255 & \nl{} \\
+12 & WLE & subtype & baseline (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & WLE & subtype & baseline (s123) / full & \nl{} & 0.327 & \nl{} \\
+12 & WLE & subtype & baseline (s123) / bg\_patch & \nl{} & 0.300 & \nl{} \\
+12 & WLE & subtype & baseline (s123) / boxmap & \nl{} & 0.197 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s42) / full & \nl{} & 0.352 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s42) / bg\_patch & \nl{} & 0.219 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s42) / boxmap & \nl{} & 0.232 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s7) / full & \nl{} & 0.375 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s7) / bg\_patch & \nl{} & 0.262 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s7) / boxmap & \nl{} & 0.199 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s123) / full & \nl{} & 0.349 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s123) / bg\_patch & \nl{} & 0.251 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch (s123) / boxmap & \nl{} & 0.191 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s42) / full & \nl{} & 0.366 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s42) / bg\_patch & \nl{} & 0.270 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s42) / boxmap & \nl{} & 0.203 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s7) / full & \nl{} & 0.386 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s7) / bg\_patch & \nl{} & 0.260 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s123) / full & \nl{} & 0.362 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s123) / bg\_patch & \nl{} & 0.193 & \nl{} \\
+12 & WLE & subtype & adv\_bgpatch\_boxmap (s123) / boxmap & \nl{} & 0.224 & \nl{} \\
+12 & EUS & binary & baseline (s42) / full & \nl{} & 0.656 & \nl{} \\
+12 & EUS & binary & baseline (s42) / bg\_patch & \nl{} & 0.527 & \nl{} \\
+12 & EUS & binary & baseline (s42) / boxmap & \nl{} & 0.486 & \nl{} \\
+12 & EUS & binary & baseline (s7) / full & \nl{} & 0.694 & \nl{} \\
+12 & EUS & binary & baseline (s7) / bg\_patch & \nl{} & 0.584 & \nl{} \\
+12 & EUS & binary & baseline (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline (s123) / full & \nl{} & 0.649 & \nl{} \\
+12 & EUS & binary & baseline (s123) / bg\_patch & \nl{} & 0.592 & \nl{} \\
+12 & EUS & binary & baseline (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s42) / full & \nl{} & 0.583 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s42) / bg\_patch & \nl{} & 0.558 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s42) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s7) / full & \nl{} & 0.639 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s7) / bg\_patch & \nl{} & 0.549 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s123) / full & \nl{} & 0.620 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s123) / bg\_patch & \nl{} & 0.604 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s42) / full & \nl{} & 0.567 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s42) / bg\_patch & \nl{} & 0.526 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s42) / boxmap & \nl{} & 0.487 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s7) / full & \nl{} & 0.639 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s7) / bg\_patch & \nl{} & 0.515 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s7) / boxmap & \nl{} & 0.499 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s123) / full & \nl{} & 0.583 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s123) / bg\_patch & \nl{} & 0.502 & \nl{} \\
+12 & EUS & binary & adv\_bgpatch\_boxmap (s123) / boxmap & \nl{} & 0.496 & \nl{} \\
+12 & EUS & subtype & baseline (s42) / full & \nl{} & 0.374 & \nl{} \\
+12 & EUS & subtype & baseline (s42) / bg\_patch & \nl{} & 0.318 & \nl{} \\
+12 & EUS & subtype & baseline (s42) / boxmap & \nl{} & 0.277 & \nl{} \\
+12 & EUS & subtype & baseline (s7) / full & \nl{} & 0.323 & \nl{} \\
+12 & EUS & subtype & baseline (s7) / bg\_patch & \nl{} & 0.230 & \nl{} \\
+12 & EUS & subtype & baseline (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & EUS & subtype & baseline (s123) / full & \nl{} & 0.286 & \nl{} \\
+12 & EUS & subtype & baseline (s123) / bg\_patch & \nl{} & 0.301 & \nl{} \\
+12 & EUS & subtype & baseline (s123) / boxmap & \nl{} & 0.208 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s42) / full & \nl{} & 0.377 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s42) / bg\_patch & \nl{} & 0.334 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s42) / boxmap & \nl{} & 0.254 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s7) / full & \nl{} & 0.282 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s7) / bg\_patch & \nl{} & 0.247 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s7) / boxmap & \nl{} & 0.217 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s123) / full & \nl{} & 0.354 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s123) / bg\_patch & \nl{} & 0.228 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch (s123) / boxmap & \nl{} & 0.203 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s42) / full & \nl{} & 0.301 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s42) / bg\_patch & \nl{} & 0.193 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s42) / boxmap & \nl{} & 0.246 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s7) / full & \nl{} & 0.277 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s7) / bg\_patch & \nl{} & 0.186 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s123) / full & \nl{} & 0.318 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s123) / bg\_patch & \nl{} & 0.223 & \nl{} \\
+12 & EUS & subtype & adv\_bgpatch\_boxmap (s123) / boxmap & \nl{} & 0.279 & \nl{} \\
+12 & WLE & binary & baseline (s1) / full & \nl{} & 0.724 & \nl{} \\
+12 & WLE & binary & baseline (s1) / bg\_patch & \nl{} & 0.642 & \nl{} \\
+12 & WLE & binary & baseline (s1) / boxmap & \nl{} & 0.502 & \nl{} \\
+12 & WLE & binary & baseline (s2) / full & \nl{} & 0.726 & \nl{} \\
+12 & WLE & binary & baseline (s2) / bg\_patch & \nl{} & 0.625 & \nl{} \\
+12 & WLE & binary & baseline (s2) / boxmap & \nl{} & 0.483 & \nl{} \\
+12 & WLE & binary & baseline (s3) / full & \nl{} & 0.744 & \nl{} \\
+12 & WLE & binary & baseline (s3) / bg\_patch & \nl{} & 0.610 & \nl{} \\
+12 & WLE & binary & baseline (s3) / boxmap & \nl{} & 0.475 & \nl{} \\
+12 & WLE & binary & baseline (s4) / full & \nl{} & 0.699 & \nl{} \\
+12 & WLE & binary & baseline (s4) / bg\_patch & \nl{} & 0.611 & \nl{} \\
+12 & WLE & binary & baseline (s4) / boxmap & \nl{} & 0.531 & \nl{} \\
+12 & WLE & subtype & baseline (s1) / full & \nl{} & 0.389 & \nl{} \\
+12 & WLE & subtype & baseline (s1) / bg\_patch & \nl{} & 0.202 & \nl{} \\
+12 & WLE & subtype & baseline (s1) / boxmap & \nl{} & 0.203 & \nl{} \\
+12 & WLE & subtype & baseline (s2) / full & \nl{} & 0.353 & \nl{} \\
+12 & WLE & subtype & baseline (s2) / bg\_patch & \nl{} & 0.258 & \nl{} \\
+12 & WLE & subtype & baseline (s2) / boxmap & \nl{} & 0.204 & \nl{} \\
+12 & WLE & subtype & baseline (s3) / full & \nl{} & 0.344 & \nl{} \\
+12 & WLE & subtype & baseline (s3) / bg\_patch & \nl{} & 0.285 & \nl{} \\
+12 & WLE & subtype & baseline (s3) / boxmap & \nl{} & 0.182 & \nl{} \\
+12 & WLE & subtype & baseline (s4) / full & \nl{} & 0.369 & \nl{} \\
+12 & WLE & subtype & baseline (s4) / bg\_patch & \nl{} & 0.278 & \nl{} \\
+12 & WLE & subtype & baseline (s4) / boxmap & \nl{} & 0.199 & \nl{} \\
+12 & EUS & binary & baseline (s1) / full & \nl{} & 0.666 & \nl{} \\
+12 & EUS & binary & baseline (s1) / bg\_patch & \nl{} & 0.566 & \nl{} \\
+12 & EUS & binary & baseline (s1) / boxmap & \nl{} & 0.526 & \nl{} \\
+12 & EUS & binary & baseline (s2) / full & \nl{} & 0.679 & \nl{} \\
+12 & EUS & binary & baseline (s2) / bg\_patch & \nl{} & 0.576 & \nl{} \\
+12 & EUS & binary & baseline (s2) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline (s3) / full & \nl{} & 0.694 & \nl{} \\
+12 & EUS & binary & baseline (s3) / bg\_patch & \nl{} & 0.556 & \nl{} \\
+12 & EUS & binary & baseline (s3) / boxmap & \nl{} & 0.412 & \nl{} \\
+12 & EUS & binary & baseline (s4) / full & \nl{} & 0.695 & \nl{} \\
+12 & EUS & binary & baseline (s4) / bg\_patch & \nl{} & 0.472 & \nl{} \\
+12 & EUS & binary & baseline (s4) / boxmap & \nl{} & 0.444 & \nl{} \\
+12 & EUS & subtype & baseline (s1) / full & \nl{} & 0.322 & \nl{} \\
+12 & EUS & subtype & baseline (s1) / bg\_patch & \nl{} & 0.226 & \nl{} \\
+12 & EUS & subtype & baseline (s1) / boxmap & \nl{} & 0.193 & \nl{} \\
+12 & EUS & subtype & baseline (s2) / full & \nl{} & 0.301 & \nl{} \\
+12 & EUS & subtype & baseline (s2) / bg\_patch & \nl{} & 0.254 & \nl{} \\
+12 & EUS & subtype & baseline (s2) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & EUS & subtype & baseline (s3) / full & \nl{} & 0.336 & \nl{} \\
+12 & EUS & subtype & baseline (s3) / bg\_patch & \nl{} & 0.292 & \nl{} \\
+12 & EUS & subtype & baseline (s3) / boxmap & \nl{} & 0.202 & \nl{} \\
+12 & EUS & subtype & baseline (s4) / full & \nl{} & 0.301 & \nl{} \\
+12 & EUS & subtype & baseline (s4) / bg\_patch & \nl{} & 0.253 & \nl{} \\
+12 & EUS & subtype & baseline (s4) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s42) / full & \nl{} & 0.715 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s42) / bg\_patch & \nl{} & 0.663 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s42) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s7) / full & \nl{} & 0.709 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s7) / bg\_patch & \nl{} & 0.580 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s123) / full & \nl{} & 0.714 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s123) / bg\_patch & \nl{} & 0.628 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s123) / boxmap & \nl{} & 0.513 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s1) / full & \nl{} & 0.727 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s1) / bg\_patch & \nl{} & 0.629 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s1) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s2) / full & \nl{} & 0.720 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s2) / bg\_patch & \nl{} & 0.610 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s2) / boxmap & \nl{} & 0.488 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s3) / full & \nl{} & 0.741 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s3) / bg\_patch & \nl{} & 0.640 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s3) / boxmap & \nl{} & 0.463 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s4) / full & \nl{} & 0.720 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s4) / bg\_patch & \nl{} & 0.608 & \nl{} \\
+12 & WLE & binary & baseline\_100ep (s4) / boxmap & \nl{} & 0.543 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s42) / full & \nl{} & 0.349 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s42) / bg\_patch & \nl{} & 0.222 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s42) / boxmap & \nl{} & 0.236 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s7) / full & \nl{} & 0.359 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s7) / bg\_patch & \nl{} & 0.255 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s123) / full & \nl{} & 0.397 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s123) / bg\_patch & \nl{} & 0.291 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s123) / boxmap & \nl{} & 0.206 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s1) / full & \nl{} & 0.363 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s1) / bg\_patch & \nl{} & 0.210 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s1) / boxmap & \nl{} & 0.201 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s2) / full & \nl{} & 0.402 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s2) / bg\_patch & \nl{} & 0.291 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s2) / boxmap & \nl{} & 0.197 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s3) / full & \nl{} & 0.391 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s3) / bg\_patch & \nl{} & 0.281 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s3) / boxmap & \nl{} & 0.162 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s4) / full & \nl{} & 0.384 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s4) / bg\_patch & \nl{} & 0.268 & \nl{} \\
+12 & WLE & subtype & baseline\_100ep (s4) / boxmap & \nl{} & 0.244 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s42) / full & \nl{} & 0.624 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s42) / bg\_patch & \nl{} & 0.578 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s42) / boxmap & \nl{} & 0.624 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s7) / full & \nl{} & 0.630 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s7) / bg\_patch & \nl{} & 0.585 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s123) / full & \nl{} & 0.747 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s123) / bg\_patch & \nl{} & 0.626 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s1) / full & \nl{} & 0.701 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s1) / bg\_patch & \nl{} & 0.555 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s1) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s2) / full & \nl{} & 0.668 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s2) / bg\_patch & \nl{} & 0.544 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s2) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s3) / full & \nl{} & 0.632 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s3) / bg\_patch & \nl{} & 0.545 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s3) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s4) / full & \nl{} & 0.727 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s4) / bg\_patch & \nl{} & 0.605 & \nl{} \\
+12 & EUS & binary & baseline\_100ep (s4) / boxmap & \nl{} & 0.500 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s42) / full & \nl{} & 0.436 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s42) / bg\_patch & \nl{} & 0.272 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s42) / boxmap & \nl{} & 0.200 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s7) / full & \nl{} & 0.297 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s7) / bg\_patch & \nl{} & 0.263 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s7) / boxmap & \nl{} & 0.199 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s123) / full & \nl{} & 0.311 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s123) / bg\_patch & \nl{} & 0.254 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s123) / boxmap & \nl{} & 0.199 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s1) / full & \nl{} & 0.388 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s1) / bg\_patch & \nl{} & 0.283 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s1) / boxmap & \nl{} & 0.194 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s2) / full & \nl{} & 0.314 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s2) / bg\_patch & \nl{} & 0.271 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s2) / boxmap & \nl{} & 0.158 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s3) / full & \nl{} & 0.328 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s3) / bg\_patch & \nl{} & 0.212 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s3) / boxmap & \nl{} & 0.189 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s4) / full & \nl{} & 0.378 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s4) / bg\_patch & \nl{} & 0.287 & \nl{} \\
+12 & EUS & subtype & baseline\_100ep (s4) / boxmap & \nl{} & 0.166 & \nl{} \\
+13 & WLE & binary & blur\_light (s42) / full & \nl{} & 0.713 & \nl{} \\
+13 & WLE & binary & blur\_light (s42) / bg\_patch & \nl{} & 0.631 & \nl{} \\
+13 & WLE & binary & blur\_light (s42) / boxmap & \nl{} & 0.483 & \nl{} \\
+13 & WLE & binary & blur\_light (s7) / full & \nl{} & 0.744 & \nl{} \\
+13 & WLE & binary & blur\_light (s7) / bg\_patch & \nl{} & 0.619 & \nl{} \\
+13 & WLE & binary & blur\_light (s7) / boxmap & \nl{} & 0.502 & \nl{} \\
+13 & WLE & binary & blur\_light (s123) / full & \nl{} & 0.732 & \nl{} \\
+13 & WLE & binary & blur\_light (s123) / bg\_patch & \nl{} & 0.642 & \nl{} \\
+13 & WLE & binary & blur\_light (s123) / boxmap & \nl{} & 0.510 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s42) / full & \nl{} & 0.715 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s42) / bg\_patch & \nl{} & 0.593 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s42) / boxmap & \nl{} & 0.493 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s7) / full & \nl{} & 0.716 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s7) / bg\_patch & \nl{} & 0.625 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s7) / boxmap & \nl{} & 0.498 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s123) / full & \nl{} & 0.720 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s123) / bg\_patch & \nl{} & 0.601 & \nl{} \\
+13 & WLE & binary & blur\_heavy (s123) / boxmap & \nl{} & 0.506 & \nl{} \\
+13 & WLE & subtype & blur\_light (s42) / full & \nl{} & 0.332 & \nl{} \\
+13 & WLE & subtype & blur\_light (s42) / bg\_patch & \nl{} & 0.286 & \nl{} \\
+13 & WLE & subtype & blur\_light (s42) / boxmap & \nl{} & 0.174 & \nl{} \\
+13 & WLE & subtype & blur\_light (s7) / full & \nl{} & 0.403 & \nl{} \\
+13 & WLE & subtype & blur\_light (s7) / bg\_patch & \nl{} & 0.285 & \nl{} \\
+13 & WLE & subtype & blur\_light (s7) / boxmap & \nl{} & 0.245 & \nl{} \\
+13 & WLE & subtype & blur\_light (s123) / full & \nl{} & 0.350 & \nl{} \\
+13 & WLE & subtype & blur\_light (s123) / bg\_patch & \nl{} & 0.266 & \nl{} \\
+13 & WLE & subtype & blur\_light (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s42) / full & \nl{} & 0.335 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s42) / bg\_patch & \nl{} & 0.259 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s42) / boxmap & \nl{} & 0.239 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s7) / full & \nl{} & 0.421 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s7) / bg\_patch & \nl{} & 0.292 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s7) / boxmap & \nl{} & 0.220 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s123) / full & \nl{} & 0.401 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s123) / bg\_patch & \nl{} & 0.246 & \nl{} \\
+13 & WLE & subtype & blur\_heavy (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+13 & EUS & binary & blur\_light (s42) / full & \nl{} & 0.638 & \nl{} \\
+13 & EUS & binary & blur\_light (s42) / bg\_patch & \nl{} & 0.568 & \nl{} \\
+13 & EUS & binary & blur\_light (s42) / boxmap & \nl{} & 0.369 & \nl{} \\
+13 & EUS & binary & blur\_light (s7) / full & \nl{} & 0.619 & \nl{} \\
+13 & EUS & binary & blur\_light (s7) / bg\_patch & \nl{} & 0.635 & \nl{} \\
+13 & EUS & binary & blur\_light (s7) / boxmap & \nl{} & 0.645 & \nl{} \\
+13 & EUS & binary & blur\_light (s123) / full & \nl{} & 0.627 & \nl{} \\
+13 & EUS & binary & blur\_light (s123) / bg\_patch & \nl{} & 0.580 & \nl{} \\
+13 & EUS & binary & blur\_light (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s42) / full & \nl{} & 0.613 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s42) / bg\_patch & \nl{} & 0.618 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s42) / boxmap & \nl{} & 0.486 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s7) / full & \nl{} & 0.586 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s7) / bg\_patch & \nl{} & 0.543 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s123) / full & \nl{} & 0.667 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s123) / bg\_patch & \nl{} & 0.635 & \nl{} \\
+13 & EUS & binary & blur\_heavy (s123) / boxmap & \nl{} & 0.405 & \nl{} \\
+13 & EUS & subtype & blur\_light (s42) / full & \nl{} & 0.349 & \nl{} \\
+13 & EUS & subtype & blur\_light (s42) / bg\_patch & \nl{} & 0.238 & \nl{} \\
+13 & EUS & subtype & blur\_light (s42) / boxmap & \nl{} & 0.190 & \nl{} \\
+13 & EUS & subtype & blur\_light (s7) / full & \nl{} & 0.293 & \nl{} \\
+13 & EUS & subtype & blur\_light (s7) / bg\_patch & \nl{} & 0.249 & \nl{} \\
+13 & EUS & subtype & blur\_light (s7) / boxmap & \nl{} & 0.181 & \nl{} \\
+13 & EUS & subtype & blur\_light (s123) / full & \nl{} & 0.315 & \nl{} \\
+13 & EUS & subtype & blur\_light (s123) / bg\_patch & \nl{} & 0.258 & \nl{} \\
+13 & EUS & subtype & blur\_light (s123) / boxmap & \nl{} & 0.202 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s42) / full & \nl{} & 0.332 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s42) / bg\_patch & \nl{} & 0.316 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s42) / boxmap & \nl{} & 0.139 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s7) / full & \nl{} & 0.336 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s7) / bg\_patch & \nl{} & 0.264 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s7) / boxmap & \nl{} & 0.193 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s123) / full & \nl{} & 0.353 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s123) / bg\_patch & \nl{} & 0.327 & \nl{} \\
+13 & EUS & subtype & blur\_heavy (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s42) / full & \nl{} & 0.710 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s42) / bg\_patch & \nl{} & 0.634 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s42) / boxmap & \nl{} & 0.490 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s7) / full & \nl{} & 0.721 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s7) / bg\_patch & \nl{} & 0.653 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s7) / boxmap & \nl{} & 0.477 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s123) / full & \nl{} & 0.730 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s123) / bg\_patch & \nl{} & 0.602 & \nl{} \\
+14 & WLE & binary & se\_layer4\_ce (s123) / boxmap & \nl{} & 0.480 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s42) / full & \nl{} & 0.717 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s42) / bg\_patch & \nl{} & 0.653 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s42) / boxmap & \nl{} & 0.506 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s7) / full & \nl{} & 0.711 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s7) / bg\_patch & \nl{} & 0.617 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s7) / boxmap & \nl{} & 0.493 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s123) / full & \nl{} & 0.717 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s123) / bg\_patch & \nl{} & 0.615 & \nl{} \\
+14 & WLE & binary & se\_all\_ce (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s42) / full & \nl{} & 0.703 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s42) / bg\_patch & \nl{} & 0.581 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s42) / boxmap & \nl{} & 0.498 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s7) / full & \nl{} & 0.705 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s7) / bg\_patch & \nl{} & 0.595 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s7) / boxmap & \nl{} & 0.479 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s123) / full & \nl{} & 0.696 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s123) / bg\_patch & \nl{} & 0.613 & \nl{} \\
+14 & WLE & binary & se\_layer4\_adv (s123) / boxmap & \nl{} & 0.467 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s42) / full & \nl{} & 0.688 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s42) / bg\_patch & \nl{} & 0.539 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s42) / boxmap & \nl{} & 0.494 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s7) / full & \nl{} & 0.689 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s7) / bg\_patch & \nl{} & 0.601 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s7) / boxmap & \nl{} & 0.557 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s123) / full & \nl{} & 0.702 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s123) / bg\_patch & \nl{} & 0.593 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s42) / full & \nl{} & 0.354 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s42) / bg\_patch & \nl{} & 0.281 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s42) / boxmap & \nl{} & 0.208 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s7) / full & \nl{} & 0.378 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s7) / bg\_patch & \nl{} & 0.289 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s7) / boxmap & \nl{} & 0.223 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s123) / full & \nl{} & 0.388 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s123) / bg\_patch & \nl{} & 0.256 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_ce (s123) / boxmap & \nl{} & 0.193 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s42) / full & \nl{} & 0.341 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s42) / bg\_patch & \nl{} & 0.295 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s42) / boxmap & \nl{} & 0.204 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s7) / full & \nl{} & 0.452 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s7) / bg\_patch & \nl{} & 0.305 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s7) / boxmap & \nl{} & 0.189 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s123) / full & \nl{} & 0.377 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s123) / bg\_patch & \nl{} & 0.257 & \nl{} \\
+14 & WLE & subtype & se\_all\_ce (s123) / boxmap & \nl{} & 0.237 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s42) / full & \nl{} & 0.364 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s42) / bg\_patch & \nl{} & 0.278 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s42) / boxmap & \nl{} & 0.201 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s7) / full & \nl{} & 0.411 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s7) / bg\_patch & \nl{} & 0.271 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s7) / boxmap & \nl{} & 0.193 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s123) / full & \nl{} & 0.364 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s123) / bg\_patch & \nl{} & 0.227 & \nl{} \\
+14 & WLE & subtype & se\_layer4\_adv (s123) / boxmap & \nl{} & 0.202 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s42) / full & \nl{} & 0.357 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s42) / bg\_patch & \nl{} & 0.219 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s42) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s7) / full & \nl{} & 0.413 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s7) / bg\_patch & \nl{} & 0.299 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s7) / boxmap & \nl{} & 0.172 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s123) / full & \nl{} & 0.370 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s123) / bg\_patch & \nl{} & 0.239 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s123) / boxmap & \nl{} & 0.257 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s42) / full & \nl{} & 0.627 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s42) / bg\_patch & \nl{} & 0.485 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s42) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s7) / full & \nl{} & 0.649 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s7) / bg\_patch & \nl{} & 0.537 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s123) / full & \nl{} & 0.620 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s123) / bg\_patch & \nl{} & 0.513 & \nl{} \\
+14 & EUS & binary & se\_layer4\_ce (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s42) / full & \nl{} & 0.592 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s42) / bg\_patch & \nl{} & 0.619 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s42) / boxmap & \nl{} & 0.455 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s7) / full & \nl{} & 0.662 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s7) / bg\_patch & \nl{} & 0.556 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s123) / full & \nl{} & 0.615 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s123) / bg\_patch & \nl{} & 0.606 & \nl{} \\
+14 & EUS & binary & se\_all\_ce (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s42) / full & \nl{} & 0.640 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s42) / bg\_patch & \nl{} & 0.511 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s42) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s7) / full & \nl{} & 0.639 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s7) / bg\_patch & \nl{} & 0.475 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s7) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s123) / full & \nl{} & 0.613 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s123) / bg\_patch & \nl{} & 0.629 & \nl{} \\
+14 & EUS & binary & se\_layer4\_adv (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s42) / full & \nl{} & 0.608 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s42) / bg\_patch & \nl{} & 0.496 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s42) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s7) / full & \nl{} & 0.620 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s7) / bg\_patch & \nl{} & 0.557 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s7) / boxmap & \nl{} & 0.496 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s123) / full & \nl{} & 0.638 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s123) / bg\_patch & \nl{} & 0.515 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s42) / full & \nl{} & 0.357 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s42) / bg\_patch & \nl{} & 0.273 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s42) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s7) / full & \nl{} & 0.277 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s7) / bg\_patch & \nl{} & 0.250 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s7) / boxmap & \nl{} & 0.228 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s123) / full & \nl{} & 0.379 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s123) / bg\_patch & \nl{} & 0.231 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_ce (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s42) / full & \nl{} & 0.274 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s42) / bg\_patch & \nl{} & 0.256 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s42) / boxmap & \nl{} & 0.202 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s7) / full & \nl{} & 0.292 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s7) / bg\_patch & \nl{} & 0.231 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s7) / boxmap & \nl{} & 0.194 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s123) / full & \nl{} & 0.376 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s123) / bg\_patch & \nl{} & 0.316 & \nl{} \\
+14 & EUS & subtype & se\_all\_ce (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s42) / full & \nl{} & 0.332 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s42) / bg\_patch & \nl{} & 0.250 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s42) / boxmap & \nl{} & 0.182 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s7) / full & \nl{} & 0.265 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s7) / bg\_patch & \nl{} & 0.247 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s123) / full & \nl{} & 0.363 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s123) / bg\_patch & \nl{} & 0.252 & \nl{} \\
+14 & EUS & subtype & se\_layer4\_adv (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s42) / full & \nl{} & 0.316 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s42) / bg\_patch & \nl{} & 0.233 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s42) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s7) / full & \nl{} & 0.333 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s7) / bg\_patch & \nl{} & 0.189 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s7) / boxmap & \nl{} & 0.206 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s123) / full & \nl{} & 0.355 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s123) / bg\_patch & \nl{} & 0.287 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s1) / full & \nl{} & 0.704 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s1) / bg\_patch & \nl{} & 0.558 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s1) / boxmap & \nl{} & 0.450 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s2) / full & \nl{} & 0.710 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s2) / bg\_patch & \nl{} & 0.583 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s2) / boxmap & \nl{} & 0.508 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s3) / full & \nl{} & 0.680 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s3) / bg\_patch & \nl{} & 0.567 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s3) / boxmap & \nl{} & 0.488 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s4) / full & \nl{} & 0.709 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s4) / bg\_patch & \nl{} & 0.548 & \nl{} \\
+14 & WLE & binary & se\_all\_adv (s4) / boxmap & \nl{} & 0.497 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s1) / full & \nl{} & 0.363 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s1) / bg\_patch & \nl{} & 0.249 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s1) / boxmap & \nl{} & 0.197 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s2) / full & \nl{} & 0.344 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s2) / bg\_patch & \nl{} & 0.229 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s2) / boxmap & \nl{} & 0.166 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s3) / full & \nl{} & 0.444 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s3) / bg\_patch & \nl{} & 0.274 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s3) / boxmap & \nl{} & 0.202 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s4) / full & \nl{} & 0.401 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s4) / bg\_patch & \nl{} & 0.276 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv (s4) / boxmap & \nl{} & 0.166 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s1) / full & \nl{} & 0.634 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s1) / bg\_patch & \nl{} & 0.482 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s1) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s2) / full & \nl{} & 0.678 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s2) / bg\_patch & \nl{} & 0.599 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s2) / boxmap & \nl{} & 0.456 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s3) / full & \nl{} & 0.622 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s3) / bg\_patch & \nl{} & 0.532 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s3) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s4) / full & \nl{} & 0.606 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s4) / bg\_patch & \nl{} & 0.485 & \nl{} \\
+14 & EUS & binary & se\_all\_adv (s4) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s1) / full & \nl{} & 0.345 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s1) / bg\_patch & \nl{} & 0.312 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s1) / boxmap & \nl{} & 0.199 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s2) / full & \nl{} & 0.336 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s2) / bg\_patch & \nl{} & 0.271 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s2) / boxmap & \nl{} & 0.212 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s3) / full & \nl{} & 0.281 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s3) / bg\_patch & \nl{} & 0.277 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s3) / boxmap & \nl{} & 0.310 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s4) / full & \nl{} & 0.317 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s4) / bg\_patch & \nl{} & 0.169 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv (s4) / boxmap & \nl{} & 0.195 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s42) / full & \nl{} & 0.703 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s42) / bg\_patch & \nl{} & 0.577 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s42) / boxmap & \nl{} & 0.456 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s7) / full & \nl{} & 0.713 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s7) / bg\_patch & \nl{} & 0.550 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s7) / boxmap & \nl{} & 0.486 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s123) / full & \nl{} & 0.715 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s123) / bg\_patch & \nl{} & 0.619 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s1) / full & \nl{} & 0.708 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s1) / bg\_patch & \nl{} & 0.589 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s1) / boxmap & \nl{} & 0.443 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s2) / full & \nl{} & 0.700 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s2) / bg\_patch & \nl{} & 0.596 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s2) / boxmap & \nl{} & 0.472 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s3) / full & \nl{} & 0.710 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s3) / bg\_patch & \nl{} & 0.590 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s3) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s4) / full & \nl{} & 0.724 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s4) / bg\_patch & \nl{} & 0.551 & \nl{} \\
+14 & WLE & binary & se\_all\_adv\_100ep (s4) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s42) / full & \nl{} & 0.363 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s42) / bg\_patch & \nl{} & 0.228 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s42) / boxmap & \nl{} & 0.212 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s7) / full & \nl{} & 0.386 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s7) / bg\_patch & \nl{} & 0.232 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s7) / boxmap & \nl{} & 0.207 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s123) / full & \nl{} & 0.367 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s123) / bg\_patch & \nl{} & 0.250 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s123) / boxmap & \nl{} & 0.258 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s1) / full & \nl{} & 0.362 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s1) / bg\_patch & \nl{} & 0.299 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s1) / boxmap & \nl{} & 0.201 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s2) / full & \nl{} & 0.406 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s2) / bg\_patch & \nl{} & 0.270 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s2) / boxmap & \nl{} & 0.244 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s3) / full & \nl{} & 0.383 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s3) / bg\_patch & \nl{} & 0.203 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s3) / boxmap & \nl{} & 0.194 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s4) / full & \nl{} & 0.387 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s4) / bg\_patch & \nl{} & 0.272 & \nl{} \\
+14 & WLE & subtype & se\_all\_adv\_100ep (s4) / boxmap & \nl{} & 0.198 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s42) / full & \nl{} & 0.693 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s42) / bg\_patch & \nl{} & 0.511 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s42) / boxmap & \nl{} & 0.499 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s7) / full & \nl{} & 0.631 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s7) / bg\_patch & \nl{} & 0.538 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s7) / boxmap & \nl{} & 0.499 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s123) / full & \nl{} & 0.634 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s123) / bg\_patch & \nl{} & 0.610 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s123) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s1) / full & \nl{} & 0.661 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s1) / bg\_patch & \nl{} & 0.516 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s1) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s2) / full & \nl{} & 0.679 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s2) / bg\_patch & \nl{} & 0.488 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s2) / boxmap & \nl{} & 0.493 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s3) / full & \nl{} & 0.646 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s3) / bg\_patch & \nl{} & 0.553 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s3) / boxmap & \nl{} & 0.423 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s4) / full & \nl{} & 0.634 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s4) / bg\_patch & \nl{} & 0.514 & \nl{} \\
+14 & EUS & binary & se\_all\_adv\_100ep (s4) / boxmap & \nl{} & 0.500 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s42) / full & \nl{} & 0.444 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s42) / bg\_patch & \nl{} & 0.226 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s42) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s7) / full & \nl{} & 0.318 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s7) / bg\_patch & \nl{} & 0.271 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s7) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s123) / full & \nl{} & 0.354 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s123) / bg\_patch & \nl{} & 0.304 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s123) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s1) / full & \nl{} & 0.360 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s1) / bg\_patch & \nl{} & 0.191 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s1) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s2) / full & \nl{} & 0.388 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s2) / bg\_patch & \nl{} & 0.307 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s2) / boxmap & \nl{} & 0.201 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s3) / full & \nl{} & 0.309 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s3) / bg\_patch & \nl{} & 0.220 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s3) / boxmap & \nl{} & 0.200 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s4) / full & \nl{} & 0.367 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s4) / bg\_patch & \nl{} & 0.255 & \nl{} \\
+14 & EUS & subtype & se\_all\_adv\_100ep (s4) / boxmap & \nl{} & 0.169 & \nl{} \\
+17 & WLE & binary & resnet / full & 0.734 & 0.647 & \nl{} \\
+17 & WLE & binary & resnet / lesion & 0.727 & 0.657 & \nl{} \\
+17 & WLE & binary & resnet / bg\_mask & 0.725 & 0.638 & \nl{} \\
+17 & WLE & binary & resnet / bg\_patch & 0.706 & 0.633 & \nl{} \\
+17 & WLE & binary & resnet / boxmap & 0.648 & 0.597 & \nl{} \\
+17 & WLE & binary & dinov3 / full & 0.788 & 0.737 & \nl{} \\
+17 & WLE & binary & dinov3 / lesion & 0.780 & 0.731 & \nl{} \\
+17 & WLE & binary & dinov3 / bg\_mask & 0.765 & 0.709 & \nl{} \\
+17 & WLE & binary & dinov3 / bg\_patch & 0.736 & 0.679 & \nl{} \\
+17 & WLE & binary & dinov3 / boxmap & 0.664 & 0.619 & \nl{} \\
+17 & WLE & subtype & resnet / full & 0.607 & 0.298 & \nl{} \\
+17 & WLE & subtype & resnet / lesion & 0.597 & 0.347 & \nl{} \\
+17 & WLE & subtype & resnet / bg\_mask & 0.618 & 0.314 & \nl{} \\
+17 & WLE & subtype & resnet / bg\_patch & 0.576 & 0.293 & \nl{} \\
+17 & WLE & subtype & resnet / boxmap & 0.419 & 0.285 & \nl{} \\
+17 & WLE & subtype & dinov3 / full & 0.644 & 0.382 & \nl{} \\
+17 & WLE & subtype & dinov3 / lesion & 0.622 & 0.414 & \nl{} \\
+17 & WLE & subtype & dinov3 / bg\_mask & 0.606 & 0.337 & \nl{} \\
+17 & WLE & subtype & dinov3 / bg\_patch & 0.581 & 0.326 & \nl{} \\
+17 & WLE & subtype & dinov3 / boxmap & 0.339 & 0.333 & \nl{} \\
+17 & EUS & binary & resnet / full & 0.744 & 0.573 & \nl{} \\
+17 & EUS & binary & resnet / lesion & 0.778 & 0.610 & \nl{} \\
+17 & EUS & binary & resnet / bg\_mask & 0.753 & 0.597 & \nl{} \\
+17 & EUS & binary & resnet / bg\_patch & 0.728 & 0.539 & \nl{} \\
+17 & EUS & binary & resnet / boxmap & 0.731 & 0.608 & \nl{} \\
+17 & EUS & binary & dinov3 / full & 0.741 & 0.604 & \nl{} \\
+17 & EUS & binary & dinov3 / lesion & 0.787 & 0.666 & \nl{} \\
+17 & EUS & binary & dinov3 / bg\_mask & 0.761 & 0.627 & \nl{} \\
+17 & EUS & binary & dinov3 / bg\_patch & 0.723 & 0.589 & \nl{} \\
+17 & EUS & binary & dinov3 / boxmap & 0.701 & 0.623 & \nl{} \\
+17 & EUS & subtype & resnet / full & 0.644 & 0.239 & \nl{} \\
+17 & EUS & subtype & resnet / lesion & 0.627 & 0.308 & \nl{} \\
+17 & EUS & subtype & resnet / bg\_mask & 0.638 & 0.267 & \nl{} \\
+17 & EUS & subtype & resnet / bg\_patch & 0.624 & 0.234 & \nl{} \\
+17 & EUS & subtype & resnet / boxmap & 0.526 & 0.292 & \nl{} \\
+17 & EUS & subtype & dinov3 / full & 0.631 & 0.246 & \nl{} \\
+17 & EUS & subtype & dinov3 / lesion & 0.638 & 0.346 & \nl{} \\
+17 & EUS & subtype & dinov3 / bg\_mask & 0.655 & 0.276 & \nl{} \\
+17 & EUS & subtype & dinov3 / bg\_patch & 0.618 & 0.248 & \nl{} \\
+17 & EUS & subtype & dinov3 / boxmap & 0.433 & 0.321 & \nl{} \\
+18 & WLE & binary & ['Center-1'] / internal & 0.778 & 0.722 & \nl{} \\
+18 & WLE & binary & ['Center-1'] / external & 0.718 & 0.590 & \nl{} \\
+18 & WLE & subtype & ['Center-1'] / internal & 0.544 & 0.321 & \nl{} \\
+18 & WLE & subtype & ['Center-1'] / external & 0.592 & 0.281 & \nl{} \\
+18 & WLE & binary & ['Center-2'] / internal & 0.783 & 0.719 & \nl{} \\
+18 & WLE & binary & ['Center-2'] / external & 0.532 & 0.661 & \nl{} \\
+18 & WLE & subtype & ['Center-2'] / internal & 0.561 & 0.375 & \nl{} \\
+18 & WLE & subtype & ['Center-2'] / external & 0.500 & 0.401 & \nl{} \\
+18 & WLE & binary & ['Center-3'] / internal & 0.790 & 0.764 & \nl{} \\
+18 & WLE & binary & ['Center-3'] / external & 0.701 & 0.630 & \nl{} \\
+18 & WLE & subtype & ['Center-3'] / internal & 0.358 & 0.359 & \nl{} \\
+18 & WLE & subtype & ['Center-3'] / external & 0.674 & 0.342 & \nl{} \\
+18 & WLE & binary & ['Center-4', 'Center-5', 'Center-6'] / internal & 0.796 & 0.741 & \nl{} \\
+18 & WLE & binary & ['Center-4', 'Center-5', 'Center-6'] / external & 0.688 & 0.681 & \nl{} \\
+18 & WLE & subtype & ['Center-4', 'Center-5', 'Center-6'] / internal & 0.628 & 0.365 & \nl{} \\
+18 & WLE & subtype & ['Center-4', 'Center-5', 'Center-6'] / external & 0.542 & 0.335 & \nl{} \\
+18 & EUS & binary & ['Center-1'] / internal & 0.776 & 0.698 & \nl{} \\
+18 & EUS & binary & ['Center-1'] / external & 0.713 & 0.614 & \nl{} \\
+18 & EUS & subtype & ['Center-1'] / internal & 0.448 & 0.298 & \nl{} \\
+18 & EUS & subtype & ['Center-1'] / external & 0.572 & 0.294 & \nl{} \\
+18 & EUS & binary & ['Center-2'] / internal & 0.725 & 0.669 & \nl{} \\
+18 & EUS & binary & ['Center-2'] / external & 0.676 & 0.752 & \nl{} \\
+18 & EUS & subtype & ['Center-2'] / internal & 0.513 & 0.288 & \nl{} \\
+18 & EUS & subtype & ['Center-2'] / external & 0.515 & 0.421 & \nl{} \\
+18 & EUS & binary & ['Center-3'] / internal & 0.772 & 0.689 & \nl{} \\
+18 & EUS & binary & ['Center-3'] / external & 0.759 & 0.690 & \nl{} \\
+18 & EUS & subtype & ['Center-3'] / internal & 0.558 & 0.322 & \nl{} \\
+18 & EUS & subtype & ['Center-3'] / external & 0.575 & 0.352 & \nl{} \\
+\bottomrule
+\end{longtable}
+\endgroup

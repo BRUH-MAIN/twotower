@@ -1,0 +1,126 @@
+{
+  "runs": [
+    {
+      "acc": 0.7746,
+      "bal": 0.7061,
+      "majority": 0.7007,
+      "chance": 0.5,
+      "n_train": 2249,
+      "n_val": 568,
+      "modality": "WLE",
+      "task": "binary",
+      "split": "patient"
+    },
+    {
+      "acc": 0.4349,
+      "bal": 0.3259,
+      "majority": 0.6285,
+      "chance": 0.2,
+      "n_train": 2249,
+      "n_val": 568,
+      "modality": "WLE",
+      "task": "subtype",
+      "split": "patient"
+    },
+    {
+      "acc": 0.8828,
+      "bal": 0.8485,
+      "majority": 0.6909,
+      "chance": 0.5,
+      "n_train": 2254,
+      "n_val": 563,
+      "modality": "WLE",
+      "task": "binary",
+      "split": "image"
+    },
+    {
+      "acc": 0.8011,
+      "bal": 0.6818,
+      "majority": 0.6217,
+      "chance": 0.2,
+      "n_train": 2254,
+      "n_val": 563,
+      "modality": "WLE",
+      "task": "subtype",
+      "split": "image"
+    },
+    {
+      "acc": 0.7747,
+      "bal": 0.6787,
+      "majority": 0.8322,
+      "chance": 0.5,
+      "n_train": 1660,
+      "n_val": 435,
+      "modality": "EUS",
+      "task": "binary",
+      "split": "patient"
+    },
+    {
+      "acc": 0.6943,
+      "bal": 0.3222,
+      "majority": 0.7701,
+      "chance": 0.2,
+      "n_train": 1660,
+      "n_val": 435,
+      "modality": "EUS",
+      "task": "subtype",
+      "split": "patient"
+    },
+    {
+      "acc": 0.9667,
+      "bal": 0.9537,
+      "majority": 0.7643,
+      "chance": 0.5,
+      "n_train": 1675,
+      "n_val": 420,
+      "modality": "EUS",
+      "task": "binary",
+      "split": "image"
+    },
+    {
+      "acc": 0.95,
+      "bal": 0.8996,
+      "majority": 0.6881,
+      "chance": 0.2,
+      "n_train": 1675,
+      "n_val": 420,
+      "modality": "EUS",
+      "task": "subtype",
+      "split": "image"
+    }
+  ],
+  "verdict": [
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "chance": 0.5,
+      "patient_level": 0.7061,
+      "image_level": 0.8485,
+      "inflation": 0.1424
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "chance": 0.2,
+      "patient_level": 0.3259,
+      "image_level": 0.6818,
+      "inflation": 0.3559
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "chance": 0.5,
+      "patient_level": 0.6787,
+      "image_level": 0.9537,
+      "inflation": 0.275
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "chance": 0.2,
+      "patient_level": 0.3222,
+      "image_level": 0.8996,
+      "inflation": 0.5774
+    }
+  ]
+}

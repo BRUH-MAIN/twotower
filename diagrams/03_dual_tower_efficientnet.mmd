@@ -1,0 +1,24 @@
+flowchart LR
+    subgraph WLE["WLE tower"]
+        direction LR
+        W_IN["WLE frames<br/>(B, T, C, H, W)"] --> W_EFF["EfficientNet-B0<br/>ImageNet-pretrained<br/>(freeze: none / partial)"]
+        W_EFF --> W_POOL["AttentionPool<br/>learned weights<br/>over T frames"]
+        W_POOL --> W_ENC["Linear + ReLU<br/>+ Dropout<br/>→ 256-d"]
+    end
+
+    subgraph EUS["EUS tower"]
+        direction LR
+        E_IN["EUS frames<br/>(B, T, C, H, W)"] --> E_EFF["EfficientNet-B0<br/>ImageNet-pretrained<br/>(freeze: none / partial)"]
+        E_EFF --> E_POOL["AttentionPool<br/>learned weights<br/>over T frames"]
+        E_POOL --> E_ENC["Linear + ReLU<br/>+ Dropout<br/>→ 256-d"]
+    end
+
+    FUSE["Fusion<br/>GatedFusion / SymmetricCrossAttn<br/>(a, b, availability flags)<br/>modality dropout p=0.3 in training"]
+
+    CLS["Classifier MLP<br/>256 → 256 → n classes"]
+
+    OUT["Output<br/>Binary: NET / non-NET<br/>or 5-way subtype"]
+
+    W_ENC --> FUSE
+    E_ENC --> FUSE
+    FUSE --> CLS --> OUT

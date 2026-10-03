@@ -1,0 +1,27 @@
+{
+  "run_names": [
+    "joint_efficientnet_b0__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__s42",
+    "joint_efficientnet_b0__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__s123",
+    "joint_efficientnet_b0__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__s7"
+  ],
+  "task": "binary",
+  "individual_bal": [
+    0.8029,
+    0.8076,
+    0.7915
+  ],
+  "individual_bal_mean": 0.8006666666666667,
+  "individual_bal_std": 0.006759848782003598,
+  "ensemble_unpaired": {
+    "acc": 0.8471,
+    "bal": 0.816,
+    "macro_f1": 0.815
+  },
+  "ensemble_paired_only": {
+    "acc": 0.8622,
+    "bal": 0.8043,
+    "macro_f1": 0.8043
+  },
+  "n_unpaired": 641,
+  "n_paired": 421
+}

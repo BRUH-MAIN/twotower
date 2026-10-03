@@ -1,0 +1,163 @@
+{
+  "run_name": "joint_film__fasterrcnn_mobilenet__binary",
+  "model": "fasterrcnn_mobilenet",
+  "paper_name": "Fasterrcnn_Mobilenet",
+  "modality": "JOINT",
+  "modalities": [
+    "WLE",
+    "EUS"
+  ],
+  "conditioning": "film",
+  "task": "binary",
+  "img_size": 640,
+  "batch_size": 8,
+  "epochs": 100,
+  "epochs_run": 30,
+  "learning_rate": 0.001,
+  "input_mode": "reference",
+  "per_modality_norm": true,
+  "augment": [
+    "flip",
+    "color",
+    "rotate"
+  ],
+  "hard_negatives": 0.3,
+  "split_level": "patient",
+  "class_weighting": true,
+  "seed": 42,
+  "best_epoch": 15,
+  "elapsed_sec": 6964.407756567001,
+  "split": {
+    "train": {
+      "images": 4009,
+      "patients": 512,
+      "by_subtype": {
+        "Leiomyoma": 179,
+        "Lipoma": 585,
+        "NET_G1": 2594,
+        "NET_G2": 300,
+        "NonNeoplasm": 351
+      },
+      "by_modality": {
+        "EUS": 1734,
+        "WLE": 2275
+      },
+      "paired_patients": 336
+    },
+    "val": {
+      "images": 903,
+      "patients": 129,
+      "by_subtype": {
+        "Leiomyoma": 37,
+        "Lipoma": 122,
+        "NET_G1": 599,
+        "NET_G2": 54,
+        "NonNeoplasm": 91
+      },
+      "by_modality": {
+        "EUS": 361,
+        "WLE": 542
+      },
+      "paired_patients": 85
+    }
+  },
+  "best": {
+    "AP@0.5": 0.5519922029319742,
+    "AP@0.5_conf": 0.49197589735724007,
+    "precision": 0.6611740473738414,
+    "recall": 0.6618556701030928,
+    "f1": 0.6615146831530139,
+    "tp": 642,
+    "fp": 329,
+    "fn": 328,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.6948387008786783,
+        "AP@0.5_conf": 0.6481165858260312,
+        "precision": 0.7314285714285714,
+        "recall": 0.7262411347517731,
+        "f1": 0.7288256227758008,
+        "tp": 512,
+        "fp": 188,
+        "fn": 193
+      },
+      "non-NET": {
+        "AP@0.5": 0.4091457049852699,
+        "AP@0.5_conf": 0.335835208888449,
+        "precision": 0.4797047970479705,
+        "recall": 0.49056603773584906,
+        "f1": 0.4850746268656716,
+        "tp": 130,
+        "fp": 141,
+        "fn": 135
+      }
+    },
+    "per_modality": {
+      "EUS": {
+        "AP@0.5": 0.43292930604465996,
+        "AP@0.5_conf": 0.38239379478735797,
+        "precision": 0.6498516320474778,
+        "recall": 0.5354523227383863,
+        "f1": 0.5871313672922253,
+        "tp": 219,
+        "fp": 118,
+        "fn": 190,
+        "per_class": {
+          "NET": {
+            "AP@0.5": 0.5807629788231767,
+            "AP@0.5_conf": 0.5436271435535888,
+            "precision": 0.6886446886446886,
+            "recall": 0.6064516129032258,
+            "f1": 0.6449399656946827,
+            "tp": 188,
+            "fp": 85,
+            "fn": 122
+          },
+          "non-NET": {
+            "AP@0.5": 0.2850956332661432,
+            "AP@0.5_conf": 0.2211604460211272,
+            "precision": 0.484375,
+            "recall": 0.31313131313131315,
+            "f1": 0.3803680981595092,
+            "tp": 31,
+            "fp": 33,
+            "fn": 68
+          }
+        }
+      },
+      "WLE": {
+        "AP@0.5": 0.6402417123270921,
+        "AP@0.5_conf": 0.5737194810302231,
+        "precision": 0.667192429022082,
+        "recall": 0.7540106951871658,
+        "f1": 0.7079497907949791,
+        "tp": 423,
+        "fp": 211,
+        "fn": 138,
+        "per_class": {
+          "NET": {
+            "AP@0.5": 0.7920267446863956,
+            "AP@0.5_conf": 0.7375668996787403,
+            "precision": 0.7587822014051522,
+            "recall": 0.8202531645569621,
+            "f1": 0.7883211678832117,
+            "tp": 324,
+            "fp": 103,
+            "fn": 71
+          },
+          "non-NET": {
+            "AP@0.5": 0.48845667996778874,
+            "AP@0.5_conf": 0.40987206238170587,
+            "precision": 0.4782608695652174,
+            "recall": 0.5963855421686747,
+            "f1": 0.5308310991957105,
+            "tp": 99,
+            "fp": 108,
+            "fn": 67
+          }
+        }
+      }
+    },
+    "AP@0.5_macro": 0.536585509185876
+  }
+}

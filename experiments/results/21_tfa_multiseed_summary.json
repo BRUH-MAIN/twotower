@@ -1,0 +1,20 @@
+{
+  "sweep_A": {
+    "n": 3,
+    "delta_AP_mean": -0.011633333333333334,
+    "delta_AP_std": 0.00016996731711975925,
+    "delta_Leiomyoma_mean": -0.027700000000000002,
+    "delta_Leiomyoma_std": 0.0010801234497346426,
+    "ap_verdict": "within noise floor -- not confirmed",
+    "leiomyoma_verdict": "CONFIRMED regression"
+  },
+  "sweep_B": {
+    "n": 2,
+    "delta_AP_mean": 0.0023,
+    "delta_AP_std": 0.0025,
+    "delta_Leiomyoma_mean": 0.037950000000000005,
+    "delta_Leiomyoma_std": 0.025750000000000002,
+    "ap_verdict": "within noise floor -- not confirmed",
+    "leiomyoma_verdict": "within noise floor -- not confirmed"
+  }
+}

@@ -1,0 +1,91 @@
+# ---------------------------------------------------------------------------
+# Environments & tooling
+# ---------------------------------------------------------------------------
+.venv/
+.venv-linux/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.claude/settings.local.json
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Secrets (HF_TOKEN lives in .env)
+# ---------------------------------------------------------------------------
+.env
+.env.*
+
+# ---------------------------------------------------------------------------
+# Dataset -- not redistributed here. Get CAD-SEL from figshare / Hugging Face
+# and point CADSEL_DATA_ROOT at it.
+# ---------------------------------------------------------------------------
+CAD-SEL-Dataset/
+*.tif
+*.tiff
+# YOLO exports: symlinked dataset images + copied annotations
+experiments/yolo/*/images/
+experiments/yolo/*/labels/
+*.cache
+
+# ---------------------------------------------------------------------------
+# Model weights & checkpoints (~34 GB locally)
+# ---------------------------------------------------------------------------
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.engine
+
+# ---------------------------------------------------------------------------
+# Feature / prediction caches -- except the small per-patient predictions the
+# two-tower bar graphs are drawn from (lets 41_* --plot-only run from a clone)
+# ---------------------------------------------------------------------------
+*.npz
+!experiments/results/41_two_tower_ablation/oof/*.npz
+
+# ---------------------------------------------------------------------------
+# Results stored outside the repo (symlink to an external drive; no trailing
+# slash -- git sees a symlink as a file, not a directory)
+# ---------------------------------------------------------------------------
+experiments/results/joint_fusion_runs
+
+# ---------------------------------------------------------------------------
+# Training-run artifacts: metrics (json/csv/yaml) and plots (png) are kept;
+# image mosaics of dataset frames are not
+# ---------------------------------------------------------------------------
+runs*/**/*.jpg
+
+# ---------------------------------------------------------------------------
+# Logs & build artifacts
+# ---------------------------------------------------------------------------
+logs/
+*.log
+*.err
+*.aux
+*.nav
+*.snm
+*.toc
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.bak
+*.bak.*
+
+# ---------------------------------------------------------------------------
+# Held back from the PUBLIC repo -- delete a line to publish that file
+# ---------------------------------------------------------------------------
+# team review documents: list teammates' names + university registration numbers
+first-review.tex
+ppt.tex
+main (5).pdf
+# blank university presentation template
+First_Review_Sample_Presentation.pptx
+# third-party article (Scientific Data, in press)
+CAD-SEL_Dataset.pdf

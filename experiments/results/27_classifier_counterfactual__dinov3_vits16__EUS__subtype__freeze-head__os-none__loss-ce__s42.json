@@ -1,0 +1,60 @@
+{
+  "target": {
+    "run_name": "dinov3_vits16__EUS__subtype__freeze-head__os-none__loss-ce__s42",
+    "modality": "EUS",
+    "task": "subtype",
+    "chance": 0.2,
+    "full": 0.20545454545454542,
+    "lesion": 0.19645479907397528,
+    "bg_mask": 0.2018181818181818,
+    "bg_patch": 0.2018181818181818,
+    "boxmap": 0.2006393606393606,
+    "ret_lesion": -0.6499535031045391,
+    "ret_bg_mask": 0.3333333333333333,
+    "ret_bg_patch": 0.3333333333333333,
+    "ret_boxmap": 0.11721611721611062,
+    "per_fold": [
+      {
+        "fold": 0,
+        "full": 0.2,
+        "lesion": 0.19711191335740072,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 1,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 2,
+        "full": 0.22727272727272724,
+        "lesion": 0.1883116883116883,
+        "bg_mask": 0.20909090909090908,
+        "bg_patch": 0.20909090909090908,
+        "boxmap": 0.20319680319680317
+      },
+      {
+        "fold": 3,
+        "full": 0.2,
+        "lesion": 0.2,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      },
+      {
+        "fold": 4,
+        "full": 0.2,
+        "lesion": 0.1968503937007874,
+        "bg_mask": 0.2,
+        "bg_patch": 0.2,
+        "boxmap": 0.2
+      }
+    ]
+  },
+  "baseline": null
+}

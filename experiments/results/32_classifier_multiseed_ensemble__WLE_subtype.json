@@ -1,0 +1,19 @@
+{
+  "run_names": [
+    "dinov3_vits16__WLE__subtype__freeze-partial__os-none__loss-weighted_ce__s42",
+    "dinov3_vits16__WLE__subtype__freeze-partial__os-none__loss-weighted_ce__s123",
+    "dinov3_vits16__WLE__subtype__freeze-partial__os-none__loss-weighted_ce__s7"
+  ],
+  "modality": "WLE",
+  "task": "subtype",
+  "individual_bal": [
+    0.5026133447664092,
+    0.5018424166228896,
+    0.49193939568228046
+  ],
+  "individual_bal_mean": 0.4987983856905264,
+  "individual_bal_std": 0.0048602393974324035,
+  "ensemble_accuracy": 0.6315228966986155,
+  "ensemble_balanced_accuracy": 0.5230174395779064,
+  "delta_vs_mean_individual": 0.024219053887379938
+}

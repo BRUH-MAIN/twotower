@@ -1,0 +1,9 @@
+path: /home/rohan/CADSEL/experiments/yolo/eus_multiclass_s42
+train: images/train
+val: images/val
+nc: 4
+names:
+- NET
+- Leiomyoma
+- Lipoma
+- NonNeoplasm

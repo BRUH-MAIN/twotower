@@ -1,0 +1,20 @@
+flowchart LR
+    IN["Input image<br/>(patient frame,<br/>modality-normalised)"]
+
+    subgraph BACKBONES["Track A backbone screen — experiments/finetune_classifier.py"]
+        direction TB
+        R50["ResNet-50<br/>2048-d pooled<br/>unfreeze layer4 (partial)"]
+        CVT["ConvNeXt-Tiny<br/>768-d pooled<br/>unfreeze last stage"]
+        EFF["EfficientNet-B0<br/>1280-d pooled<br/>unfreeze last 2 stages"]
+        DINO["DINOv3 ViT-S/16<br/>384-d CLS token<br/>unfreeze last N blocks"]
+    end
+
+    HEAD["Swappable classifier head<br/>Linear → n classes<br/>(freeze mode: none / head / partial)"]
+
+    OUT["Output<br/>Binary: NET / non-NET<br/>or 5-way subtype<br/>(5-fold patient CV,<br/>balanced accuracy)"]
+
+    IN --> R50 --> HEAD
+    IN --> CVT --> HEAD
+    IN --> EFF --> HEAD
+    IN --> DINO --> HEAD
+    HEAD --> OUT

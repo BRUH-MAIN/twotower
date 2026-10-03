@@ -1,0 +1,30 @@
+# PyTorch: install first, matched to your CUDA runtime. For Blackwell (sm_120)
+# GPUs such as the RTX 50-series you need a cu128 build:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# CPU-only:
+#   pip install torch torchvision
+torch>=2.5
+torchvision>=0.20
+
+numpy>=1.26
+pillow>=10.0
+matplotlib>=3.8
+tqdm>=4.66
+openpyxl>=3.1
+
+# experiments/svm_classifier.py only (SVM on frozen embeddings) -- the rest of
+# the project deliberately avoids scikit-learn (see experiments/probes.py's
+# docstring); an actual SVM needs a real QP/SMO solver that isn't practical to
+# hand-roll, unlike the gradient-based decodability probes elsewhere.
+scikit-learn>=1.4
+# experiments/embeddings.py's DINOv3 path only. The facebook/dinov3-* checkpoints
+# on Hugging Face are gated -- request access at
+# https://huggingface.co/facebook/dinov3-vits16-pretrain-lvd1689m (or your chosen
+# size), then `huggingface-cli login` / set HF_TOKEN before it will download weights.
+transformers>=4.56
+
+# Track B (YOLO11 detection track) only -- experiments/src/28_export_yolo_dataset.py
+# and `yolo detect train`. AGPL-3.0 licensed; see FINDINGS.md's YOLO section for
+# the license caveat before using this in anything beyond local research.
+ultralytics>=8.4
+pyyaml>=6.0

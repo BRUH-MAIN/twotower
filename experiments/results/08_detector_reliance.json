@@ -1,0 +1,62 @@
+[
+  {
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "baseline",
+    "run": "fasterrcnn_mobilenet_320__WLE__multiclass",
+    "best_epoch": 17,
+    "val_AP50": 0.3809,
+    "det_per_full_image": 1.176,
+    "det_per_lesion_free_crop": 0.327,
+    "mean_top_score_full": 0.911,
+    "mean_top_score_lesion_free": 0.297,
+    "hallucination_ratio": 0.278,
+    "n_val": 568,
+    "n_lesion_free": 568
+  },
+  {
+    "modality": "WLE",
+    "task": "multiclass",
+    "arm": "mitigated",
+    "run": "mobilenet_320__WLE__multiclass__mitigated",
+    "best_epoch": 18,
+    "val_AP50": 0.373,
+    "det_per_full_image": 1.183,
+    "det_per_lesion_free_crop": 0.394,
+    "mean_top_score_full": 0.933,
+    "mean_top_score_lesion_free": 0.337,
+    "hallucination_ratio": 0.333,
+    "n_val": 568,
+    "n_lesion_free": 568
+  },
+  {
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "baseline",
+    "run": "fasterrcnn_mobilenet_320__WLE__binary",
+    "best_epoch": 8,
+    "val_AP50": 0.6458,
+    "det_per_full_image": 1.083,
+    "det_per_lesion_free_crop": 0.366,
+    "mean_top_score_full": 0.908,
+    "mean_top_score_lesion_free": 0.349,
+    "hallucination_ratio": 0.338,
+    "n_val": 568,
+    "n_lesion_free": 568
+  },
+  {
+    "modality": "WLE",
+    "task": "binary",
+    "arm": "mitigated",
+    "run": "mobilenet_320__WLE__binary__mitigated",
+    "best_epoch": 9,
+    "val_AP50": 0.634,
+    "det_per_full_image": 1.114,
+    "det_per_lesion_free_crop": 0.273,
+    "mean_top_score_full": 0.913,
+    "mean_top_score_lesion_free": 0.298,
+    "hallucination_ratio": 0.245,
+    "n_val": 568,
+    "n_lesion_free": 568
+  }
+]

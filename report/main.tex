@@ -1,0 +1,800 @@
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,fit,backgrounds,calc}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{colortbl}
+\usepackage{needspace}
+\usepackage[export]{adjustbox}
+\usepackage{seqsplit}
+
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, citecolor=blue!50!black, urlcolor=blue!50!black}
+
+\definecolor{confirmgreen}{RGB}{30,110,60}
+\definecolor{negred}{RGB}{150,30,30}
+\definecolor{unconfamber}{RGB}{160,110,10}
+\definecolor{headerblue}{RGB}{235,240,248}
+\definecolor{boxwle}{RGB}{225,238,255}
+\definecolor{boxeus}{RGB}{235,225,255}
+\definecolor{boxhead}{RGB}{255,235,210}
+\definecolor{boxbb}{RGB}{220,240,220}
+
+\newcommand{\confirmed}{\textcolor{confirmgreen}{\textbf{Confirmed}}}
+\newcommand{\negresult}{\textcolor{negred}{\textbf{Confirmed-negative}}}
+\newcommand{\unconf}{\textcolor{unconfamber}{\textbf{Not confirmed}}}
+\newcommand{\noeffect}{\textcolor{unconfamber}{\textbf{No effect}}}
+\newcommand{\nl}{\textcolor{gray}{n/l}}
+\newcommand{\napp}{\textcolor{gray}{N/A}}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small CAD-SEL Experiment Report}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{0.6em}{}
+
+\title{\textbf{CAD-SEL: Shortcut-Learning Audit and \\ Performance-Campaign Experiment Report}}
+\author{CADSEL Project Workspace}
+\date{Compiled 2026-09-09 \quad (source: \texttt{FINDINGS.md}, last updated 2026-08-30)}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+\noindent This report consolidates the \textbf{classification} lines of work run in the CAD-SEL project
+workspace: (1) a ResNet-18 shortcut-learning audit of the dataset, (2) two rounds of classifier-level
+mitigations (an augmentation-based round and an architectural round with an adversarial discriminator,
+bbox blurring, and channel attention), (3) a single-modality classification-accuracy campaign (Track~A)
+across four backbone families, and (4) an end-to-end trainable two-tower WLE+EUS fusion architecture. Object
+detection (the project's Faster R-CNN reproduction grid, its detector-level performance-lever campaign, the
+detector-ROI multimodal fusion pipeline, and the YOLO11 detection campaign) is out of scope for this report
+and has been removed. For each remaining line of work we report the model architecture, the augmentation and
+training hyperparameters, and the quantitative outcome, with an explicit confirmed / confirmed-negative /
+not-confirmed verdict wherever the underlying work applied a multi-seed noise-floor check. Numbers are drawn
+from \texttt{FINDINGS.md}, cross-checked where needed against the underlying JSON results and source code.
+This is a curated synthesis organized by line of work, not a line-for-line transcription of every logged
+run; multi-seed grids are collapsed to mean $\pm$ std with the governing verdict.
+\end{abstract}
+
+\tableofcontents
+\clearpage
+
+% =====================================================================
+\section{Introduction}
+% =====================================================================
+
+\subsection{Dataset}
+
+CAD-SEL is a dual-modal (white-light endoscopy, WLE, and endoscopic ultrasound, EUS) colonoscopy dataset
+of subepithelial lesions (SELs), collected across 6 acquisition centers.
+
+\begin{center}
+\begin{tabular}{lL{10.5cm}}
+\toprule
+\textbf{Property} & \textbf{Value} \\
+\midrule
+Patients & 641 (537 in Center-1; EUS available for 421, zero EUS-only) \\
+Images & 4{,}912 total, across WLE and EUS \\
+Centers & 6 (Center-1 dominates: 81--94\% of the training pool depending on split) \\
+Classification subtypes & 5 (paper): NET\_G1, NET\_G2, Leiomyoma, Lipoma, NonNeoplasm \\
+Tasks & \texttt{binary} (NET vs.\ non-NET), \texttt{subtype} (5-way patient-level classification) \\
+Class imbalance & $\sim$15:1, NET-heavy (NET\_G1 alone is 299 of 641 patients; Leiomyoma is the rarest subtype) \\
+Splitting & patient-level (\texttt{patient\_key} excludes center, deliberately) unless stated otherwise \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Reporting metric}
+
+Every task in this report is scored as \textbf{balanced accuracy} (mean per-class recall), because plain
+accuracy is flattered by always predicting the majority class under $\sim$15:1 imbalance; macro-F1 is used
+as a secondary cross-check, and Appendix~\ref{sec:appendix-metrics} additionally reports accuracy,
+precision, recall, ROC-AUC, and PR-AUC wherever the underlying run logged them.
+
+\subsection{Discipline applied across the campaign}
+
+Every line of work in this report follows the same protocol, established once a direct measurement showed
+a single run's own seed-to-seed spread could be larger than several previously reported deltas:
+
+\begin{enumerate}[nosep]
+  \item A candidate lever is \textbf{screened} at a single seed.
+  \item If directionally positive, it is \textbf{confirmed} at $\geq$3 seeds; a delta only counts if it
+    clears roughly $1$--$2\times$ the pooled seed-to-seed noise floor, $\sqrt{\sigma_a^2+\sigma_b^2}$.
+  \item Any classification-accuracy win is passed through a \textbf{mandatory counterfactual gate}: the
+    trained model is re-scored on lesion-removed variants (Section~\ref{sec:audit}) to check the gain is
+    not simply increased shortcut reliance.
+\end{enumerate}
+
+\subsection{Report organization}
+
+Section~\ref{sec:audit} covers the shortcut-learning audit (Experiments 1--6). Sections~\ref{sec:mit1}--\ref{sec:mit2}
+cover classifier-level mitigations (Experiments 7, 12--16). Section~\ref{sec:tracka} covers the Track~A
+single-modality classification-accuracy campaign. Section~\ref{sec:fusion2} covers the end-to-end
+trainable two-tower WLE+EUS fusion architecture. Section~\ref{sec:summary} consolidates every
+confirmed/negative result across these lines of work into master tables.
+
+\clearpage
+% =====================================================================
+\section{Shortcut-Learning Audit (Experiments 1--6)}
+\label{sec:audit}
+% =====================================================================
+
+\noindent\textit{Full accuracy/balanced-accuracy for every probe and variant in this section: Appendix~\ref{sec:appendix-metrics}.3.}
+
+Diagnostics testing whether the label is predictable \emph{without} reading lesion morphology --- the
+failure mode defined by Geirhos et al.\ (2020). All tests use a ResNet-18 classifier, balanced accuracy,
+and patient-level splits (unless the experiment is explicitly about splitting).
+
+\subsection{Counterfactual ablation protocol}
+
+The evidentiary backbone of the whole shortcut audit (and every counterfactual gate used later) is a
+5-way image variant, built once per sample and reused verbatim across Experiments 3, 17, 27, and 36:
+
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[
+  node distance=4mm,
+  v/.style={rectangle, draw, rounded corners, minimum height=16mm, minimum width=22mm, align=center, font=\scriptsize, fill=boxwle},
+  lbl/.style={font=\scriptsize\itshape}
+]
+  \node[v] (full) {\textbf{full}\\entire frame};
+  \node[v, right=of full, fill=boxeus] (lesion) {\textbf{lesion}\\box + 10\% pad\\(context removed)};
+  \node[v, right=of lesion, fill=boxhead] (bgmask) {\textbf{bg\_mask}\\box filled with\\mean color};
+  \node[v, right=of bgmask, fill=boxbb] (bgpatch) {\textbf{bg\_patch}\\largest lesion-free\\rectangle};
+  \node[v, right=of bgpatch, fill=gray!25] (boxmap) {\textbf{boxmap}\\black canvas,\\box outline only};
+\end{tikzpicture}
+\end{adjustbox}
+\end{center}
+
+\texttt{bg\_mask} is \emph{not} a clean ablation --- the filled rectangle still encodes the box's size and
+position, which Experiment~1 shows is class-associated. \texttt{bg\_patch} and \texttt{boxmap} were added
+to separate tissue-context leakage from pure geometry leakage; \texttt{bg\_mask} is retained only to show
+the contamination it causes.
+
+\subsection{Experiments and mechanisms tested}
+
+\begin{center}
+\begin{tabular}{L{2.6cm}L{6.3cm}L{4.6cm}}
+\toprule
+\textbf{Experiment} & \textbf{Question} & \textbf{Verdict} \\
+\midrule
+01 Dataset confounds & Is the label predictable from center, demographics, size, location, geometry? & Center: not present (Cram\'er's V 0.099) \\
+02 Low-level probes & Is center or the label decodable from global color/exposure stats? & Center: present, strong (0.81 vs.\ 0.167 chance) \\
+03 Lesion vs.\ background & Counterfactual ablation: remove the lesion, see what survives & Present, strong (68--95\% retained) \\
+04 Cross-center & Train Center-1, test Centers 2--6 & Partial (52--100\% retained, small $n$) \\
+05 Split leakage & Patient-level vs.\ image-level splitting & Present (+0.14 to +0.58 balanced acc.) \\
+06 Synthesis & Collates 01--05 into one verdict table & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Core result (Experiment 3)}
+
+Balanced accuracy, retention against the full-image reference in brackets:
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+Task & chance & full & lesion & bg\_patch & boxmap \\
+\midrule
+WLE binary & 0.500 & 0.706 & 0.754 (123\%) & \textbf{0.695 (95\%)} & 0.598 (48\%) \\
+WLE subtype & 0.200 & 0.326 & 0.448 (197\%) & \textbf{0.299 (79\%)} & 0.300 (80\%) \\
+EUS binary & 0.500 & 0.679 & 0.749 (139\%) & \textbf{0.621 (68\%)} & 0.666 (93\%) \\
+EUS subtype & 0.200 & 0.322 & 0.599 (326\%) & \textbf{0.292 (75\%)} & 0.431 (189\%) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Mechanism summary}
+
+\begin{center}
+\begin{tabular}{L{5.6cm}L{3.4cm}L{4.2cm}}
+\toprule
+\textbf{Mechanism} & \textbf{Verdict} & \textbf{Evidence} \\
+\midrule
+Center predicts the label & Not present & Cram\'er's V 0.099; probe lift +0.003 \\
+Site encoded in pixels & Present (strong) & center decodable at 0.81 vs.\ 0.167 chance \\
+Label leaks via global appearance & Not present & max probe lift +0.10 \\
+Label predictable from non-lesion pixels & Present (strong) & 68--95\% retention \\
+Annotation geometry alone diagnostic & Present (strong) & 48--189\% retention \\
+Collapse on unseen site & Partial & 52--100\% retained, small external $n$ \\
+Image-level split inflation & Present & +0.14 to +0.58 balanced accuracy \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Headline:} the label is recoverable from context and box geometry, largely independent of lesion
+appearance; but the site fingerprint, while real, is \emph{not} the dominant route to the label (Center-1
+supplies 537/641 patients, so site and class are near-independent). \textbf{Detection is markedly less
+shortcut-prone than classification}: a classifier retains 68--95\% of accuracy on lesion-free crops, while a
+detector fires on the same crops only $\sim$0.3$\times$ as often as on full frames --- box regression forces
+commitment to a location.
+
+\clearpage
+% =====================================================================
+\section{Mitigation Study I --- Augmentation-Level (Experiment 7)}
+\label{sec:mit1}
+% =====================================================================
+
+\noindent\textit{Full accuracy/balanced-accuracy for every condition/variant here: Appendix~\ref{sec:appendix-metrics}.3.}
+
+\subsection{Methods}
+
+\begin{center}
+\begin{tabular}{lL{9.5cm}}
+\toprule
+\textbf{Augmentation} & \textbf{Mechanism} \\
+\midrule
+\texttt{scale} & Random rescale of the lesion, 0.5--1.6$\times$; targets the geometry shortcut \\
+\texttt{bgswap} & Lesion pasted onto a \emph{different patient's} lesion-free background; targets the context shortcut \\
+\texttt{both} & \texttt{scale} + \texttt{bgswap} composed \\
+\texttt{hard negatives} & Lesion-free frames from the same patients mined into training, at a target fraction (e.g.\ 0.3) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Protocol differs from Experiment 3 on purpose: \textbf{one} model is trained on ordinary frames and ablated
+\emph{at inference} (``does this trained model rely on the lesion?''), rather than retraining a separate
+model per input variant (``is the label learnable from this input?'').
+
+\subsection{Classifier-level results (Experiment 7)}
+
+Change in background reliance (\texttt{ret\_bg\_patch}) vs.\ baseline, negative = less shortcut:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Task & \texttt{scale} & \texttt{bgswap} & \texttt{both} \\
+\midrule
+WLE binary & $-0.6\%$ & \textbf{$-75.2\%$} & $-50.9\%$ \\
+WLE subtype & $-46.5\%$ & $-41.2\%$ & $-42.4\%$ \\
+EUS binary & $-28.7\%$ & $-30.9\%$ & $+1.0\%$ \\
+EUS subtype & $+37.3\%$ & $+26.8\%$ & $+23.2\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{WLE responds; EUS does not.} \texttt{both} cuts WLE-binary background reliance from 69\% to 18\% for
+$-0.069$ balanced accuracy; on subtype it cuts 45\% to 3\% while \emph{improving} accuracy (+0.042).
+\texttt{bgswap} alone is the strongest single intervention ($-75.2\%$) but costs the most accuracy
+($-0.153$). On EUS, every condition makes reliance \emph{worse} (grayscale, narrow-field ultrasound makes a
+pasted lesion implausible, so the augmentation mostly injects noise).
+
+
+\clearpage
+% =====================================================================
+\section{Mitigation Study II --- Architectural (Experiments 12--16)}
+\label{sec:mit2}
+% =====================================================================
+
+\noindent\textit{Full accuracy/balanced-accuracy for every condition/seed/variant here: Appendix~\ref{sec:appendix-metrics}.3.}
+
+Three further classifier-level mitigations, all following Experiment 7's protocol (train \emph{one} model,
+ablate at inference), reusing Experiment 3's variant definitions and this project's general seed-noise-floor
+discipline (see the Introduction).
+
+\subsection{Adversarial discriminator with gradient reversal (Experiment 12)}
+
+A shared ResNet-18 backbone feeds a main classification head (full image, ordinary cross-entropy) and a
+discriminator head, behind a Gradient Reversal Layer (GRL), that tries to predict the true label from that
+sample's \texttt{bg\_patch} crop alone. Reversed gradients push the backbone toward representations from
+which the discriminator \emph{cannot} predict the label from shortcut-only pixels.
+
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[
+  node distance=7mm and 9mm,
+  block/.style={rectangle, draw, rounded corners, minimum height=9mm, minimum width=26mm, align=center, font=\small},
+  arr/.style={-{Latex[length=2mm]}, thick}
+]
+  \node[block, fill=boxwle] (img) {Full image};
+  \node[block, below=13mm of img, fill=boxeus] (bgp) {\texttt{bg\_patch} crop\\(same sample)};
+  \node[block, right=26mm of img, fill=boxwle] (backbone) {Shared ResNet-18\\backbone (+ SE gates\\in Exp.\ 14)};
+  \node[block, above right=6mm and 20mm of backbone, fill=boxbb] (main) {Main head\\(linear)\\$\to$ CE loss};
+  \node[block, below right=6mm and 20mm of backbone, fill=gray!20] (grl) {Gradient\\Reversal Layer\\$-\lambda \cdot \nabla$};
+  \node[block, right=10mm of grl, fill=boxhead] (disc) {Discriminator\\head\\$\to$ CE loss};
+
+  \draw[arr] (img) -- (backbone);
+  \draw[arr, dashed] (bgp) -- (backbone.west |- bgp);
+  \draw[arr] (backbone) -- (main);
+  \draw[arr] (backbone) -- (grl);
+  \draw[arr] (grl) -- (disc);
+\end{tikzpicture}
+\end{adjustbox}
+\end{center}
+
+\texttt{boxmap} is a secondary, ablatable discriminator target (riskier: a synthetic near-black canvas is
+out-of-distribution for a natural-image backbone). GRL $\lambda$ follows a DANN-style sigmoid ramp
+($\lambda_{\max}=1.0$, 2-epoch warm-up).
+
+\subsection{Bbox blur (Experiment 13) and channel attention (Experiment 14)}
+
+\textbf{Bbox blur}: Gaussian-blurs everything outside a heavily feathered, generously padded ($\geq$1.15$\times$
+box extent), per-sample-jittered region around the lesion box, \emph{during training only}, guarding
+explicitly against the \texttt{bg\_mask} trap (a hard blur boundary would itself encode geometry).
+
+\textbf{Channel attention}: squeeze-and-excite (SE) gates on ResNet-18's stages (simplified from
+\texttt{Channel\_Att\_Bridge} in UltraLight-VM-UNet). \texttt{se\_*\_ce} (no discriminator) is an
+\emph{expected-null control}; \texttt{se\_all\_adv} composes SE gates with the Experiment-12 discriminator.
+
+\subsection{Results and verdicts}
+
+\begin{center}
+\begin{tabular}{L{2.1cm}L{7.6cm}L{4.4cm}}
+\toprule
+\textbf{Method} & \textbf{\texttt{ret\_bg\_patch} vs.\ baseline, 4 modality/task cells} & \textbf{Verdict} \\
+\midrule
+Exp.\ 12 (GRL disc.) & 7/8 conditions negative; 1/8 (EUS/subtype) cleared the noise floor & \unconf{} at 3 seeds \\
+Exp.\ 13 (bbox blur) & mixed sign on WLE; \textbf{backfires on EUS binary} (+34 to +38\% retention) & \noeffect{}; no boundary-leak fired \\
+Exp.\ 14 (\texttt{se\_all\_adv}) & \textbf{8/8 cells negative}, clean dose-response vs.\ \texttt{se\_layer4\_adv} & \unconf{}, most consistent direction \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Exp.\ 15/16 follow-up.} \texttt{baseline} and \texttt{se\_all\_adv} extended from 3 to 7 seeds (Exp.\
+15), then rerun at up to 100 epochs with early-stop patience 20 (Exp.\ 16). Models converged well before the
+cap (mean 27--45 epochs). \textbf{All 4 cells still negative}, none clearing $2\times$ the pooled seed-noise
+floor even after proper convergence --- noise floors actually \emph{tightened} in 3 of 4 cells. \textbf{Final
+verdict: \texttt{se\_all\_adv} is a real, consistent, but small effect --- not strong enough to confirm as a
+validated mitigation.} None of the three methods (12/13/14) cleared their own noise floor with the budget
+tested.
+
+\clearpage
+% =====================================================================
+\section{Track A --- Classification-Accuracy Campaign (\S10, \S12--\S14)}
+\label{sec:tracka}
+% =====================================================================
+
+\noindent\textit{Full accuracy, balanced accuracy, precision, recall, F1, ROC-AUC, and PR-AUC for all 62 runs: Appendix~\ref{sec:appendix-metrics}.1.}
+
+Every classification result before this section was a shortcut-learning diagnostic or a frozen-embedding
+fusion component. Track~A pushes single-modality lesion classification (binary NET/non-NET, 5-way subtype)
+as an end in itself, with a trainable backbone, on the same discipline as the rest of the project.
+
+\subsection{Backbones and infrastructure}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Backbones & \texttt{resnet50}, \texttt{convnext\_tiny}, \texttt{efficientnet\_b0}, \texttt{dinov3\_vits16} \\
+Freeze modes & \texttt{none} (full fine-tune), \texttt{partial} (last blocks), \texttt{head} (frozen backbone) \\
+Losses & \texttt{ce}, \texttt{weighted\_ce}, \texttt{seesaw\_ce} \\
+Oversampling & \texttt{none}, \texttt{size} (size-aware RFS, threshold 0.2) \\
+Image size & 224 \\
+Optimizer & AdamW, lr $3\times10^{-4}$ default, batch 32 \\
+Epochs & 30 default (20 for the backbone screen, early-stop patience 8) \\
+Cross-validation & 5-fold, patient-grouped \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every run writes per-fold loss/LR curves, a confusion matrix, and ROC/PR curves; ROC-AUC/PR-AUC are logged
+alongside balanced accuracy.
+
+\subsection{Fair-baseline gate (10.1) --- PASS}
+
+A fine-tuned ResNet-50 must clearly beat the frozen-embedding SVM baseline used earlier in this project's
+audit work (\texttt{experiments/svm\_classifier.py}, an SVM on frozen ResNet-50/DINOv3 embeddings), or the
+new pipeline has a bug:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Task & Frozen-SVM & Fine-tuned ResNet-50 \\
+\midrule
+WLE binary & 0.6447 & $\mathbf{0.7616\pm0.0234}$ \\
+WLE subtype & 0.2995 & $\mathbf{0.4398\pm0.0457}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Backbone screen (10.2)}
+
+32 runs (4 backbones $\times$ 2 modalities $\times$ 2 tasks $\times$ \{frozen, unfrozen\}), single seed 42:
+
+\begin{center}
+\begin{tabular}{llcc}
+\toprule
+Modality/task & Backbone & Frozen (head) & Unfrozen (none) \\
+\midrule
+WLE binary & efficientnet\_b0 & 0.6724 & \textbf{0.7711} \\
+WLE binary & dinov3\_vits16 & \textbf{0.7072} & 0.5711 \\
+WLE subtype & efficientnet\_b0 & 0.3069 & \textbf{0.4348} \\
+EUS binary & resnet50 & 0.5279 & \textbf{0.6925} \\
+EUS subtype & efficientnet\_b0 & 0.2327 & \textbf{0.3602} \\
+\bottomrule
+\end{tabular}
+\end{center}
+(chance: 0.500 binary, 0.200 subtype; full 16-row table in \texttt{FINDINGS.md} \S10.2.)
+
+\textbf{efficientnet\_b0} is the best unfrozen WLE backbone, carried into the lever screen.
+\textbf{DINOv3 is the one backbone where full fine-tuning backfires} --- frozen beats unfrozen on WLE
+binary (0.7072 vs.\ 0.5711) and unfrozen collapses to chance on EUS. Root cause identified in \S12.3: the
+project's CNN-tuned default LR ($3\times10^{-4}$) is too high for a ViT.
+
+\subsection{Lever screen and multi-seed confirmation (10.3--10.5)}
+
+\texttt{weighted\_ce} on subtype: single-seed $+0.0221$, confirmed at 3 seeds
+($0.4282\pm0.0127 \to 0.4609\pm0.0035$, $\Delta+0.0327$, clears floor by $\sim$2.5$\times$).
+\textbf{Counterfactual gate}: \texttt{ret\_bg\_patch} 33\% (win) vs.\ 42\% (baseline) --- \textbf{lower}, so
+the gain is not shortcut-driven. \confirmed{} as a validated classification-accuracy improvement.
+
+\subsection{DINOv3 \texttt{--freeze partial} (12.2) --- new best classifier}
+
+Unfreezing only the last 4 (of 12) transformer blocks:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Task & seed 42 & seed 123 & seed 7 (mean $\pm$ std) \\
+\midrule
+binary & 0.7963 & 0.8136 & 0.8105 $\to$ $\mathbf{0.8068\pm0.0075}$ \\
+subtype & 0.4741 & 0.4899 & 0.4697 $\to$ $\mathbf{0.4779\pm0.0087}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\confirmed{} on both tasks (binary $+0.0357$ over \texttt{efficientnet\_b0}; subtype $+0.0170$ over
+\texttt{weighted\_ce}). \textbf{Counterfactual gate: PARTIAL} --- \texttt{bg\_patch} retention is technically
+higher than the CNN baselines' (54\%>46\%, 40\%>33\%, a literal WARN), but retention on the
+\emph{isolated-lesion} crop is dramatically higher too (87\%/83\% vs.\ 55\%/55\%) --- DINOv3's richer
+representation appears to extract more signal from \emph{both} lesion and context, not to substitute
+shortcut-reading for lesion-reading. Recorded as the new best result, flagged partial rather than clean.
+
+\subsection{Compounding levers and ensembling (13.2, 13.4)}
+
+DINOv3-partial + \texttt{weighted\_ce} on subtype \confirmed{} at 3 seeds ($0.4957\pm0.0033$, gate clean:
+\texttt{bg\_patch} retention \emph{dropped} 40\%$\to$27\%). Multi-seed probability ensembling (3 already-trained
+seeds, zero extra GPU time) reaches new campaign bests:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Config & seed mean $\pm$ std & Ensemble & $\Delta$ \\
+\midrule
+DINOv3-partial, binary & $0.8063\pm0.0078$ & \textbf{0.8209} & +0.0146 \\
+DINOv3-partial + weighted\_ce, subtype & $0.4988\pm0.0049$ & \textbf{0.5230} & +0.0242 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{EUS: treat as shortcut-suspect by default}
+
+Extending the counterfactual gate to the remaining 17 EUS backbone-screen checkpoints found retentions from
+$-43\%$ to \textbf{89\%} (\texttt{efficientnet\_b0}/subtype/frozen) --- close to the $\sim$100\% ``pure
+shortcut'' DINOv3-EUS precedent from the audit. \textbf{No EUS classification result in this campaign is
+both strong and counterfactually clean}; the single new-best EUS classifier that does clear the gate
+cleanly is DINOv3 \texttt{--freeze partial} (\S14.3): binary $0.7386\pm0.0313$ (35\% \texttt{bg\_patch}
+retention), subtype $0.3764\pm0.0507$ (15\% retention).
+
+\subsection{Closed threads: TTA and DINOv3 fine-tuning LR}
+
+Flip-TTA (12.4) and 5-crop TTA (14.6) are both null on every checkpoint tried: training already includes
+\texttt{RandomHorizontalFlip}/\texttt{RandomResizedCrop}, leaving TTA nothing new to add.
+\texttt{unfreeze\_last\_n} sweep (14.5): $n=6$--8 modestly beats the default $n=4$ (single-seed, not
+confirmed); even $n=12$ avoids catastrophic collapse because the patch/position embeddings stay frozen under
+\texttt{--freeze partial} regardless of $n$ --- the actual reason \texttt{--freeze none} was catastrophic
+(\S10.2) while a much lower LR (\S12.3, $10^{-5}$) recovers most of the gap.
+
+\clearpage
+% =====================================================================
+\section{Joint End-to-End Two-Tower WLE+EUS Fusion (\S15)}
+\label{sec:fusion2}
+% =====================================================================
+
+\noindent\textit{Accuracy, balanced accuracy, and macro-F1 for all 69 run/ablation combinations: Appendix~\ref{sec:appendix-metrics}.2.}
+
+Every prior fusion result trained \texttt{FusionHead} on \textbf{frozen, pre-extracted, single-pass}
+features --- the per-modality backbones never see a fusion-loss gradient, and no image augmentation happens
+in the fusion stage. This architecture is structurally different: two independently trainable backbones,
+jointly fine-tuned end-to-end, with independent per-modality augmentation every training step.
+
+\subsection{Architecture}
+
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[
+  node distance=7mm and 9mm,
+  block/.style={rectangle, draw, rounded corners, minimum height=9mm, minimum width=27mm, align=center, font=\scriptsize},
+  arr/.style={-{Latex[length=2mm]}, thick}
+]
+  \node[block, fill=boxwle] (wle) {WLE frames\\(up to 4/patient,\\augmented each epoch)};
+  \node[block, below=14mm of wle, fill=boxeus] (eus) {EUS frames\\(up to 4/patient,\\augmented each epoch)};
+  \node[block, right=16mm of wle, fill=boxeus] (twle) {EfficientNet-B0\\tower (WLE)\\\texttt{--freeze partial/none}};
+  \node[block, right=16mm of eus, fill=boxwle] (teus) {EfficientNet-B0\\tower (EUS)\\\texttt{--freeze partial/none}};
+  \node[block, right=16mm of twle, minimum height=8mm, fill=boxhead] (poolw) {AttentionPool};
+  \node[block, right=16mm of teus, minimum height=8mm, fill=boxhead] (poole) {AttentionPool};
+  \node[block, right=18mm of $(poolw)!0.5!(poole)$, minimum height=20mm, fill=gray!20] (fuse) {FusionHead:\\GatedFusion or\\SymmetricCrossAttention\\(modality dropout 0.3)};
+  \node[block, right=12mm of fuse, fill=boxbb] (out) {Patient class\\(binary / subtype)};
+
+  \draw[arr] (wle) -- (twle);
+  \draw[arr] (eus) -- (teus);
+  \draw[arr] (twle) -- (poolw);
+  \draw[arr] (teus) -- (poole);
+  \draw[arr] (poolw) -- (fuse);
+  \draw[arr] (poole) -- (fuse);
+  \draw[arr] (fuse) -- (out);
+\end{tikzpicture}
+\end{adjustbox}
+\end{center}
+
+\begin{sloppypar}
+Two independent \texttt{efficientnet\_b0} towers (ImageNet-pretrained; \texttt{--freeze partial} unfreezes
+the last two \texttt{features} stages) feed the \textbf{unmodified} \texttt{cadsel.fusion.FusionHead}
+module: an attention-weighted pool over each modality's frames, then a \texttt{GatedFusion} or
+\texttt{SymmetricCrossAttentionFusion} combination layer, with modality dropout and missing-modality
+masking. One joint model per fold is
+trained with \texttt{modality\_dropout=0.3} throughout, and \texttt{wle\_only} / \texttt{eus\_only} /
+\texttt{fused} are reported as three masked-inference views of that single model.
+\end{sloppypar}
+
+\subsection{Hyperparameters}
+
+\begin{center}
+\begin{tabular}{lL{10cm}}
+\toprule
+Towers & \texttt{efficientnet\_b0} $\times$ 2 (independent weights) \\
+Frame budget & up to 4 frames/patient/modality, sampled with replacement \\
+Loss & \texttt{weighted\_ce} \\
+Fusion & \texttt{gated} (default) or \texttt{symmetric} \\
+Learning rate & flat $10^{-4}$, or discriminative (backbone $10^{-5}$ / head $10^{-4}$) \\
+Epochs & 30 (initial screen) or 100 / patience 20 (confirmed configs) \\
+Cross-validation & 5-fold, patient-grouped \\
+Optional levers & \texttt{--lesion-crop} (crop to box + 10\% pad, pre-augmentation), \texttt{--bg-remove-prob} (stochastic mean-fill outside the box) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Binary task: confirmed fusion win}
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+Config & Ablation (denom.) & seed 42/123/7 & \textbf{3-seed mean $\pm$ std} \\
+\midrule
+\texttt{--freeze partial}, flat LR & wle\_only (unpaired) & 0.687/0.722/0.737 & $0.7153\pm0.0208$ \\
+& \textbf{fused} (unpaired) & 0.749/0.761/0.769 & $\mathbf{0.7596\pm0.0082}$ \\
+\texttt{--freeze none} & wle\_only (unpaired) & 0.766/0.773/0.754 & $0.7644\pm0.0093$ \\
+& \textbf{fused} (unpaired) & 0.803/0.808/0.792 & $\mathbf{0.8007\pm0.0067}$ \\
+\texttt{--freeze none} + \texttt{--lesion-crop} & wle\_only (unpaired) & 0.769/0.768/0.783 & $0.7733\pm0.0071$ \\
+& eus\_only (paired) & 0.682/0.725/0.710 & $0.7057\pm0.0178$ \\
+& \textbf{fused} (unpaired) & 0.817/0.794/0.822 & $\mathbf{0.8110\pm0.0123}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{\texttt{fused} vs.\ \texttt{wle\_only}} (within \texttt{--freeze none}): $\Delta+0.0363$, noise floor
+$\approx0.0115$ --- \confirmed{}, $\sim$3.2$\times$ the floor, the cleanest margin in this section.
+\textbf{\texttt{--freeze none} vs.\ \texttt{--freeze partial}}, both fused: $\Delta+0.0411$, floor
+$\approx0.0106$ --- \confirmed{}. \texttt{--lesion-crop} confirms a real EUS-only gain
+($0.6197\pm0.0216 \to 0.7057\pm0.0178$, $\Delta+0.0860$, $\sim$3.1$\times$ floor) but its \texttt{fused}
+delta over plain \texttt{--freeze none} ($+0.0103$) does \emph{not} clear its own floor ($\approx0.0140$) ---
+a real single-modality win that does not (yet) propagate to the headline fused metric, plausibly because
+\texttt{GatedFusion}'s gate structurally favors WLE.
+
+\textbf{Multi-seed ensembling} (zero extra training) reaches campaign-best fused/unpaired balanced accuracy
+of \textbf{0.8219} (\texttt{--lesion-crop} ensemble) / 0.8160 (\texttt{--freeze none} ensemble alone).
+
+\subsection{Counterfactual gate --- PASSED}
+
+Built \texttt{36\_joint\_fusion\_counterfactual.py}, the patient-level, multi-frame, two-modality adaptation
+of the classifier gate; swaps both towers to the same variant simultaneously per patient. Run against the
+confirmed \texttt{--freeze none} seed-42 checkpoint:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Variant & balanced accuracy & retention vs.\ full \\
+\midrule
+full (real images, both towers) & 0.803 & --- \\
+lesion (crop to box + padding) & 0.632 & 44\% \\
+bg\_mask (lesion erased, background kept) & 0.644 & 48\% \\
+bg\_patch (pure background, no lesion) & 0.627 & 42\% \\
+\textbf{boxmap} (black canvas, box outline only) & \textbf{0.494} & \textbf{$-2\%$} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+With every trace of real tissue removed, balanced accuracy falls to essentially exact chance (0.494 vs.\
+0.500). \textbf{Gate PASSED}: the confirmed win is genuine lesion-dependent signal, not shortcut-reading.
+
+\subsection{Subtype task: confirmed on the unpaired denominator}
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+Config & Ablation & seed 42/123/7 & \textbf{3-seed mean $\pm$ std} \\
+\midrule
+discriminative LR, \texttt{--freeze partial} & wle\_only (unpaired) & 0.464/0.445/0.502 & $0.4704\pm0.0234$ \\
+& \textbf{fused} (unpaired) & 0.510/0.481/0.528 & $\mathbf{0.5063\pm0.0193}$ \\
+\texttt{--freeze none} + \texttt{--lesion-crop} & wle\_only (unpaired) & 0.527/0.469/0.518 & $0.5049\pm0.0254$ \\
+& \textbf{fused} (unpaired) & 0.555/0.514/0.557 & $\mathbf{0.5419\pm0.0201}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Unpaired balanced accuracy delta $+0.0359$ vs.\ floor $\approx0.0304$ (1.18$\times$, tight but real; macro-F1
+cross-check confirms more cleanly at 2.9$\times$). \texttt{--lesion-crop} on \texttt{--freeze none} then
+confirms a \textbf{new subtype best} ($0.5419\pm0.0201$, $\Delta+0.0356$ over the prior best, $\sim$1.28$\times$
+floor). Counterfactual gate on the discriminative-LR checkpoint \textbf{PASSED} (boxmap retention 2\%,
+essentially chance). \textbf{Caveat}: the paired-only denominator's confirmation is razor-thin (clears its
+floor by 0.0002) and should not be leaned on.
+
+\subsection{Negative and null screens}
+
+Discriminative backbone LR (\S15.3) helped \texttt{wle\_only} more than \texttt{fused}, narrowing rather than
+widening the fusion gap --- a useful negative, not carried forward. \texttt{--fusion symmetric} (\S15.7) is
+within noise of gated and does not let lesion-crop's EUS gain reach the fused output either, refuting the
+specific ``WLE-bias'' hypothesis. \texttt{--bg-remove-prob 0.5} (\S15.9) is clearly negative (fused
+$-0.0397$), single-seed, not escalated: stochastic mean-filling followed by \texttt{RandomResizedCrop} can
+land entirely inside the filled region, producing noisy supervision rather than useful regularization.
+
+\clearpage
+% =====================================================================
+\section{Cross-Cutting Summary}
+\label{sec:summary}
+% =====================================================================
+
+\subsection{Campaign-best numbers}
+
+\begin{center}
+\begin{tabular}{L{4.3cm}L{7.4cm}C{2.6cm}}
+\toprule
+\textbf{Line of work} & \textbf{Best confirmed configuration} & \textbf{Score} \\
+\midrule
+Track A, WLE binary & DINOv3-partial, 3-seed ensemble & 0.8209 bal.\ acc. \\
+Track A, WLE subtype & DINOv3-partial + weighted\_ce, 3-seed ensemble & 0.5230 bal.\ acc. \\
+Track A, EUS binary (gate-clean) & DINOv3-partial & 0.7386 $\pm$ 0.0313 bal.\ acc. \\
+Joint fusion, binary & \texttt{--freeze none} + \texttt{--lesion-crop}, ensemble & 0.8219 bal.\ acc. \\
+Joint fusion, subtype & \texttt{--freeze none} + \texttt{--lesion-crop} & 0.5419 $\pm$ 0.0201 bal.\ acc. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Confirmed levers across the whole project}
+
+\begin{center}
+\begin{tabular}{L{6.8cm}L{6.2cm}}
+\toprule
+\textbf{Confirmed positive} & \textbf{Confirmed negative} \\
+\midrule
+\texttt{weighted\_ce} loss, WLE subtype (Track A) & DINOv3 \texttt{--freeze none} at the project's default LR (Track A) \\
+DINOv3 \texttt{--freeze partial} (Track A, both WLE tasks) & Flip-TTA / 5-crop TTA (Track A) \\
+Multi-seed probability ensembling (Track A \& joint fusion) & \texttt{--bg-remove-prob} (joint fusion) \\
+Joint two-tower fusion, binary (\texttt{--freeze none}) & \\
+Joint two-tower fusion, subtype (unpaired denominator) & \\
+\texttt{--lesion-crop}, EUS single-modality signal & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Standing cautions}
+
+\begin{itemize}[nosep]
+  \item \textbf{EUS classification results are shortcut-suspect by default} unless individually gated ---
+    only DINOv3-partial (\S14.3) is both strong and clean.
+  \item \textbf{A clean confirmation and a clean counterfactual pass are two different bars.} DINOv3-partial
+    is a confirmed win on both WLE tasks (Section~\ref{sec:tracka}) yet only flags PARTIAL on its own
+    counterfactual gate --- a result can clear the noise floor without being unambiguously shortcut-free.
+  \item \textbf{A confirmation can be real and still be razor-thin.} The joint-fusion subtype win on the
+    paired-only denominator (Section~\ref{sec:fusion2}) clears its own noise floor by only 0.0002 --- treat
+    it as directionally right, not as statistically solid as the unpaired-denominator result next to it.
+\end{itemize}
+
+\clearpage
+% =====================================================================
+\section{Implementation Lessons}
+\label{sec:lessons}
+% =====================================================================
+
+\begin{itemize}[nosep]
+  \item \textbf{Run-name collisions silently overwrite results.} Any CLI flag that can distinguish two
+    otherwise-identical configs must be part of the output filename, or a later run can destroy an earlier
+    one's checkpoints/JSON with no error --- seen twice in this project's classification work: a learning-rate
+    sweep silently overwrote Track~A's original DINOv3 \texttt{--freeze none} failure JSON (\S12.3) until
+    \texttt{--lr} was added to the run-name template, and the joint-fusion multi-seed ensemble script
+    initially keyed its output only on task, so a second ensemble run overwrote the first's result file
+    (\S15.5) until the script was fixed to key on the full ensembled config.
+\end{itemize}
+
+\clearpage
+% =====================================================================
+\section{Open Items}
+\label{sec:open}
+% =====================================================================
+
+\begin{itemize}[nosep]
+  \item A repeated-CV or bootstrapped-confidence-interval protocol for the DINOv3-classifier-backbone
+    fusion rebuild (a frozen-feature variant distinct from the trainable two-tower architecture in
+    Section~\ref{sec:fusion2}), whose paired-patient pool is too small for a single 5-fold split to give a
+    stable read.
+  \item A counterfactual-gate adaptation for \texttt{--lesion-crop}-trained joint-fusion checkpoints (the
+    model never sees uncropped content, so the existing raw-frame gate would confound distribution shift
+    with genuine lesion-dependence).
+  \item Domain-specific backbone pretraining (GastroNet-5M is in-domain for WLE but gated behind a
+    commercial platform; no publicly downloadable SEL dataset currently exists per the paper's own Table~1
+    comparison).
+\end{itemize}
+
+\clearpage
+% =====================================================================
+\section*{References}
+\addcontentsline{toc}{section}{References}
+% =====================================================================
+
+\begin{itemize}[nosep]
+\item Xu, L., Chen, S., Li, C. et al. \textit{CAD-SEL: A dual-modal colonoscopy dataset of subepithelial
+  lesion.} Scientific Data (2026). doi:10.1038/s41597-026-07331-y
+\item Geirhos, R. et al. \textit{Shortcut learning in deep neural networks.} Nature Machine Intelligence
+  (2020).
+\item Ganin, Y. \& Lempitsky, V. \textit{Unsupervised domain adaptation by backpropagation (gradient
+  reversal / DANN).} ICML (2015).
+\item Wang, J. et al. \textit{Seesaw Loss for Long-Tailed Instance Segmentation.} CVPR (2021).
+\end{itemize}
+
+\clearpage
+\appendix
+% =====================================================================
+\section{Full Metrics by Run}
+\label{sec:appendix-metrics}
+% =====================================================================
+
+Every table in the main text reports the headline metric(s) actually used to reach each verdict (balanced
+accuracy), matching how the underlying experiments were designed and gated. This appendix reports
+\textbf{accuracy, balanced accuracy, precision, recall, F1, ROC-AUC, and PR-AUC for every individual
+classification run} referenced anywhere in this report, extracted programmatically from the project's own
+saved result files (never re-derived by hand, to avoid transcription error at this scale). Two honesty
+rules govern every cell below:
+
+\begin{itemize}[nosep]
+  \item A metric is populated only if the underlying JSON actually contains it, or is exactly derivable
+    from something it contains (precision/recall/F1 from a saved confusion matrix). A cell reading
+    \nl{} means \textbf{not logged} by the original experiment --- the script that produced that run
+    never computed or saved that statistic, and no attempt is made to estimate it.
+\end{itemize}
+
+\subsection{Track A classifiers (Section~\ref{sec:tracka}) --- 62 runs}
+
+The only line of work in this project with all 7 metrics natively logged per run: accuracy, balanced
+accuracy, ROC-AUC, and PR-AUC come directly from \texttt{experiments/finetune\_classifier.py}'s own
+evaluation code; precision and recall are macro-averaged from each run's saved 5-fold-pooled confusion
+matrix.
+
+\input{tables/track_a.tex}
+
+\subsection{Joint two-tower fusion (Section~\ref{sec:fusion2}) --- 69 run/ablation rows}
+
+\input{tables/joint_fusion.tex}
+
+\subsection{Shortcut-learning-audit classifier probes (Section~\ref{sec:audit}, \ref{sec:mit2}) --- 790 run/variant rows}
+
+Experiments 1--5, 7, and 12--14/17--18: ResNet-18 counterfactual probes and classifier-level mitigation
+screens. These predate Track~A's infrastructure and were built around a single metric (balanced accuracy
+against a chance/majority floor) by design --- see \texttt{experiments/probes.py}'s own docstring on why
+this line of work deliberately avoids scikit-learn. No confusion matrix, class-probability score, or
+checkpoint was retained, so precision/recall/F1/ROC-AUC/PR-AUC cannot be recovered without fully retraining
+roughly 150 individual model fits; per the scope agreed for this report, that retraining was not performed.
+
+\input{tables/audit_classifier.tex}
+
+\end{document}

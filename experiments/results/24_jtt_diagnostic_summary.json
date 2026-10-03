@@ -1,0 +1,37 @@
+{
+  "checkpoint": "runs/ms_baseline_s42__WLE__multiclass/best_model.pth",
+  "n_scored": 2249,
+  "n_hard": 450,
+  "hard_center_dist": {
+    "Center-2": 21,
+    "Center-1": 327,
+    "Center-3": 89,
+    "Center-4": 8,
+    "Center-5": 2,
+    "Center-6": 3
+  },
+  "overall_center_dist": {
+    "Center-2": 112,
+    "Center-1": 1807,
+    "Center-3": 297,
+    "Center-4": 17,
+    "Center-5": 8,
+    "Center-6": 8
+  },
+  "hard_subtype_dist": {
+    "Leiomyoma": 32,
+    "NonNeoplasm": 68,
+    "NET_G1": 268,
+    "Lipoma": 51,
+    "NET_G2": 31
+  },
+  "overall_subtype_dist": {
+    "Leiomyoma": 112,
+    "NonNeoplasm": 228,
+    "NET_G1": 1392,
+    "Lipoma": 362,
+    "NET_G2": 155
+  },
+  "hard_area_mean": 0.12214746832729503,
+  "easy_area_mean": 0.16132986422187665
+}

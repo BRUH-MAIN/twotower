@@ -1,0 +1,57 @@
+{
+  "run_name": "joint_resnet50__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42",
+  "task": "subtype",
+  "chance": 0.2,
+  "full": 0.23420000000000002,
+  "lesion": 0.42889999999999995,
+  "bg_mask": 0.19119999999999998,
+  "bg_patch": 0.20895999999999998,
+  "boxmap": 0.25516,
+  "reference": "lesion",
+  "ret_full": 0.1494102228047183,
+  "ret_bg_mask": -0.03844473569244226,
+  "ret_bg_patch": 0.039143730886850026,
+  "ret_boxmap": 0.24097859327217128,
+  "per_fold": [
+    {
+      "fold": 0,
+      "full": 0.232,
+      "lesion": 0.5311,
+      "bg_mask": 0.1772,
+      "bg_patch": 0.2265,
+      "boxmap": 0.2637
+    },
+    {
+      "fold": 1,
+      "full": 0.2367,
+      "lesion": 0.4306,
+      "bg_mask": 0.227,
+      "bg_patch": 0.1945,
+      "boxmap": 0.3226
+    },
+    {
+      "fold": 2,
+      "full": 0.215,
+      "lesion": 0.4268,
+      "bg_mask": 0.1564,
+      "bg_patch": 0.2569,
+      "boxmap": 0.2
+    },
+    {
+      "fold": 3,
+      "full": 0.2287,
+      "lesion": 0.3634,
+      "bg_mask": 0.2003,
+      "bg_patch": 0.1817,
+      "boxmap": 0.2895
+    },
+    {
+      "fold": 4,
+      "full": 0.2586,
+      "lesion": 0.3926,
+      "bg_mask": 0.1951,
+      "bg_patch": 0.1852,
+      "boxmap": 0.2
+    }
+  ]
+}

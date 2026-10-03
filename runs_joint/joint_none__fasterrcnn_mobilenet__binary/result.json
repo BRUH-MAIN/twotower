@@ -1,0 +1,163 @@
+{
+  "run_name": "joint_none__fasterrcnn_mobilenet__binary",
+  "model": "fasterrcnn_mobilenet",
+  "paper_name": "Fasterrcnn_Mobilenet",
+  "modality": "JOINT",
+  "modalities": [
+    "WLE",
+    "EUS"
+  ],
+  "conditioning": "none",
+  "task": "binary",
+  "img_size": 640,
+  "batch_size": 8,
+  "epochs": 100,
+  "epochs_run": 26,
+  "learning_rate": 0.001,
+  "input_mode": "reference",
+  "per_modality_norm": true,
+  "augment": [
+    "flip",
+    "color",
+    "rotate"
+  ],
+  "hard_negatives": 0.3,
+  "split_level": "patient",
+  "class_weighting": true,
+  "seed": 42,
+  "best_epoch": 11,
+  "elapsed_sec": 6348.07404589653,
+  "split": {
+    "train": {
+      "images": 4009,
+      "patients": 512,
+      "by_subtype": {
+        "Leiomyoma": 179,
+        "Lipoma": 585,
+        "NET_G1": 2594,
+        "NET_G2": 300,
+        "NonNeoplasm": 351
+      },
+      "by_modality": {
+        "EUS": 1734,
+        "WLE": 2275
+      },
+      "paired_patients": 336
+    },
+    "val": {
+      "images": 903,
+      "patients": 129,
+      "by_subtype": {
+        "Leiomyoma": 37,
+        "Lipoma": 122,
+        "NET_G1": 599,
+        "NET_G2": 54,
+        "NonNeoplasm": 91
+      },
+      "by_modality": {
+        "EUS": 361,
+        "WLE": 542
+      },
+      "paired_patients": 85
+    }
+  },
+  "best": {
+    "AP@0.5": 0.5654689028149538,
+    "AP@0.5_conf": 0.490307434047756,
+    "precision": 0.646,
+    "recall": 0.6659793814432989,
+    "f1": 0.6558375634517766,
+    "tp": 646,
+    "fp": 354,
+    "fn": 324,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.7044694290869093,
+        "AP@0.5_conf": 0.6441789882334579,
+        "precision": 0.7463126843657817,
+        "recall": 0.7177304964539007,
+        "f1": 0.7317425885755603,
+        "tp": 506,
+        "fp": 172,
+        "fn": 199
+      },
+      "non-NET": {
+        "AP@0.5": 0.4264683765429981,
+        "AP@0.5_conf": 0.33643587986205414,
+        "precision": 0.43478260869565216,
+        "recall": 0.5283018867924528,
+        "f1": 0.4770017035775127,
+        "tp": 140,
+        "fp": 182,
+        "fn": 125
+      }
+    },
+    "per_modality": {
+      "EUS": {
+        "AP@0.5": 0.4559009679655005,
+        "AP@0.5_conf": 0.38146731034950365,
+        "precision": 0.653250773993808,
+        "recall": 0.5158924205378973,
+        "f1": 0.5765027322404371,
+        "tp": 211,
+        "fp": 112,
+        "fn": 198,
+        "per_class": {
+          "NET": {
+            "AP@0.5": 0.581132417138024,
+            "AP@0.5_conf": 0.5039719927241202,
+            "precision": 0.7361702127659574,
+            "recall": 0.5580645161290323,
+            "f1": 0.6348623853211011,
+            "tp": 173,
+            "fp": 62,
+            "fn": 137
+          },
+          "non-NET": {
+            "AP@0.5": 0.330669518792977,
+            "AP@0.5_conf": 0.25896262797488717,
+            "precision": 0.4318181818181818,
+            "recall": 0.3838383838383838,
+            "f1": 0.40641711229946526,
+            "tp": 38,
+            "fp": 50,
+            "fn": 61
+          }
+        }
+      },
+      "WLE": {
+        "AP@0.5": 0.6540384971881411,
+        "AP@0.5_conf": 0.580245405820657,
+        "precision": 0.6425406203840472,
+        "recall": 0.7754010695187166,
+        "f1": 0.7027463651050081,
+        "tp": 435,
+        "fp": 242,
+        "fn": 126,
+        "per_class": {
+          "NET": {
+            "AP@0.5": 0.8131304060549218,
+            "AP@0.5_conf": 0.7661070946490733,
+            "precision": 0.7516930022573364,
+            "recall": 0.8430379746835444,
+            "f1": 0.7947494033412887,
+            "tp": 333,
+            "fp": 110,
+            "fn": 62
+          },
+          "non-NET": {
+            "AP@0.5": 0.4949465883213604,
+            "AP@0.5_conf": 0.3943837169922407,
+            "precision": 0.4358974358974359,
+            "recall": 0.6144578313253012,
+            "f1": 0.5100000000000001,
+            "tp": 102,
+            "fp": 132,
+            "fn": 64
+          }
+        }
+      }
+    },
+    "AP@0.5_macro": 0.5549697325768208
+  }
+}

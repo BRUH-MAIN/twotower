@@ -1,0 +1,646 @@
+{
+  "arms": [
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "convnext_tiny freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.5828,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6227,
+      "pr_auc_mean": 0.4105,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "convnext_tiny freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6918,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7534,
+      "pr_auc_mean": 0.5079,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "dinov3_vits16 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.5308,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.5997,
+      "pr_auc_mean": 0.389,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "dinov3_vits16 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.5,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.5377,
+      "pr_auc_mean": 0.2631,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.5761,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6717,
+      "pr_auc_mean": 0.3973,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce bgswap",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6823,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7528,
+      "pr_auc_mean": 0.5257,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6836,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7313,
+      "pr_auc_mean": 0.5435,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "resnet50 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.5279,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6013,
+      "pr_auc_mean": 0.3612,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "binary",
+      "arm": "resnet50 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6925,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7679,
+      "pr_auc_mean": 0.5626,
+      "chance": 0.5
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "convnext_tiny freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.2415,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6163,
+      "pr_auc_mean": 0.3033,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "convnext_tiny freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3295,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6771,
+      "pr_auc_mean": 0.3627,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "dinov3_vits16 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.2055,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.4967,
+      "pr_auc_mean": 0.238,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "dinov3_vits16 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.233,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.5239,
+      "pr_auc_mean": 0.2468,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.2327,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6094,
+      "pr_auc_mean": 0.2843,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce bgswap",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3711,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6686,
+      "pr_auc_mean": 0.3752,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3602,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6789,
+      "pr_auc_mean": 0.3915,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "resnet50 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.2,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.4808,
+      "pr_auc_mean": 0.2053,
+      "chance": 0.2
+    },
+    {
+      "modality": "EUS",
+      "task": "subtype",
+      "arm": "resnet50 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3595,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6517,
+      "pr_auc_mean": 0.3641,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "convnext_tiny freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6916,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7767,
+      "pr_auc_mean": 0.6818,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "convnext_tiny freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.7607,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.8421,
+      "pr_auc_mean": 0.7346,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "dinov3_vits16 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.7072,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.8004,
+      "pr_auc_mean": 0.7119,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "dinov3_vits16 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.5711,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6195,
+      "pr_auc_mean": 0.4649,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6724,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7533,
+      "pr_auc_mean": 0.6412,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce bgswap",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.7404,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.8143,
+      "pr_auc_mean": 0.7096,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.7711,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.8367,
+      "pr_auc_mean": 0.7505,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "efficientnet_b0 freeze=none os=size@0.2 loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.7642,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.8409,
+      "pr_auc_mean": 0.7624,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "resnet50 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.6669,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7392,
+      "pr_auc_mean": 0.6484,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "binary",
+      "arm": "resnet50 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.7668,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.8362,
+      "pr_auc_mean": 0.7324,
+      "chance": 0.5
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "convnext_tiny freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.322,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7003,
+      "pr_auc_mean": 0.3838,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "convnext_tiny freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.4327,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7631,
+      "pr_auc_mean": 0.4459,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "dinov3_vits16 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3115,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7182,
+      "pr_auc_mean": 0.4064,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "dinov3_vits16 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3007,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6345,
+      "pr_auc_mean": 0.3218,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.3069,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6828,
+      "pr_auc_mean": 0.3637,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce bgswap",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.4317,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7461,
+      "pr_auc_mean": 0.449,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 3,
+      "seeds": [
+        7,
+        42,
+        123
+      ],
+      "bal_acc_mean": 0.4282333333333333,
+      "bal_acc_std": 0.012679204321337467,
+      "roc_auc_mean": 0.7391333333333333,
+      "pr_auc_mean": 0.4511,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=none loss=seesaw_ce(p=0.8)",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.4128,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7502,
+      "pr_auc_mean": 0.4544,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=none loss=weighted_ce",
+      "freeze": "none",
+      "n_seeds": 3,
+      "seeds": [
+        7,
+        42,
+        123
+      ],
+      "bal_acc_mean": 0.46090000000000003,
+      "bal_acc_std": 0.0035364765892999805,
+      "roc_auc_mean": 0.7475333333333333,
+      "pr_auc_mean": 0.44106666666666666,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "efficientnet_b0 freeze=none os=size@0.2 loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.4161,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7479,
+      "pr_auc_mean": 0.4371,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "resnet50 freeze=head os=none loss=ce",
+      "freeze": "head",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.2928,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.6867,
+      "pr_auc_mean": 0.3627,
+      "chance": 0.2
+    },
+    {
+      "modality": "WLE",
+      "task": "subtype",
+      "arm": "resnet50 freeze=none os=none loss=ce",
+      "freeze": "none",
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "bal_acc_mean": 0.4164,
+      "bal_acc_std": 0.0,
+      "roc_auc_mean": 0.7431,
+      "pr_auc_mean": 0.439,
+      "chance": 0.2
+    }
+  ],
+  "svm_reference": [
+    {
+      "name": "resnet50 (frozen, SVM)",
+      "modality": "WLE",
+      "task": "binary",
+      "balanced_accuracy": 0.6447
+    },
+    {
+      "name": "resnet50 (frozen, SVM)",
+      "modality": "WLE",
+      "task": "subtype",
+      "balanced_accuracy": 0.2995
+    },
+    {
+      "name": "dinov3_vits16 (frozen, SVM)",
+      "modality": "WLE",
+      "task": "binary",
+      "balanced_accuracy": 0.7353
+    },
+    {
+      "name": "dinov3_vits16 (frozen, SVM)",
+      "modality": "WLE",
+      "task": "subtype",
+      "balanced_accuracy": 0.3813
+    },
+    {
+      "name": "dinov3_vits16 (frozen, SVM)",
+      "modality": "EUS",
+      "task": "binary",
+      "balanced_accuracy": 0.5805
+    },
+    {
+      "name": "resnet50 (frozen, SVM)",
+      "modality": "EUS",
+      "task": "binary",
+      "balanced_accuracy": 0.5817
+    }
+  ]
+}

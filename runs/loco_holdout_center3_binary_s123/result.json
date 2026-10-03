@@ -1,0 +1,97 @@
+{
+  "run_name": "loco_holdout_center3_binary_s123",
+  "model": "fasterrcnn_mobilenet_320",
+  "paper_name": "Fasterrcnn_Mobilenet_320",
+  "modality": "WLE",
+  "task": "binary",
+  "img_size": 320,
+  "batch_size": 16,
+  "epochs": 100,
+  "epochs_run": 25,
+  "learning_rate": 0.001,
+  "input_mode": "reference",
+  "augment": [
+    "flip",
+    "color",
+    "rotate"
+  ],
+  "hard_negatives": 0.0,
+  "split_level": "patient",
+  "joint_split": false,
+  "class_weighting": true,
+  "loss_fn": "weighted_ce",
+  "seesaw_p": null,
+  "seed": 123,
+  "auto_anchors": null,
+  "rpn_fg_iou_thresh": null,
+  "rpn_bg_iou_thresh": null,
+  "box_fg_iou_thresh": null,
+  "box_bg_iou_thresh": null,
+  "multiscale_sizes": null,
+  "ema": false,
+  "ema_decay": null,
+  "rfs_threshold": 0.0,
+  "size_rfs_threshold": 0.0,
+  "center_rfs_threshold": 0.0,
+  "centers": "Center-1,Center-2,Center-4,Center-5,Center-6",
+  "copy_paste_source": "real",
+  "lesion_gan_checkpoint": null,
+  "best_epoch": 10,
+  "elapsed_sec": 381.3100802898407,
+  "split": {
+    "train": {
+      "images": 1961,
+      "patients": 458,
+      "by_subtype": {
+        "Leiomyoma": 93,
+        "Lipoma": 315,
+        "NET_G1": 1187,
+        "NET_G2": 163,
+        "NonNeoplasm": 203
+      }
+    },
+    "val": {
+      "images": 488,
+      "patients": 115,
+      "by_subtype": {
+        "Leiomyoma": 23,
+        "Lipoma": 86,
+        "NET_G1": 292,
+        "NET_G2": 27,
+        "NonNeoplasm": 60
+      }
+    }
+  },
+  "best": {
+    "AP@0.5": 0.6940328751390761,
+    "AP@0.5_conf": 0.6219038926981375,
+    "precision": 0.6865942028985508,
+    "recall": 0.740234375,
+    "f1": 0.712406015037594,
+    "tp": 379,
+    "fp": 173,
+    "fn": 133,
+    "per_class": {
+      "NET": {
+        "AP@0.5": 0.8238887835000022,
+        "AP@0.5_conf": 0.7601718525701675,
+        "precision": 0.7315789473684211,
+        "recall": 0.8449848024316109,
+        "f1": 0.7842031029619182,
+        "tp": 278,
+        "fp": 102,
+        "fn": 51
+      },
+      "non-NET": {
+        "AP@0.5": 0.56417696677815,
+        "AP@0.5_conf": 0.4836359328261076,
+        "precision": 0.5872093023255814,
+        "recall": 0.5519125683060109,
+        "f1": 0.5690140845070423,
+        "tp": 101,
+        "fp": 71,
+        "fn": 82
+      }
+    }
+  }
+}

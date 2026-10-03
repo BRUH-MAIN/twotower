@@ -1,0 +1,1064 @@
+[
+  {
+    "task": "binary",
+    "backbone": "convnext_tiny",
+    "config": "joint_convnext_tiny__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      42
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7358,
+            "std": 0.052
+          }
+        ],
+        "mean": 0.7358,
+        "seed_std": null
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7286,
+            "std": 0.0633
+          }
+        ],
+        "mean": 0.7286,
+        "seed_std": null
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.6227,
+            "std": 0.0735
+          }
+        ],
+        "mean": 0.6227,
+        "seed_std": null
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7219,
+            "std": 0.0778
+          }
+        ],
+        "mean": 0.7219,
+        "seed_std": null
+      }
+    },
+    "tower_params_M": 28.31,
+    "trainable_M": 56.63,
+    "peak_mem_gb": 4.51,
+    "hours_per_run": 0.77
+  },
+  {
+    "task": "binary",
+    "backbone": "deit_s",
+    "config": "joint_deit_s__binary__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7504,
+            "std": 0.0284
+          },
+          {
+            "mean": 0.7598,
+            "std": 0.0404
+          },
+          {
+            "mean": 0.7476,
+            "std": 0.0386
+          }
+        ],
+        "mean": 0.7526,
+        "seed_std": 0.0052
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7208,
+            "std": 0.014
+          },
+          {
+            "mean": 0.7512,
+            "std": 0.0443
+          },
+          {
+            "mean": 0.7389,
+            "std": 0.0453
+          }
+        ],
+        "mean": 0.737,
+        "seed_std": 0.0125
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7038,
+            "std": 0.0279
+          },
+          {
+            "mean": 0.6452,
+            "std": 0.0484
+          },
+          {
+            "mean": 0.6747,
+            "std": 0.0235
+          }
+        ],
+        "mean": 0.6746,
+        "seed_std": 0.0239
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7434,
+            "std": 0.0287
+          },
+          {
+            "mean": 0.7391,
+            "std": 0.0715
+          },
+          {
+            "mean": 0.7163,
+            "std": 0.0196
+          }
+        ],
+        "mean": 0.7329,
+        "seed_std": 0.0119
+      }
+    },
+    "tower_params_M": 22.01,
+    "trainable_M": 14.89,
+    "peak_mem_gb": 1.16,
+    "hours_per_run": 0.74
+  },
+  {
+    "task": "binary",
+    "backbone": "dinov3_vits16",
+    "config": "joint_dinov3_vits16__binary__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7764,
+            "std": 0.0251
+          },
+          {
+            "mean": 0.7729,
+            "std": 0.0439
+          },
+          {
+            "mean": 0.7733,
+            "std": 0.0457
+          }
+        ],
+        "mean": 0.7742,
+        "seed_std": 0.0016
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7553,
+            "std": 0.0307
+          },
+          {
+            "mean": 0.7724,
+            "std": 0.0484
+          },
+          {
+            "mean": 0.7688,
+            "std": 0.0425
+          }
+        ],
+        "mean": 0.7655,
+        "seed_std": 0.0074
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7084,
+            "std": 0.0321
+          },
+          {
+            "mean": 0.6681,
+            "std": 0.0488
+          },
+          {
+            "mean": 0.6857,
+            "std": 0.0554
+          }
+        ],
+        "mean": 0.6874,
+        "seed_std": 0.0165
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7833,
+            "std": 0.036
+          },
+          {
+            "mean": 0.7401,
+            "std": 0.0578
+          },
+          {
+            "mean": 0.7352,
+            "std": 0.0546
+          }
+        ],
+        "mean": 0.7529,
+        "seed_std": 0.0216
+      }
+    },
+    "tower_params_M": 21.94,
+    "trainable_M": 14.89,
+    "peak_mem_gb": 1.43,
+    "hours_per_run": 0.74
+  },
+  {
+    "task": "binary",
+    "backbone": "efficientnet_b0",
+    "config": "joint_efficientnet_b0__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7392,
+            "std": 0.0221
+          },
+          {
+            "mean": 0.7434,
+            "std": 0.0642
+          },
+          {
+            "mean": 0.7401,
+            "std": 0.0376
+          }
+        ],
+        "mean": 0.7409,
+        "seed_std": 0.0018
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7317,
+            "std": 0.0208
+          },
+          {
+            "mean": 0.7303,
+            "std": 0.0659
+          },
+          {
+            "mean": 0.7322,
+            "std": 0.0408
+          }
+        ],
+        "mean": 0.7314,
+        "seed_std": 0.0008
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.6325,
+            "std": 0.05
+          },
+          {
+            "mean": 0.6362,
+            "std": 0.0532
+          },
+          {
+            "mean": 0.6144,
+            "std": 0.0277
+          }
+        ],
+        "mean": 0.6277,
+        "seed_std": 0.0095
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7342,
+            "std": 0.0287
+          },
+          {
+            "mean": 0.7426,
+            "std": 0.0594
+          },
+          {
+            "mean": 0.7376,
+            "std": 0.0264
+          }
+        ],
+        "mean": 0.7381,
+        "seed_std": 0.0034
+      }
+    },
+    "tower_params_M": 4.7,
+    "trainable_M": 9.39,
+    "peak_mem_gb": 2.9,
+    "hours_per_run": 0.87
+  },
+  {
+    "task": "binary",
+    "backbone": "mobilenet_v3_large",
+    "config": "joint_mobilenet_v3_large__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7221,
+            "std": 0.0157
+          },
+          {
+            "mean": 0.7698,
+            "std": 0.052
+          },
+          {
+            "mean": 0.7606,
+            "std": 0.0325
+          }
+        ],
+        "mean": 0.7508,
+        "seed_std": 0.0207
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7034,
+            "std": 0.0218
+          },
+          {
+            "mean": 0.7538,
+            "std": 0.0463
+          },
+          {
+            "mean": 0.7479,
+            "std": 0.0215
+          }
+        ],
+        "mean": 0.735,
+        "seed_std": 0.0225
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.6259,
+            "std": 0.0998
+          },
+          {
+            "mean": 0.6848,
+            "std": 0.0311
+          },
+          {
+            "mean": 0.6841,
+            "std": 0.0595
+          }
+        ],
+        "mean": 0.6649,
+        "seed_std": 0.0276
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7196,
+            "std": 0.034
+          },
+          {
+            "mean": 0.7475,
+            "std": 0.0644
+          },
+          {
+            "mean": 0.749,
+            "std": 0.0342
+          }
+        ],
+        "mean": 0.7387,
+        "seed_std": 0.0135
+      }
+    },
+    "tower_params_M": 3.54,
+    "trainable_M": 7.08,
+    "peak_mem_gb": 1.5,
+    "hours_per_run": 0.88
+  },
+  {
+    "task": "binary",
+    "backbone": "mobilevit_s",
+    "config": "joint_mobilevit_s__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7323,
+            "std": 0.0268
+          },
+          {
+            "mean": 0.7543,
+            "std": 0.0236
+          },
+          {
+            "mean": 0.7707,
+            "std": 0.0428
+          }
+        ],
+        "mean": 0.7524,
+        "seed_std": 0.0157
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7156,
+            "std": 0.0436
+          },
+          {
+            "mean": 0.7204,
+            "std": 0.0501
+          },
+          {
+            "mean": 0.733,
+            "std": 0.0403
+          }
+        ],
+        "mean": 0.723,
+        "seed_std": 0.0073
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.6758,
+            "std": 0.0621
+          },
+          {
+            "mean": 0.7437,
+            "std": 0.0382
+          },
+          {
+            "mean": 0.6735,
+            "std": 0.1021
+          }
+        ],
+        "mean": 0.6977,
+        "seed_std": 0.0326
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7112,
+            "std": 0.0216
+          },
+          {
+            "mean": 0.7654,
+            "std": 0.0379
+          },
+          {
+            "mean": 0.7755,
+            "std": 0.0512
+          }
+        ],
+        "mean": 0.7507,
+        "seed_std": 0.0282
+      }
+    },
+    "tower_params_M": 5.38,
+    "trainable_M": 10.76,
+    "peak_mem_gb": 5.2,
+    "hours_per_run": 1.0
+  },
+  {
+    "task": "binary",
+    "backbone": "resnet50",
+    "config": "joint_resnet50__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      42
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7278,
+            "std": 0.0382
+          }
+        ],
+        "mean": 0.7278,
+        "seed_std": null
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.7047,
+            "std": 0.061
+          }
+        ],
+        "mean": 0.7047,
+        "seed_std": null
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.6121,
+            "std": 0.0682
+          }
+        ],
+        "mean": 0.6121,
+        "seed_std": null
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.7307,
+            "std": 0.0481
+          }
+        ],
+        "mean": 0.7307,
+        "seed_std": null
+      }
+    },
+    "tower_params_M": 24.49,
+    "trainable_M": 48.99,
+    "peak_mem_gb": 3.37,
+    "hours_per_run": 0.64
+  },
+  {
+    "task": "subtype",
+    "backbone": "convnext_tiny",
+    "config": "joint_convnext_tiny__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      42
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3881,
+            "std": 0.0328
+          }
+        ],
+        "mean": 0.3881,
+        "seed_std": null
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3878,
+            "std": 0.0579
+          }
+        ],
+        "mean": 0.3878,
+        "seed_std": null
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.2922,
+            "std": 0.0542
+          }
+        ],
+        "mean": 0.2922,
+        "seed_std": null
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.3907,
+            "std": 0.0543
+          }
+        ],
+        "mean": 0.3907,
+        "seed_std": null
+      }
+    },
+    "tower_params_M": 28.31,
+    "trainable_M": 56.63,
+    "peak_mem_gb": 4.49,
+    "hours_per_run": 0.91
+  },
+  {
+    "task": "subtype",
+    "backbone": "deit_s",
+    "config": "joint_deit_s__subtype__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3915,
+            "std": 0.0365
+          },
+          {
+            "mean": 0.3856,
+            "std": 0.0298
+          },
+          {
+            "mean": 0.4083,
+            "std": 0.0618
+          }
+        ],
+        "mean": 0.3951,
+        "seed_std": 0.0096
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3677,
+            "std": 0.0525
+          },
+          {
+            "mean": 0.3749,
+            "std": 0.0364
+          },
+          {
+            "mean": 0.3869,
+            "std": 0.0584
+          }
+        ],
+        "mean": 0.3765,
+        "seed_std": 0.0079
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3566,
+            "std": 0.0684
+          },
+          {
+            "mean": 0.3485,
+            "std": 0.0804
+          },
+          {
+            "mean": 0.3478,
+            "std": 0.0096
+          }
+        ],
+        "mean": 0.351,
+        "seed_std": 0.004
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.4122,
+            "std": 0.0499
+          },
+          {
+            "mean": 0.3797,
+            "std": 0.0792
+          },
+          {
+            "mean": 0.462,
+            "std": 0.0853
+          }
+        ],
+        "mean": 0.418,
+        "seed_std": 0.0338
+      }
+    },
+    "tower_params_M": 22.01,
+    "trainable_M": 14.89,
+    "peak_mem_gb": 1.16,
+    "hours_per_run": 0.65
+  },
+  {
+    "task": "subtype",
+    "backbone": "dinov3_vits16",
+    "config": "joint_dinov3_vits16__subtype__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.4323,
+            "std": 0.044
+          },
+          {
+            "mean": 0.45,
+            "std": 0.0541
+          },
+          {
+            "mean": 0.4823,
+            "std": 0.0378
+          }
+        ],
+        "mean": 0.4549,
+        "seed_std": 0.0207
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.4273,
+            "std": 0.0296
+          },
+          {
+            "mean": 0.457,
+            "std": 0.0467
+          },
+          {
+            "mean": 0.4576,
+            "std": 0.0336
+          }
+        ],
+        "mean": 0.4473,
+        "seed_std": 0.0141
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3557,
+            "std": 0.1034
+          },
+          {
+            "mean": 0.3805,
+            "std": 0.0701
+          },
+          {
+            "mean": 0.3458,
+            "std": 0.0332
+          }
+        ],
+        "mean": 0.3607,
+        "seed_std": 0.0146
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.4567,
+            "std": 0.05
+          },
+          {
+            "mean": 0.4403,
+            "std": 0.0895
+          },
+          {
+            "mean": 0.5348,
+            "std": 0.089
+          }
+        ],
+        "mean": 0.4773,
+        "seed_std": 0.0412
+      }
+    },
+    "tower_params_M": 21.94,
+    "trainable_M": 14.89,
+    "peak_mem_gb": 1.28,
+    "hours_per_run": 0.8
+  },
+  {
+    "task": "subtype",
+    "backbone": "efficientnet_b0",
+    "config": "joint_efficientnet_b0__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.4311,
+            "std": 0.0405
+          },
+          {
+            "mean": 0.4151,
+            "std": 0.0754
+          },
+          {
+            "mean": 0.4158,
+            "std": 0.0396
+          }
+        ],
+        "mean": 0.4207,
+        "seed_std": 0.0074
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.4175,
+            "std": 0.0513
+          },
+          {
+            "mean": 0.425,
+            "std": 0.0681
+          },
+          {
+            "mean": 0.4114,
+            "std": 0.0474
+          }
+        ],
+        "mean": 0.418,
+        "seed_std": 0.0056
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.331,
+            "std": 0.0606
+          },
+          {
+            "mean": 0.3217,
+            "std": 0.0393
+          },
+          {
+            "mean": 0.3644,
+            "std": 0.0522
+          }
+        ],
+        "mean": 0.339,
+        "seed_std": 0.0183
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.4958,
+            "std": 0.0352
+          },
+          {
+            "mean": 0.4419,
+            "std": 0.0769
+          },
+          {
+            "mean": 0.3996,
+            "std": 0.0474
+          }
+        ],
+        "mean": 0.4458,
+        "seed_std": 0.0394
+      }
+    },
+    "tower_params_M": 4.7,
+    "trainable_M": 9.4,
+    "peak_mem_gb": 2.9,
+    "hours_per_run": 1.0
+  },
+  {
+    "task": "subtype",
+    "backbone": "mobilenet_v3_large",
+    "config": "joint_mobilenet_v3_large__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      42
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.4109,
+            "std": 0.0566
+          }
+        ],
+        "mean": 0.4109,
+        "seed_std": null
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3894,
+            "std": 0.0633
+          }
+        ],
+        "mean": 0.3894,
+        "seed_std": null
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.297,
+            "std": 0.0296
+          }
+        ],
+        "mean": 0.297,
+        "seed_std": null
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.4129,
+            "std": 0.1186
+          }
+        ],
+        "mean": 0.4129,
+        "seed_std": null
+      }
+    },
+    "tower_params_M": 3.54,
+    "trainable_M": 7.08,
+    "peak_mem_gb": 1.5,
+    "hours_per_run": 0.83
+  },
+  {
+    "task": "subtype",
+    "backbone": "mobilevit_s",
+    "config": "joint_mobilevit_s__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      42
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.4132,
+            "std": 0.0631
+          }
+        ],
+        "mean": 0.4132,
+        "seed_std": null
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.434,
+            "std": 0.0475
+          }
+        ],
+        "mean": 0.434,
+        "seed_std": null
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3347,
+            "std": 0.0601
+          }
+        ],
+        "mean": 0.3347,
+        "seed_std": null
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.418,
+            "std": 0.0646
+          }
+        ],
+        "mean": 0.418,
+        "seed_std": null
+      }
+    },
+    "tower_params_M": 5.38,
+    "trainable_M": 10.76,
+    "peak_mem_gb": 5.19,
+    "hours_per_run": 1.15
+  },
+  {
+    "task": "subtype",
+    "backbone": "resnet50",
+    "config": "joint_resnet50__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2",
+    "seeds": [
+      123,
+      42,
+      7
+    ],
+    "metrics": {
+      "fused/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3627,
+            "std": 0.0527
+          },
+          {
+            "mean": 0.4289,
+            "std": 0.0567
+          },
+          {
+            "mean": 0.3583,
+            "std": 0.0414
+          }
+        ],
+        "mean": 0.3833,
+        "seed_std": 0.0323
+      },
+      "wle_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3596,
+            "std": 0.0446
+          },
+          {
+            "mean": 0.411,
+            "std": 0.0647
+          },
+          {
+            "mean": 0.3602,
+            "std": 0.0467
+          }
+        ],
+        "mean": 0.3769,
+        "seed_std": 0.0241
+      },
+      "eus_only/unpaired": {
+        "per_seed": [
+          {
+            "mean": 0.3195,
+            "std": 0.0678
+          },
+          {
+            "mean": 0.3234,
+            "std": 0.0174
+          },
+          {
+            "mean": 0.2825,
+            "std": 0.034
+          }
+        ],
+        "mean": 0.3085,
+        "seed_std": 0.0184
+      },
+      "fused/paired_only": {
+        "per_seed": [
+          {
+            "mean": 0.3697,
+            "std": 0.0905
+          },
+          {
+            "mean": 0.4642,
+            "std": 0.0869
+          },
+          {
+            "mean": 0.3303,
+            "std": 0.0881
+          }
+        ],
+        "mean": 0.3881,
+        "seed_std": 0.0562
+      }
+    },
+    "tower_params_M": 24.49,
+    "trainable_M": 48.99,
+    "peak_mem_gb": 3.37,
+    "hours_per_run": 1.09
+  }
+]
