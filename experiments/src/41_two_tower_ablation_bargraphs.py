@@ -15,12 +15,14 @@ that have EUS frames (the same denominators 34 reports).
 
     python -m experiments.src.41_two_tower_ablation_bargraphs            # score + plot
     python -m experiments.src.41_two_tower_ablation_bargraphs --plot-only
+    python -m experiments.src.41_two_tower_ablation_bargraphs --variants   # score follow-up runs only
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+import importlib
 import json
 import re
 import sys
@@ -90,16 +92,20 @@ SURFACE, INK, INK2, MUTED, GRID, AXIS = "#fcfcfb", "#0b0b0b", "#52514e", "#89878
 # ---------------------------------------------------------------------------
 # Scoring
 # ---------------------------------------------------------------------------
-def load_runs() -> list[dict]:
+def is_ablation_config(run: dict) -> bool:
+    """The ablation's own configuration; the follow-up variants (full
+    frame, symmetric fusion, external-centre test) are compared elsewhere."""
+    return (bool(run.get("lesion_crop")) and run.get("fusion", "gated") == "gated"
+            and not run.get("external_test_centres") and not run.get("paired_only"))
+
+
+def load_runs(ablation_only: bool = True) -> list[dict]:
     runs = []
     for path in sorted(RESULTS_DIR.glob("*__nested*.json")):
         run = json.loads(path.read_text())
         if run.get("inner_val_fraction", 0) <= 0 or run["folds_done"] != run["n_splits"]:
             continue
-        # only the ablation's configuration; the follow-up variants (full
-        # frame, symmetric fusion, external-centre test) are compared elsewhere
-        if (not run.get("lesion_crop") or run.get("fusion", "gated") != "gated"
-                or run.get("external_test_centres") or run.get("paired_only")):
+        if ablation_only and not is_ablation_config(run):
             continue
         runs.append(run)
     return runs
@@ -123,8 +129,15 @@ def build_fold_inputs(run: dict, num_workers: int) -> list[dict]:
     if run.get("paired_only"):
         paired_keys = {s.patient_key for s in samples if s.modality == "EUS"}
         samples = [s for s in samples if s.patient_key in paired_keys]
-    folds = patient_level_folds(samples, n_folds=run["n_splits"], seed=run["seed"],
-                                 strata_key=joint_strata_key)
+    if run.get("external_test_centres"):
+        exp34 = importlib.import_module("experiments.src.34_joint_fusion_train")
+        held_out = set(run["external_test_centres"].split(","))
+        centre = exp34.patient_centres(samples)
+        folds = [([s for s in samples if centre[s.patient_key] not in held_out],
+                  [s for s in samples if centre[s.patient_key] in held_out])]
+    else:
+        folds = patient_level_folds(samples, n_folds=run["n_splits"], seed=run["seed"],
+                                     strata_key=joint_strata_key)
     out = []
     for k, (_, test_samples) in enumerate(folds):
         ds = JointPatientDataset(test_samples, "subtype", img_size=run["img_size"],
@@ -214,7 +227,8 @@ def collect(runs: list[dict], device: torch.device, num_workers: int) -> None:
         if (OUT_DIR / "oof" / f"{run['run_name']}.npz").exists():
             continue
         key = (run["seed"], run["n_splits"], run.get("paired_only", False), run["img_size"],
-               run["max_frames"], run.get("lesion_crop", False), run.get("bg_remove_prob", 0.0))
+               run["max_frames"], run.get("lesion_crop", False), run.get("bg_remove_prob", 0.0),
+               run.get("external_test_centres"))
         groups[key].append(run)
     for key, group in groups.items():
         print(f"seed {key[0]}: loading test-fold inputs for {len(group)} run(s)", flush=True)
@@ -469,16 +483,27 @@ def main() -> None:
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--num-workers", type=int, default=4)
     p.add_argument("--only", default=None, help="regex filter on run_name (smoke tests)")
+    p.add_argument("--variants", action="store_true",
+                   help="score the follow-up variant runs (full frame, symmetric fusion, external centres) "
+                        "into oof/ and stop; the tables and bar graphs stay ablation-only")
     args = p.parse_args()
 
     import matplotlib
     matplotlib.use("Agg")
     matplotlib.rcParams["font.family"] = "sans-serif"
 
-    runs = load_runs()
+    runs = load_runs(ablation_only=not args.variants)
+    if args.variants:
+        runs = [r for r in runs if not is_ablation_config(r)]
     if args.only:
         runs = [r for r in runs if re.search(args.only, r["run_name"])]
     print(f"{len(runs)} completed nested run(s)")
+    if not runs:
+        # writing the tables now would overwrite them with headers only
+        raise SystemExit(f"no matching runs under {RESULTS_DIR} (is the results volume mounted?)")
+    if args.variants:
+        collect(runs, torch.device(args.device), args.num_workers)
+        return
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     PLOT_DIR.mkdir(parents=True, exist_ok=True)
     if not args.plot_only:
