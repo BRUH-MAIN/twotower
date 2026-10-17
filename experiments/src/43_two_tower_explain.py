@@ -59,7 +59,7 @@ from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
 from cadsel.data import build_joint_manifest, joint_strata_key, patient_level_folds
 from cadsel.fusion import patient_classes, patient_label
 from cadsel.joint_fusion_data import JointPatientDataset, _boxes_for, joint_collate
-from cadsel.joint_fusion_model import JointTwoTowerModel, tower_normalizers
+from cadsel.joint_fusion_model import JointTwoTowerModel, dinov3_blocks, tower_normalizers
 
 exp41 = importlib.import_module("experiments.src.41_two_tower_ablation_bargraphs")
 BACKBONES, TASK_TITLE = exp41.BACKBONES, exp41.TASK_TITLE
@@ -166,7 +166,7 @@ def cam_layer(tower, backbone: str):
     if backbone == "deit_s":
         return tower.model.layers[-1], "vit"
     if backbone.startswith("dinov3_"):
-        return tower.model.model.layer[-1], "vit"
+        return dinov3_blocks(tower.model)[-1], "vit"
     raise ValueError(backbone)
 
 
