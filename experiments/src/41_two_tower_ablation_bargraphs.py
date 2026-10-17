@@ -16,6 +16,7 @@ that have EUS frames (the same denominators 34 reports).
     python -m experiments.src.41_two_tower_ablation_bargraphs            # score + plot
     python -m experiments.src.41_two_tower_ablation_bargraphs --plot-only
     python -m experiments.src.41_two_tower_ablation_bargraphs --variants   # score follow-up runs only
+    python -m experiments.src.41_two_tower_ablation_bargraphs --score-only # predictions only, no tables
 """
 
 from __future__ import annotations
@@ -486,6 +487,9 @@ def main() -> None:
     p.add_argument("--variants", action="store_true",
                    help="score the follow-up variant runs (full frame, symmetric fusion, external centres) "
                         "into oof/ and stop; the tables and bar graphs stay ablation-only")
+    p.add_argument("--score-only", action="store_true",
+                   help="write the oof/*.npz predictions and stop, leaving the tables and plots alone "
+                        "(for a machine that holds only some of the runs, e.g. the cluster)")
     args = p.parse_args()
 
     import matplotlib
@@ -501,7 +505,7 @@ def main() -> None:
     if not runs:
         # writing the tables now would overwrite them with headers only
         raise SystemExit(f"no matching runs under {RESULTS_DIR} (is the results volume mounted?)")
-    if args.variants:
+    if args.variants or args.score_only:
         collect(runs, torch.device(args.device), args.num_workers)
         return
     OUT_DIR.mkdir(parents=True, exist_ok=True)
