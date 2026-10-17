@@ -67,6 +67,13 @@ BACKBONES = [
     ("deit_s", "DeiT-S", "DeiT-S", "#008300"),
     ("dinov3_vits16", "DINOv3 ViT-S/16", "DINOv3-S", "#4a3aa7"),
 ]
+# Colours reserved for the cluster follow-up's bigger DINOv3 towers (slot-8
+# red, then a lighter violet that reads as DINOv3's family); appended to
+# BACKBONES' slots once their runs exist.
+CLUSTER_BACKBONES = [
+    ("dinov3_vitb16", "DINOv3 ViT-B/16", "DINOv3-B", "#e34948"),
+    ("dinov3_vitl16", "DINOv3 ViT-L/16", "DINOv3-L", "#9085e9"),
+]
 METRICS = {
     "binary": [("auroc", "ROC AUC"), ("acc", "Accuracy"), ("bal", "Balanced accuracy"),
                ("precision", "Precision (NET)"), ("recall", "Recall / sensitivity (NET)"),
@@ -88,6 +95,11 @@ def load_runs() -> list[dict]:
     for path in sorted(RESULTS_DIR.glob("*__nested*.json")):
         run = json.loads(path.read_text())
         if run.get("inner_val_fraction", 0) <= 0 or run["folds_done"] != run["n_splits"]:
+            continue
+        # only the ablation's configuration; the follow-up variants (full
+        # frame, symmetric fusion, external-centre test) are compared elsewhere
+        if (not run.get("lesion_crop") or run.get("fusion", "gated") != "gated"
+                or run.get("external_test_centres") or run.get("paired_only")):
             continue
         runs.append(run)
     return runs

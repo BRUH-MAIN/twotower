@@ -41,11 +41,15 @@ TOWERS = {
     "mobilevit_s": (640, "unit"),
     "deit_s": (384, "imagenet"),
     "dinov3_vits16": (384, "imagenet"),
+    "dinov3_vitb16": (768, "imagenet"),
+    "dinov3_vitl16": (1024, "imagenet"),
 }
 HF_MODEL_NAMES = {
     "mobilevit_s": "apple/mobilevit-small",
     "deit_s": "facebook/deit-small-patch16-224",
     "dinov3_vits16": "facebook/dinov3-vits16-pretrain-lvd1689m",
+    "dinov3_vitb16": "facebook/dinov3-vitb16-pretrain-lvd1689m",
+    "dinov3_vitl16": "facebook/dinov3-vitl16-pretrain-lvd1689m",
 }
 
 
@@ -114,7 +118,7 @@ def _build_hf_tower(backbone: str, unfreeze_last_n: int) -> tuple[nn.Module, lis
         # transformers 5.x moved ViT's blocks from ``encoder.layer`` to ``layers``
         blocks = model.layers if hasattr(model, "layers") else model.encoder.layer
         return _HFTower(model, "cls"), [*blocks[-unfreeze_last_n:], model.layernorm]
-    if backbone == "dinov3_vits16":
+    if backbone.startswith("dinov3_"):
         model = AutoModel.from_pretrained(name, token=token)
         return _HFTower(model, "cls"), [*model.model.layer[-unfreeze_last_n:], model.norm]
     raise ValueError(f"unknown HF tower {backbone!r}")

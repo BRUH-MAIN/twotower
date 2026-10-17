@@ -43,6 +43,7 @@ an optimistic estimate.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 import time
@@ -365,12 +366,40 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--paired-only", action="store_true",
                     help="restrict to the 421 patients that have both modalities")
+    p.add_argument("--external-test-centres", default=None,
+                    help="comma-separated centres (e.g. Center-2,Center-3,Center-4,Center-5,Center-6) held "
+                         "out as one external test set; training / selection use only the other "
+                         "centres' patients. Replaces the k-fold split.")
     p.add_argument("--early-stop-patience", type=int, default=0)
     p.add_argument("--num-workers", type=int, default=4)
     p.add_argument("--output-dir", type=Path, default=OUT_DEFAULT)
     p.add_argument("--save-checkpoint", action="store_true", default=True)
     p.add_argument("--no-save-checkpoint", dest="save_checkpoint", action="store_false")
     return p
+
+
+PATIENT_CENTRE_CSV = Path(__file__).resolve().parent.parent / "data" / "patient_centre.csv"
+
+
+def _centre_tag(centres: str) -> str:
+    """'Center-2,Center-3,...,Center-6' -> 'C2-6' (or 'C2.4' when not contiguous)."""
+    nums = sorted(int(c.rsplit("-", 1)[1]) for c in centres.split(","))
+    contiguous = nums == list(range(nums[0], nums[-1] + 1))
+    return f"C{nums[0]}-{nums[-1]}" if contiguous and len(nums) > 1 else "C" + ".".join(map(str, nums))
+
+
+def patient_centres(samples) -> dict[str, str]:
+    """patient_key -> centre. The figshare layout carries the centre in the
+    path; the Hugging Face mirror does not ('Full'), so fall back to the
+    committed map exported from a figshare-layout manifest."""
+    if all(s.center != "Full" for s in samples):
+        return {s.patient_key: s.center for s in samples}
+    with open(PATIENT_CENTRE_CSV) as fh:
+        mapping = dict(row for row in csv.reader(fh) if row[0] != "patient_key")
+    missing = {s.patient_key for s in samples} - set(mapping)
+    if missing:
+        raise SystemExit(f"{len(missing)} patients missing from {PATIENT_CENTRE_CSV}")
+    return mapping
 
 
 def main() -> None:
@@ -393,7 +422,9 @@ def main() -> None:
         f"{'' if args.batch_size == 8 else f'__bs{args.batch_size}'}"
         f"{'' if args.grad_accum == 1 else f'__ga{args.grad_accum}'}"
         f"{'' if args.inner_val_fraction == 0 else f'__nested{args.inner_val_fraction:g}'}"
-        f"{'__paired' if args.paired_only else ''}__s{args.seed}"
+        f"{'__paired' if args.paired_only else ''}"
+        f"{'' if not args.external_test_centres else '__ext-' + _centre_tag(args.external_test_centres)}"
+        f"__s{args.seed}"
     )
     out_path = args.output_dir / f"{run_name}.json"
     ckpt_dir = (args.output_dir / run_name) if args.save_checkpoint else None
@@ -405,8 +436,18 @@ def main() -> None:
         samples = [s for s in samples if s.patient_key in paired_keys]
 
     classes = patient_classes(args.task)
-    folds = patient_level_folds(samples, n_folds=args.n_splits, seed=args.seed,
-                                 strata_key=joint_strata_key)
+    if args.external_test_centres:
+        held_out = set(args.external_test_centres.split(","))
+        centre = patient_centres(samples)
+        test = [s for s in samples if centre[s.patient_key] in held_out]
+        train = [s for s in samples if centre[s.patient_key] not in held_out]
+        folds = [(train, test)]
+        args.n_splits = 1
+        print(f"external test: {len({s.patient_key for s in test})} patients from {sorted(held_out)}, "
+              f"{len({s.patient_key for s in train})} for training / selection")
+    else:
+        folds = patient_level_folds(samples, n_folds=args.n_splits, seed=args.seed,
+                                     strata_key=joint_strata_key)
     n_patients = len({s.patient_key for s in samples})
 
     # Resume support: reuse folds a prior (interrupted) run of this exact
@@ -455,6 +496,7 @@ def main() -> None:
             "batch_size": args.batch_size, "grad_accum": args.grad_accum,
             "n_splits": args.n_splits, "seed": args.seed,
             "paired_only": args.paired_only, "n_patients": n_patients,
+            "external_test_centres": args.external_test_centres,
             "inner_val_fraction": args.inner_val_fraction,
             "protocol": ("nested: checkpoint/LR/early-stop chosen on an inner select split, "
                          "summary scored on the outer fold only") if args.inner_val_fraction > 0
