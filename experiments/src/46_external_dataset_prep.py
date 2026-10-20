@@ -21,6 +21,7 @@ the split audit (no group in two folds).
 
     python -m experiments.src.46_external_dataset_prep limuc
     python -m experiments.src.46_external_dataset_prep real_colon --frames-per-lesion 32
+    python -m experiments.src.46_external_dataset_prep real_colon --shard 0/4   # 4 parallel jobs: 0/4 .. 3/4
     python -m experiments.src.46_external_dataset_prep limuc --stats --check
 """
 
@@ -123,7 +124,7 @@ def _pick_frames(entries: list, n: int) -> list:
     return [big[i] for i in sorted(set(idx.tolist()))]
 
 
-def prep_real_colon(frames_per_lesion: int) -> None:
+def prep_real_colon(frames_per_lesion: int, shard: tuple[int, int] = (0, 1)) -> None:
     root = EXT_ROOT / "real_colon"
     raw, cache = root / "raw", root / "cache"
     files = json.load(_open(REAL_COLON_API))
@@ -138,9 +139,13 @@ def prep_real_colon(frames_per_lesion: int) -> None:
     (cache / "frames").mkdir(parents=True, exist_ok=True)
     keep_ids = {r["unique_object_id"] for r in lesions}
 
+    # A single figshare connection streams at a few MB/s, so the videos can be
+    # split over parallel jobs: shard k/n takes every n-th video. Videos have
+    # their own done markers and polyp folders, so shards never collide.
+    k, n = shard
     for i, video in enumerate(videos):
         done = cache / "done" / video
-        if done.exists():
+        if i % n != k or done.exists():
             continue
         ann = by_name[f"{video}_annotations.tar.gz"]
         tgz = download(ann["download_url"], raw / ann["name"], ann["size"])
@@ -175,6 +180,11 @@ def prep_real_colon(frames_per_lesion: int) -> None:
             raise SystemExit(f"{video}: found {got} of {len(want)} wanted frames in the tarball")
         done.parent.mkdir(parents=True, exist_ok=True)
         done.write_text(str(got))
+    missing = [v for v in videos if not (cache / "done" / v).exists()]
+    if missing:
+        print(f"shard {k}/{n} finished; {len(missing)} video(s) still pending in other shards")
+        return
+    # the manifest only exists once every video is cached, so a partial cache can't be trained on
     shutil.copy(raw / "lesion_info.csv", cache / "lesions.csv")
     print(f"cache ready: {cache}")
 
@@ -228,12 +238,14 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("dataset", choices=["limuc", "real_colon"])
     p.add_argument("--frames-per-lesion", type=int, default=32)
+    p.add_argument("--shard", default="0/1", help="k/n: this job takes every n-th video starting at k")
     p.add_argument("--stats", action="store_true", help="write modality_stats.json")
     p.add_argument("--check", action="store_true", help="print counts and the split audit")
     p.add_argument("--no-download", action="store_true", help="only --stats / --check on an existing cache")
     args = p.parse_args()
     if not args.no_download:
-        prep_limuc() if args.dataset == "limuc" else prep_real_colon(args.frames_per_lesion)
+        k, n = (int(x) for x in args.shard.split("/"))
+        prep_limuc() if args.dataset == "limuc" else prep_real_colon(args.frames_per_lesion, (k, n))
     if args.stats:
         write_stats(args.dataset)
     if args.check:
