@@ -151,17 +151,21 @@ def build_tower(backbone: str = "efficientnet_b0", freeze: str = "partial",
     return model
 
 
-def tower_normalizers(backbone: str = "efficientnet_b0") -> dict:
+def tower_normalizers(backbone: str = "efficientnet_b0", modalities=None, modality_stats=None) -> dict:
     """``{modality: uint8 -> normalised float}`` for ``backbone``'s input
-    convention (see ``TOWERS``)."""
+    convention (see ``TOWERS``). ``modalities`` / ``modality_stats`` default
+    to CAD-SEL's (``MODALITY_NAMES`` / ``MODALITY_STATS``); other datasets
+    pass their own per-modality stats for the "modality"-normalised CNNs."""
+    modalities = list(MODALITY_NAMES if modalities is None else modalities)
     norm = TOWERS[backbone][1]
     if norm == "modality":
-        return {m: make_classification_normalizer(*MODALITY_STATS[m]) for m in MODALITY_NAMES}
+        table = MODALITY_STATS if modality_stats is None else modality_stats
+        return {m: make_classification_normalizer(*table[m]) for m in modalities}
     if norm == "imagenet":
         stats = (IMAGENET_MEAN, IMAGENET_STD)
     else:
         stats = ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))
-    return {m: make_classification_normalizer(*stats) for m in MODALITY_NAMES}
+    return {m: make_classification_normalizer(*stats) for m in modalities}
 
 
 class JointTwoTowerModel(nn.Module):
@@ -173,16 +177,19 @@ class JointTwoTowerModel(nn.Module):
 
     def __init__(self, n_classes: int, backbone: str = "efficientnet_b0", freeze: str = "partial",
                  fusion: str = "gated", modality_dropout: float = 0.3,
-                 dropout: float = 0.3, unfreeze_last_n: int = 4) -> None:
+                 dropout: float = 0.3, unfreeze_last_n: int = 4, modalities=None) -> None:
         super().__init__()
         self.backbone_name = backbone
         self.feat_dim = TOWERS[backbone][0]
+        # one tower per modality; a single modality gives the single-backbone model
+        self.modalities = list(MODALITY_NAMES if modalities is None else modalities)
         self.backbones = nn.ModuleDict({
-            m: build_tower(backbone, freeze, unfreeze_last_n) for m in MODALITY_NAMES
+            m: build_tower(backbone, freeze, unfreeze_last_n) for m in self.modalities
         })
         self.head = FusionHead(
             self.feat_dim, n_classes,
             modality_dropout=modality_dropout, fusion=fusion, dropout=dropout,
+            modalities=self.modalities,
         )
 
     def forward(self, images: dict[str, torch.Tensor], masks: dict[str, torch.Tensor]) -> torch.Tensor:
@@ -199,7 +206,7 @@ class JointTwoTowerModel(nn.Module):
         masked to zero.
         """
         batch: dict[str, torch.Tensor] = {}
-        for modality in MODALITY_NAMES:
+        for modality in self.modalities:
             imgs, mask = images[modality], masks[modality]
             B, T, C, H, W = imgs.shape
             real = mask.reshape(B * T) > 0.5

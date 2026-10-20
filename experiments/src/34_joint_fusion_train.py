@@ -58,8 +58,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
-from cadsel.data import build_joint_manifest, joint_strata_key, patient_level_folds, patient_level_split
-from cadsel.fusion import patient_classes, patient_label
+from cadsel.data import patient_level_folds, patient_level_split, split_group
+from cadsel.external_datasets import SPECS, get_spec, modality_views as ablation_views
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
 from cadsel.joint_fusion_model import TOWERS, JointTwoTowerModel, tower_normalizers
 from cadsel.train_fusion import score
@@ -70,10 +70,14 @@ OUT_DEFAULT = PROJECT_ROOT / "experiments" / "results" / "joint_fusion_runs"
 ABLATION_MODALITIES = {"wle_only": ["WLE"], "eus_only": ["EUS"], "fused": MODALITY_NAMES}
 
 
+def keep_modalities(samples, modalities: list[str]) -> list:
+    return [s for s in samples if s.modality in modalities]
+
+
 def _normalize_frames(images: dict, normalizers: dict, device: torch.device) -> dict:
     """``images[m]``: (B, T, C, H, W) uint8 -> (B, T, C, H, W) normalised float."""
     out = {}
-    for m in MODALITY_NAMES:
+    for m in images:
         x = images[m].to(device, non_blocking=True)
         B, T, C, H, W = x.shape
         flat = normalizers[m](x.reshape(B * T, C, H, W).float())
@@ -84,28 +88,35 @@ def _normalize_frames(images: dict, normalizers: dict, device: torch.device) -> 
 def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
              device: torch.device, fold_idx: int, ckpt_dir: Path | None) -> dict:
     n_classes = len(classes)
+    spec, mods = args.spec, args.mods
     # Outer-fold patients are the test set either way; under the nested
     # protocol, selection moves to a select split carved out of train.
     test_samples = val_samples
     if args.inner_val_fraction > 0:
         train_samples, val_samples = patient_level_split(
             train_samples, val_fraction=args.inner_val_fraction,
-            seed=args.seed + 1000 + fold_idx, strata_key=joint_strata_key,
+            seed=args.seed + 1000 + fold_idx, strata_key=spec.strata_key,
         )
-        fit_keys = {s.patient_key for s in train_samples}
-        select_keys = {s.patient_key for s in val_samples}
-        test_keys = {s.patient_key for s in test_samples}
+        fit_keys = {split_group(s) for s in train_samples}
+        select_keys = {split_group(s) for s in val_samples}
+        test_keys = {split_group(s) for s in test_samples}
         assert not (fit_keys & select_keys or fit_keys & test_keys or select_keys & test_keys), \
             "fit/select/test patient sets overlap"
+    # Splits are made on every modality, then reduced to this run's, so a
+    # single-modality run scores exactly the patients of the full run's folds.
+    same_split = test_samples is val_samples
+    train_samples, test_samples = keep_modalities(train_samples, mods), keep_modalities(test_samples, mods)
+    val_samples = test_samples if same_split else keep_modalities(val_samples, mods)
+    data_kw = dict(modalities=mods, classes=classes, label_of=spec.label_of)
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
 
     train_ds = JointPatientDataset(train_samples, task, img_size=args.img_size,
                                     max_frames=args.max_frames, train=True, seed=args.seed,
-                                    lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob)
+                                    lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob, **data_kw)
     val_ds = JointPatientDataset(val_samples, task, img_size=args.img_size,
                                   max_frames=args.max_frames, train=False, seed=args.seed,
-                                  lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob)
+                                  lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob, **data_kw)
 
     train_loader = DataLoader(
         train_ds, batch_size=args.batch_size, shuffle=True, collate_fn=joint_collate,
@@ -121,7 +132,8 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     else:
         test_ds = JointPatientDataset(test_samples, task, img_size=args.img_size,
                                        max_frames=args.max_frames, train=False, seed=args.seed,
-                                       lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob)
+                                       lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
+                                       **data_kw)
         test_loader = DataLoader(
             test_ds, batch_size=args.batch_size, shuffle=False, collate_fn=joint_collate,
             num_workers=min(2, args.num_workers), pin_memory=device.type == "cuda",
@@ -130,14 +142,14 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     model = JointTwoTowerModel(
         n_classes, backbone=args.backbone, freeze=args.freeze, fusion=args.fusion,
         modality_dropout=args.modality_dropout, dropout=args.dropout,
-        unfreeze_last_n=args.unfreeze_last_n,
+        unfreeze_last_n=args.unfreeze_last_n, modalities=mods,
     ).to(device)
     n_params = {"total": sum(p.numel() for p in model.parameters()),
                 "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad)}
-    normalizers = tower_normalizers(args.backbone)
+    normalizers = tower_normalizers(args.backbone, mods, spec.modality_stats())
 
     ytr = np.array([
-        classes.index(patient_label(train_ds.subtype[k], task)) for k in train_ds.patient_keys
+        classes.index(spec.label_of(train_ds.subtype[k], task)) for k in train_ds.patient_keys
     ])
     weight_tensor = None
     if args.loss == "weighted_ce":
@@ -181,7 +193,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         optimizer.zero_grad(set_to_none=True)
         for step, (images, masks, labels) in enumerate(train_loader):
             images_norm = _normalize_frames(images, normalizers, device)
-            masks_dev = {m: masks[m].to(device, non_blocking=True) for m in MODALITY_NAMES}
+            masks_dev = {m: masks[m].to(device, non_blocking=True) for m in mods}
             labels = labels.to(device, non_blocking=True)
             with torch.amp.autocast("cuda", enabled=device.type == "cuda"):
                 logits = model(images_norm, masks_dev)
@@ -201,7 +213,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         with torch.no_grad():
             for images, masks, labels in val_loader:
                 images_norm = _normalize_frames(images, normalizers, device)
-                masks_dev = {m: masks[m].to(device, non_blocking=True) for m in MODALITY_NAMES}
+                masks_dev = {m: masks[m].to(device, non_blocking=True) for m in mods}
                 labels = labels.to(device, non_blocking=True)
                 with torch.amp.autocast("cuda", enabled=device.type == "cuda"):
                     logits = model(images_norm, masks_dev)
@@ -233,6 +245,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
                     "max_frames": args.max_frames, "fold": fold_idx, "bal": bal,
                     "inner_val_fraction": args.inner_val_fraction,
                     "lesion_crop": args.lesion_crop, "bg_remove_prob": args.bg_remove_prob,
+                    "dataset": spec.name, "modalities": mods,
                 }, ckpt_dir / f"fold{fold_idx}_best.pt")
         history.append({"epoch": epoch + 1, "train_loss": train_loss, "val_loss": val_loss,
                          "lr": lr, "backbone_lr": backbone_lr, "acc": acc, "bal": bal})
@@ -268,16 +281,18 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     peak_mem_gb = (round(torch.cuda.max_memory_allocated(device) / 2**30, 2)
                    if device.type == "cuda" else None)
 
+    views = ablation_views(mods)
     per_patient = []
     with torch.no_grad():
         for images, masks, labels in test_loader:
             images_norm = _normalize_frames(images, normalizers, device)
-            paired = (masks["WLE"].sum(dim=1) > 0.5) & (masks["EUS"].sum(dim=1) > 0.5)
-            for name, use_modalities in ABLATION_MODALITIES.items():
+            present = {m: (masks[m].sum(dim=1) > 0.5) for m in mods}
+            paired = torch.stack(list(present.values())).all(dim=0)
+            for name, use_modalities in views.items():
                 masks_dev = {
                     m: (masks[m].to(device) if m in use_modalities
                         else torch.zeros_like(masks[m]).to(device))
-                    for m in MODALITY_NAMES
+                    for m in mods
                 }
                 logits = model(images_norm, masks_dev)
                 pred_b = torch.softmax(logits.float(), dim=1).argmax(1).cpu().numpy()
@@ -285,12 +300,15 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
                     per_patient.append({
                         "ablation": name, "y_true": int(labels[i]), "y_pred": int(pred_b[i]),
                         "paired": bool(paired[i]),
+                        "has_input": bool(all(present[m][i] for m in use_modalities)),
                     })
 
     def _agg(ablation: str, restrict_paired: bool):
+        # a single-modality view is only scored where that modality exists
+        # (CAD-SEL: EUS-only on the patients with EUS)
         sel = [r for r in per_patient if r["ablation"] == ablation
                and (not restrict_paired or r["paired"])
-               and (ablation != "eus_only" or r["paired"])]
+               and (ablation == "fused" or r["has_input"])]
         if not sel:
             return None
         pred_arr = np.array([r["y_pred"] for r in sel])
@@ -299,7 +317,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
 
     ablation_results = {
         ablation: {"unpaired": _agg(ablation, False), "paired_only": _agg(ablation, True)}
-        for ablation in ABLATION_MODALITIES
+        for ablation in views
     }
 
     del model
@@ -314,7 +332,13 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--task", choices=["binary", "subtype"], default="subtype")
+    p.add_argument("--task", default="subtype",
+                   help="a task of --dataset (cadsel: binary/subtype; limuc: mayo/remission; ...)")
+    p.add_argument("--dataset", choices=sorted(SPECS), default="cadsel",
+                   help="dataset spec from cadsel.external_datasets (default: CAD-SEL)")
+    p.add_argument("--modalities", default=None,
+                   help="comma-separated subset of the dataset's modalities, e.g. WLE for a CAD-SEL "
+                        "single-backbone run; folds are still built on all of them")
     p.add_argument("--freeze", choices=["none", "partial"], default="partial")
     p.add_argument("--fusion", choices=["gated", "symmetric"], default="gated")
     p.add_argument("--modality-dropout", type=float, default=0.3)
@@ -404,6 +428,14 @@ def patient_centres(samples) -> dict[str, str]:
 
 def main() -> None:
     args = build_parser().parse_args()
+    args.spec = get_spec(args.dataset)
+    args.mods = (list(args.spec.modalities) if args.modalities is None
+                 else [m for m in args.spec.modalities if m in args.modalities.split(",")])
+    if not args.mods or (args.modalities and len(args.mods) != len(args.modalities.split(","))):
+        raise SystemExit(f"--modalities {args.modalities!r} must name modalities of {args.spec.name}: "
+                         f"{list(args.spec.modalities)}")
+    if args.external_test_centres and args.dataset != "cadsel":
+        raise SystemExit("--external-test-centres is defined for CAD-SEL's centres only")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -424,18 +456,22 @@ def main() -> None:
         f"{'' if args.inner_val_fraction == 0 else f'__nested{args.inner_val_fraction:g}'}"
         f"{'__paired' if args.paired_only else ''}"
         f"{'' if not args.external_test_centres else '__ext-' + _centre_tag(args.external_test_centres)}"
+        f"{'' if args.dataset == 'cadsel' else '__ds-' + args.dataset}"
+        f"{'' if args.mods == list(args.spec.modalities) else '__mod-' + '+'.join(args.mods)}"
         f"__s{args.seed}"
     )
     out_path = args.output_dir / f"{run_name}.json"
     ckpt_dir = (args.output_dir / run_name) if args.save_checkpoint else None
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    samples = build_joint_manifest()
+    samples = args.spec.manifest()
     if args.paired_only:
-        paired_keys = {s.patient_key for s in samples if s.modality == "EUS"}
-        samples = [s for s in samples if s.patient_key in paired_keys]
+        have = {}
+        for s in samples:
+            have.setdefault(s.patient_key, set()).add(s.modality)
+        samples = [s for s in samples if have[s.patient_key] >= set(args.spec.modalities)]
 
-    classes = patient_classes(args.task)
+    classes = args.spec.classes(args.task)
     if args.external_test_centres:
         held_out = set(args.external_test_centres.split(","))
         centre = patient_centres(samples)
@@ -447,8 +483,8 @@ def main() -> None:
               f"{len({s.patient_key for s in train})} for training / selection")
     else:
         folds = patient_level_folds(samples, n_folds=args.n_splits, seed=args.seed,
-                                     strata_key=joint_strata_key)
-    n_patients = len({s.patient_key for s in samples})
+                                     strata_key=args.spec.strata_key)
+    n_patients = len({s.patient_key for s in keep_modalities(samples, args.mods)})
 
     # Resume support: reuse folds a prior (interrupted) run of this exact
     # run_name already completed, rather than re-training them from scratch --
@@ -482,7 +518,7 @@ def main() -> None:
     def _write_result() -> dict:
         summary = {
             ablation: {denom: _summarize(ablation, denom) for denom in ("unpaired", "paired_only")}
-            for ablation in ABLATION_MODALITIES
+            for ablation in ablation_views(args.mods)
         }
         result = {
             "run_name": run_name, "backbone": args.backbone, "task": args.task,
@@ -497,6 +533,7 @@ def main() -> None:
             "n_splits": args.n_splits, "seed": args.seed,
             "paired_only": args.paired_only, "n_patients": n_patients,
             "external_test_centres": args.external_test_centres,
+            "dataset": args.dataset, "modalities": args.mods, "unit": args.spec.unit,
             "inner_val_fraction": args.inner_val_fraction,
             "protocol": ("nested: checkpoint/LR/early-stop chosen on an inner select split, "
                          "summary scored on the outer fold only") if args.inner_val_fraction > 0
@@ -528,7 +565,7 @@ def main() -> None:
 
     result = _write_result()
     print(f"\n[{run_name}] {result['folds_done']}-fold summary (mean +/- std, chance={result['chance']:.3f}):")
-    for ablation in ABLATION_MODALITIES:
+    for ablation in ablation_views(args.mods):
         for denom in ("unpaired", "paired_only"):
             s = result["summary"][ablation][denom]
             if s is not None:

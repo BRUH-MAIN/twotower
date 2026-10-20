@@ -4,6 +4,8 @@
 .venv/
 .venv-linux/
 .venv-*/
+# external colonoscopy datasets (cadsel.external_datasets); never publish them
+external_data/
 venv/
 __pycache__/
 *.py[cod]
