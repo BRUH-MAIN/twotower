@@ -104,6 +104,12 @@ class _HFTower(nn.Module):
         return out.pooler_output if self.pool == "pooler" else out.last_hidden_state[:, 0]
 
 
+def dinov3_blocks(model: nn.Module) -> nn.ModuleList:
+    """DINOv3ViTModel's transformer blocks: transformers 5.x nests them as
+    ``model.model.layer``, 4.x keeps them at ``model.layer``."""
+    return model.model.layer if hasattr(model, "model") else model.layer
+
+
 def _build_hf_tower(backbone: str, unfreeze_last_n: int) -> tuple[nn.Module, list[nn.Module]]:
     from transformers import AutoModel, MobileViTModel, ViTModel
 
@@ -120,7 +126,7 @@ def _build_hf_tower(backbone: str, unfreeze_last_n: int) -> tuple[nn.Module, lis
         return _HFTower(model, "cls"), [*blocks[-unfreeze_last_n:], model.layernorm]
     if backbone.startswith("dinov3_"):
         model = AutoModel.from_pretrained(name, token=token)
-        return _HFTower(model, "cls"), [*model.model.layer[-unfreeze_last_n:], model.norm]
+        return _HFTower(model, "cls"), [*dinov3_blocks(model)[-unfreeze_last_n:], model.norm]
     raise ValueError(f"unknown HF tower {backbone!r}")
 
 
