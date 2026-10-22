@@ -1,0 +1,72 @@
+{
+ "joint_efficientnet_b0__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.0035467147827148438,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_resnet50__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.00986415147781372,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_convnext_tiny__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.0022751688957214355,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_mobilenet_v3_large__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.0020267367362976074,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_mobilevit_s__binary__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.0012248754501342773,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_deit_s__binary__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 4.351139068603516e-06,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_dinov3_vits16__binary__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 6.267428398132324e-05,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_efficientnet_b0__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.002377927303314209,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_resnet50__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.017949402332305908,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_convnext_tiny__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.0013862252235412598,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_mobilenet_v3_large__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.0021647512912750244,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_mobilevit_s__subtype__freeze-none__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.001074671745300293,
+  "pred_flips": 1,
+  "n": 641
+ },
+ "joint_deit_s__subtype__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 2.2202730178833008e-06,
+  "pred_flips": 0,
+  "n": 641
+ },
+ "joint_dinov3_vits16__subtype__freeze-partial__fusion-gated__loss-weighted_ce__moddrop0.3__mf4__ep100__es20__lesioncrop__nested0.2__s42": {
+  "max_abs_prob_diff": 0.00015473365783691406,
+  "pred_flips": 0,
+  "n": 641
+ }
+}
