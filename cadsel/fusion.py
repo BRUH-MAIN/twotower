@@ -363,6 +363,11 @@ class FusionHead(nn.Module):
     ``modality_dropout`` randomly zeroes a stream during training. WLE is never
     dropped when EUS is already absent, so a patient always keeps at least one
     stream and the loss stays defined.
+
+    ``modalities`` names the streams, first = the one GatedFusion falls back
+    to. With a single modality there is nothing to fuse: the pooled, encoded
+    stream goes straight to the classifier (the single-backbone model, kept on
+    the same code path so its protocol matches the two-tower runs).
     """
 
     def __init__(
@@ -373,15 +378,21 @@ class FusionHead(nn.Module):
         modality_dropout: float = 0.3,
         dropout: float = 0.3,
         fusion: Literal["gated", "symmetric"] = "gated",
+        modalities: Sequence[str] = tuple(MODALITY_NAMES),
     ) -> None:
         super().__init__()
+        if len(modalities) not in (1, 2):
+            raise ValueError(f"FusionHead takes one or two modalities, got {list(modalities)}")
+        self.modalities = list(modalities)
         self.modality_dropout = modality_dropout
         self.encoders = nn.ModuleDict({
             m: nn.Sequential(nn.Linear(in_dim, hidden), nn.ReLU(), nn.Dropout(dropout))
-            for m in MODALITY_NAMES
+            for m in self.modalities
         })
-        self.pools = nn.ModuleDict({m: AttentionPool(in_dim) for m in MODALITY_NAMES})
-        if fusion == "gated":
+        self.pools = nn.ModuleDict({m: AttentionPool(in_dim) for m in self.modalities})
+        if len(self.modalities) == 1:
+            self.fuse = None
+        elif fusion == "gated":
             self.fuse = GatedFusion(hidden)
         elif fusion == "symmetric":
             self.fuse = SymmetricCrossAttentionFusion(hidden)
@@ -394,14 +405,17 @@ class FusionHead(nn.Module):
 
     def forward(self, batch: dict) -> torch.Tensor:
         pooled, avail = {}, {}
-        for modality in MODALITY_NAMES:
+        if self.fuse is None:
+            m = self.modalities[0]
+            return self.classifier(self.encoders[m](self.pools[m](batch[m], batch[f"{m}_mask"])))
+        for modality in self.modalities:
             frames, mask = batch[modality], batch[f"{modality}_mask"]
             present = (mask.sum(dim=1) > 0.5).float()
 
             if self.training and self.modality_dropout > 0:
                 drop = torch.rand_like(present) < self.modality_dropout
                 # Never drop the last remaining stream.
-                other = MODALITY_NAMES[1] if modality == MODALITY_NAMES[0] else MODALITY_NAMES[0]
+                other = self.modalities[1] if modality == self.modalities[0] else self.modalities[0]
                 other_present = batch[f"{other}_mask"].sum(dim=1) > 0.5
                 drop = drop & other_present
                 present = present * (~drop).float()
@@ -411,8 +425,8 @@ class FusionHead(nn.Module):
             pooled[modality] = pooled[modality] * present.unsqueeze(1)
             avail[modality] = present
 
-        a, b = (pooled[m] for m in MODALITY_NAMES)
-        flags = torch.stack([avail[m] for m in MODALITY_NAMES], dim=1)
+        a, b = (pooled[m] for m in self.modalities)
+        flags = torch.stack([avail[m] for m in self.modalities], dim=1)
         return self.classifier(self.fuse(a, b, flags))
 
 

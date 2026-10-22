@@ -90,6 +90,10 @@ class Sample:
     subtype: str        # folder subtype, e.g. "NET_G1"
     patient: str        # pseudonym, e.g. "NET_G1-0"
     negative: bool = False   # serve the lesion-free region with an empty target
+    # What must not cross a split when it differs from the classified unit,
+    # e.g. the patient behind several lesions or images (external datasets,
+    # cadsel.external_datasets). None = the unit itself (CAD-SEL).
+    group: str | None = None
 
     @property
     def patient_key(self) -> str:
@@ -243,6 +247,13 @@ def box_area_frac(sample: Sample) -> float:
 # ---------------------------------------------------------------------------
 # Patient-level splitting
 # ---------------------------------------------------------------------------
+def split_group(s: Sample) -> str:
+    """The unit of split assignment: ``Sample.group`` when set (external
+    datasets classify lesions or images but split by patient), otherwise the
+    patient itself, so CAD-SEL splits are unchanged."""
+    return s.group or s.patient_key
+
+
 def _default_strata_key(items: Sequence[Sample]):
     """Stratify on histological subtype, as the unimodal baselines do."""
     return items[0].subtype
@@ -276,7 +287,7 @@ def patient_level_split(
     """
     by_patient: dict[str, list[Sample]] = defaultdict(list)
     for s in samples:
-        by_patient[s.patient_key].append(s)
+        by_patient[split_group(s)].append(s)
 
     strata: dict[object, list[str]] = defaultdict(list)
     for key, items in by_patient.items():
@@ -292,8 +303,8 @@ def patient_level_split(
         n_val = min(n_val, len(keys) - 1) if len(keys) > 1 else len(keys)
         val_keys.update(keys[:n_val])
 
-    train = [s for s in samples if s.patient_key not in val_keys]
-    val = [s for s in samples if s.patient_key in val_keys]
+    train = [s for s in samples if split_group(s) not in val_keys]
+    val = [s for s in samples if split_group(s) in val_keys]
     return train, val
 
 
@@ -336,7 +347,7 @@ def patient_level_folds(
     """Stratified patient-level K-fold, for the cross-validation protocol."""
     by_patient: dict[str, list[Sample]] = defaultdict(list)
     for s in samples:
-        by_patient[s.patient_key].append(s)
+        by_patient[split_group(s)].append(s)
 
     strata: dict[object, list[str]] = defaultdict(list)
     for key, items in by_patient.items():
@@ -352,8 +363,8 @@ def patient_level_folds(
 
     folds = []
     for f in range(n_folds):
-        train = [s for s in samples if fold_of[s.patient_key] != f]
-        val = [s for s in samples if fold_of[s.patient_key] == f]
+        train = [s for s in samples if fold_of[split_group(s)] != f]
+        val = [s for s in samples if fold_of[split_group(s)] == f]
         folds.append((train, val))
     return folds
 

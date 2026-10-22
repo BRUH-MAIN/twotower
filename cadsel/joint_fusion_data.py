@@ -157,9 +157,16 @@ class JointPatientDataset(Dataset):
         seed: int = 0,
         lesion_crop: bool = False,
         bg_remove_prob: float = 0.0,
+        modalities: Sequence[str] | None = None,
+        classes: Sequence[str] | None = None,
+        label_of=None,
     ) -> None:
+        # modalities / classes / label_of default to CAD-SEL's; other datasets
+        # pass their DatasetSpec's (cadsel.external_datasets)
         self.task = task
-        self.classes = patient_classes(task)
+        self.modalities = list(MODALITY_NAMES if modalities is None else modalities)
+        self.classes = list(patient_classes(task) if classes is None else classes)
+        self.label_of = patient_label if label_of is None else label_of
         self.img_size = img_size
         self.max_frames = max_frames
         self.train = train
@@ -209,16 +216,17 @@ class JointPatientDataset(Dataset):
         patient_key = self.patient_keys[index]
         rng = random.Random((self.seed * 1_000_003) ^ index)
         images, masks = {}, {}
-        for modality in MODALITY_NAMES:
+        for modality in self.modalities:
             imgs, mask = self._sample_modality(patient_key, modality, rng)
             images[modality] = torch.from_numpy(np.ascontiguousarray(imgs.transpose(0, 3, 1, 2)))
             masks[modality] = torch.from_numpy(mask)
-        label = self.classes.index(patient_label(self.subtype[patient_key], self.task))
+        label = self.classes.index(self.label_of(self.subtype[patient_key], self.task))
         return images, masks, label
 
 
 def joint_collate(batch):
-    images = {m: torch.stack([b[0][m] for b in batch]) for m in MODALITY_NAMES}
-    masks = {m: torch.stack([b[1][m] for b in batch]) for m in MODALITY_NAMES}
+    modalities = list(batch[0][0])          # the dataset's modality order
+    images = {m: torch.stack([b[0][m] for b in batch]) for m in modalities}
+    masks = {m: torch.stack([b[1][m] for b in batch]) for m in modalities}
     labels = torch.tensor([b[2] for b in batch], dtype=torch.long)
     return images, masks, labels

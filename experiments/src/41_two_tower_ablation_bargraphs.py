@@ -39,6 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
 from cadsel.data import build_joint_manifest, joint_strata_key, patient_level_folds
+from cadsel.external_datasets import get_spec, modality_views
 from cadsel.fusion import SUBTYPES, patient_classes, patient_label
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
 from cadsel.joint_fusion_model import JointTwoTowerModel, tower_normalizers
@@ -97,7 +98,9 @@ def is_ablation_config(run: dict) -> bool:
     """The ablation's own configuration; the follow-up variants (full
     frame, symmetric fusion, external-centre test) are compared elsewhere."""
     return (bool(run.get("lesion_crop")) and run.get("fusion", "gated") == "gated"
-            and not run.get("external_test_centres") and not run.get("paired_only"))
+            and not run.get("external_test_centres") and not run.get("paired_only")
+            and run.get("dataset", "cadsel") == "cadsel"
+            and run.get("modalities", MODALITY_NAMES) == MODALITY_NAMES)
 
 
 def load_runs(ablation_only: bool = True) -> list[dict]:
@@ -112,9 +115,15 @@ def load_runs(ablation_only: bool = True) -> list[dict]:
     return runs
 
 
+def _run_spec(run: dict):
+    """(dataset spec, this run's modalities); runs from before the registry are CAD-SEL."""
+    spec = get_spec(run.get("dataset", "cadsel"))
+    return spec, list(run.get("modalities") or spec.modalities)
+
+
 def _normalize_frames(images: dict, normalizers: dict, device: torch.device) -> dict:
     out = {}
-    for m in MODALITY_NAMES:
+    for m in images:
         x = images[m].to(device, non_blocking=True)
         B, T, C, H, W = x.shape
         flat = normalizers[m](x.reshape(B * T, C, H, W).float())
@@ -126,10 +135,13 @@ def build_fold_inputs(run: dict, num_workers: int) -> list[dict]:
     """Each outer fold's test patients as pre-collated uint8 batches. The
     inputs depend only on the split / frame-selection settings, not on the
     backbone or task, so every run of one seed shares them."""
-    samples = build_joint_manifest()
+    spec, mods = _run_spec(run)
+    samples = spec.manifest()
     if run.get("paired_only"):
-        paired_keys = {s.patient_key for s in samples if s.modality == "EUS"}
-        samples = [s for s in samples if s.patient_key in paired_keys]
+        have = {}
+        for s in samples:
+            have.setdefault(s.patient_key, set()).add(s.modality)
+        samples = [s for s in samples if have[s.patient_key] >= set(spec.modalities)]
     if run.get("external_test_centres"):
         exp34 = importlib.import_module("experiments.src.34_joint_fusion_train")
         held_out = set(run["external_test_centres"].split(","))
@@ -138,13 +150,16 @@ def build_fold_inputs(run: dict, num_workers: int) -> list[dict]:
                   [s for s in samples if centre[s.patient_key] in held_out])]
     else:
         folds = patient_level_folds(samples, n_folds=run["n_splits"], seed=run["seed"],
-                                     strata_key=joint_strata_key)
+                                     strata_key=spec.strata_key)
     out = []
     for k, (_, test_samples) in enumerate(folds):
-        ds = JointPatientDataset(test_samples, "subtype", img_size=run["img_size"],
+        # folds are built on every modality, then reduced to the run's (as in 34)
+        test_samples = [s for s in test_samples if s.modality in mods]
+        ds = JointPatientDataset(test_samples, run["task"], img_size=run["img_size"],
                                   max_frames=run["max_frames"], train=False, seed=run["seed"],
                                   lesion_crop=run.get("lesion_crop", False),
-                                  bg_remove_prob=run.get("bg_remove_prob", 0.0))
+                                  bg_remove_prob=run.get("bg_remove_prob", 0.0), modalities=mods,
+                                  classes=spec.classes(run["task"]), label_of=spec.label_of)
         loader = DataLoader(ds, batch_size=16, shuffle=False, collate_fn=joint_collate,
                             num_workers=num_workers)
         batches = [(images, masks) for images, masks, _ in loader]
@@ -157,10 +172,12 @@ def build_fold_inputs(run: dict, num_workers: int) -> list[dict]:
 @torch.no_grad()
 def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
     task = run["task"]
-    classes = patient_classes(task)
-    normalizers = tower_normalizers(run.get("backbone", "efficientnet_b0"))
+    spec, mods = _run_spec(run)
+    classes = spec.classes(task)
+    views = modality_views(mods)
+    normalizers = tower_normalizers(run.get("backbone", "efficientnet_b0"), mods, spec.modality_stats())
     keys, fold_of, y, paired = [], [], [], []
-    probs = {name: [] for name in ABLATION_MODALITIES}
+    probs = {name: [] for name in views}
     for f in sorted(run["folds"], key=lambda f: f["fold"]):
         k = f["fold"]
         ck = torch.load(RESULTS_DIR / run["run_name"] / f"fold{k}_best.pt", map_location="cpu",
@@ -168,20 +185,21 @@ def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
         model = JointTwoTowerModel(len(classes), backbone=ck.get("backbone", "efficientnet_b0"),
                                     freeze=ck["freeze"], fusion=ck["fusion"],
                                     modality_dropout=ck["modality_dropout"],
-                                    unfreeze_last_n=ck.get("unfreeze_last_n", 4)).to(device).eval()
+                                    unfreeze_last_n=ck.get("unfreeze_last_n", 4),
+                                    modalities=ck.get("modalities", mods)).to(device).eval()
         model.load_state_dict(ck["model_state_dict"])
         inp = fold_inputs[k]
         for images, masks in inp["batches"]:
             images_norm = _normalize_frames(images, normalizers, device)
-            paired.append(((masks["WLE"].sum(dim=1) > 0.5) & (masks["EUS"].sum(dim=1) > 0.5)).numpy())
-            for name, use_modalities in ABLATION_MODALITIES.items():
+            paired.append(torch.stack([masks[m].sum(dim=1) > 0.5 for m in mods]).all(dim=0).numpy())
+            for name, use_modalities in views.items():
                 masks_dev = {m: (masks[m] if m in use_modalities else torch.zeros_like(masks[m])).to(device)
-                             for m in MODALITY_NAMES}
+                             for m in mods}
                 logits = model(images_norm, masks_dev)
                 probs[name].append(torch.softmax(logits.float(), dim=1).cpu().numpy())
         keys += inp["patient_keys"]
         fold_of += [k] * len(inp["patient_keys"])
-        y += [classes.index(patient_label(st, task)) for st in inp["subtypes"]]
+        y += [classes.index(spec.label_of(st, task)) for st in inp["subtypes"]]
         del model
         if device.type == "cuda":
             torch.cuda.empty_cache()
@@ -229,7 +247,8 @@ def collect(runs: list[dict], device: torch.device, num_workers: int) -> None:
             continue
         key = (run["seed"], run["n_splits"], run.get("paired_only", False), run["img_size"],
                run["max_frames"], run.get("lesion_crop", False), run.get("bg_remove_prob", 0.0),
-               run.get("external_test_centres"))
+               run.get("external_test_centres"), run.get("dataset", "cadsel"),
+               tuple(run.get("modalities") or ()))
         groups[key].append(run)
     for key, group in groups.items():
         print(f"seed {key[0]}: loading test-fold inputs for {len(group)} run(s)", flush=True)
