@@ -141,6 +141,48 @@ def summarise(group: list[dict], rng_seed: int = 0) -> dict:
     return row
 
 
+def fusion_strategies(groups: dict, rng_seed: int = 0) -> list[dict]:
+    """CAD-SEL, seed 42: the two-tower against separately trained
+    single-modality models (same outer folds) and their late fusion (mean
+    probability of the WLE-only and EUS-only models). Scored on the patients
+    with both modalities, and on all patients (late fusion = the WLE model for
+    patients without EUS). The bootstrap CI is for late fusion minus the two-tower."""
+    rows = []
+    for task in ("binary", "subtype"):
+        n = len(get_spec("cadsel").classes(task))
+        for bb in BACKBONES:
+            pick = {cfg: next((r for r in groups.get(("cadsel", task, cfg, bb), []) if r["seed"] == 42), None)
+                    for cfg in ("WLE+EUS", "WLE", "EUS")}
+            if None in pick.values():
+                continue
+            tt, w, e = pick["WLE+EUS"], pick["WLE"], pick["EUS"]
+            assert np.array_equal(tt["patient_key"], w["patient_key"]) and np.array_equal(tt["y"], w["y"])
+            pos = {k: i for i, k in enumerate(tt["patient_key"].tolist())}
+            ip = np.array([pos[k] for k in e["patient_key"].tolist()])        # EUS model: patients with EUS
+            assert np.array_equal(tt["y"][ip], e["y"])
+            y_p = e["y"]
+            late_p = (w["probs_fused"][ip] + e["probs_fused"]) / 2
+            preds = {"wle_single": w["probs_fused"][ip].argmax(1), "eus_single": e["probs_fused"].argmax(1),
+                     "two_tower_fused": tt["probs_fused"][ip].argmax(1),
+                     "two_tower_wle_view": tt["probs_wle_only"][ip].argmax(1),
+                     "two_tower_eus_view": tt["probs_eus_only"][ip].argmax(1),
+                     "late_fusion_singles": late_p.argmax(1)}
+            idx = exp44.boot_indices(y_p, np.random.default_rng(rng_seed))
+            diff = np.array([exp44.bal_acc(y_p[i], preds["late_fusion_singles"][i], n)
+                             - exp44.bal_acc(y_p[i], preds["two_tower_fused"][i], n) for i in idx])
+            late_all = w["probs_fused"].copy()
+            late_all[ip] = late_p
+            row = {"task": task, "backbone": bb, "n_paired": len(y_p), "n_all": len(tt["y"]),
+                   **{f"bal_paired_{k}": exp44.bal_acc(y_p, v, n) for k, v in preds.items()},
+                   "late_minus_twotower_paired": float(np.mean(diff)),
+                   "ci_lo": float(np.percentile(diff, 2.5)), "ci_hi": float(np.percentile(diff, 97.5)),
+                   "bal_all_wle_single": exp44.bal_acc(tt["y"], w["probs_fused"].argmax(1), n),
+                   "bal_all_two_tower_fused": exp44.bal_acc(tt["y"], tt["probs_fused"].argmax(1), n),
+                   "bal_all_late_fusion_singles": exp44.bal_acc(tt["y"], late_all.argmax(1), n)}
+            rows.append(row)
+    return rows
+
+
 # ---------------------------------------------------------------------------
 def _style(ax, xlim=None, ylim=None) -> None:
     ax.set_facecolor(SURFACE)
@@ -251,6 +293,60 @@ def plot_fusion_gain(rows: list[dict]) -> Path | None:
     return out
 
 
+def plot_fusion_strategies(rows: list[dict]) -> Path | None:
+    """Dot plot per backbone: marker shape = strategy, colour = backbone."""
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+
+    if not rows:
+        return None
+    strategies = [("bal_paired_wle_single", "o", "none", "WLE-only model (separately trained)"),
+                  ("bal_paired_eus_single", "s", "none", "EUS-only model (separately trained)"),
+                  ("bal_paired_two_tower_fused", "o", None, "two-tower, fused (end-to-end)"),
+                  ("bal_paired_late_fusion_singles", "D", None, "late fusion of the two single models")]
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.6), facecolor=SURFACE)
+    fig.subplots_adjust(left=0.06, right=0.98, top=0.72, bottom=0.14, wspace=0.18)
+    for ax, task in zip(axes, ("binary", "subtype")):
+        sub = [r for r in rows if r["task"] == task]
+        vals = [r[k] for r in sub for k, *_ in strategies]
+        _style(ax, (-0.6, len(BACKBONES) - 0.4), (min(vals) - 0.03, max(vals) + 0.04))
+        ax.grid(True, axis="y", color=GRID, linewidth=0.8)
+        ax.set_axisbelow(True)
+        offs = np.linspace(-0.27, 0.27, len(strategies))
+        for i, bb in enumerate(BACKBONES):
+            r = next((x for x in sub if x["backbone"] == bb), None)
+            if r is None:
+                continue
+            for (k, mk, fc, _), dx in zip(strategies, offs):
+                ax.scatter([i + dx], [r[k]], marker=mk, s=52, facecolor=COLOR[bb] if fc is None else SURFACE,
+                           edgecolor=COLOR[bb], linewidth=1.6, zorder=3)
+            ax.text(i, max(r[k] for k, *_ in strategies) + 0.012,
+                    f"late − two-tower {r['late_minus_twotower_paired']:+.3f}\n"
+                    f"[{r['ci_lo']:+.3f}, {r['ci_hi']:+.3f}]",
+                    ha="center", fontsize=7.2, color=INK2)
+        ax.set_xticks(range(len(BACKBONES)))
+        ax.set_xticklabels([NAME[b] for b in BACKBONES], fontsize=8.5, color=INK2)
+        ax.set_ylabel("balanced accuracy (421 patients with EUS)", fontsize=8.5, color=MUTED)
+        ax.set_title(f"CAD-SEL {exp41.TASK_TITLE[task]}", loc="left", fontsize=10, color=INK, fontweight="bold",
+                     pad=8)
+    fig.legend(handles=[Line2D([], [], marker=mk, linestyle="none", markerfacecolor=INK if fc is None else SURFACE,
+                               markeredgecolor=INK, markersize=7, label=lab) for _, mk, fc, lab in strategies],
+               loc="upper left", bbox_to_anchor=(0.055, 0.86), ncols=4, frameon=False, fontsize=8.2, labelcolor=INK2,
+               columnspacing=1.8)
+    h = fig.get_figheight()
+    fig.text(0.02, 1 - 0.2 / h, "End-to-end fusion vs separately trained towers on CAD-SEL", fontsize=14, color=INK,
+             fontweight="bold", va="top")
+    fig.text(0.02, 1 - 0.55 / h, "Seed 42, nested 5-fold, identical outer folds for every model; the 421 patients "
+             "with both WLE and EUS. Late fusion = mean of the two single models' class probabilities.\nNumbers: "
+             "late fusion minus two-tower, 95% patient-level bootstrap CI. Colour = backbone, as in every figure.",
+             fontsize=8.6, color=INK2, va="top", linespacing=1.45)
+    PLOT_DIR.mkdir(parents=True, exist_ok=True)
+    out = PLOT_DIR / "cadsel_fusion_strategies.png"
+    fig.savefig(out, dpi=200, facecolor=SURFACE)
+    plt.close(fig)
+    return out
+
+
 def main() -> None:
     argparse.ArgumentParser(description=__doc__).parse_args()
     import matplotlib
@@ -274,7 +370,20 @@ def main() -> None:
         print(f"  {DATASET_LABEL[r['dataset']]:10s} {r['task']:9s} {r['modalities']:8s} {r['backbone']:16s} "
               f"bal {r['bal']:.3f} [{r['bal_lo']:.3f},{r['bal_hi']:.3f}]  norm {r['norm_bal']:+.3f}"
               + (f"  gain {r['fusion_gain']:+.3f}" if "fusion_gain" in r else ""))
-    for p in (plot_normalised(rows), plot_fusion_gain(rows)):
+    strat = fusion_strategies(groups)
+    if strat:
+        with open(OUT_DIR / "cadsel_fusion_strategies.csv", "w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=list(strat[0]))
+            w.writeheader()
+            for r in strat:
+                w.writerow({k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()})
+        for r in strat:
+            print(f"  fusion strategies CAD-SEL {r['task']:8s} {r['backbone']:16s} paired: WLE {r['bal_paired_wle_single']:.3f} "
+                  f"EUS {r['bal_paired_eus_single']:.3f} two-tower {r['bal_paired_two_tower_fused']:.3f} "
+                  f"late {r['bal_paired_late_fusion_singles']:.3f} (late-TT {r['late_minus_twotower_paired']:+.3f} "
+                  f"[{r['ci_lo']:+.3f},{r['ci_hi']:+.3f}]) | all-641: TT {r['bal_all_two_tower_fused']:.3f} "
+                  f"late {r['bal_all_late_fusion_singles']:.3f}")
+    for p in (plot_normalised(rows), plot_fusion_gain(rows), plot_fusion_strategies(strat)):
         if p is not None:
             print(f"wrote {p.relative_to(PROJECT_ROOT)}")
 

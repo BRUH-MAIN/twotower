@@ -1,0 +1,5 @@
+task,backbone,n_paired,n_all,bal_paired_wle_single,bal_paired_eus_single,bal_paired_two_tower_fused,bal_paired_two_tower_wle_view,bal_paired_two_tower_eus_view,bal_paired_late_fusion_singles,late_minus_twotower_paired,ci_lo,ci_hi,bal_all_wle_single,bal_all_two_tower_fused,bal_all_late_fusion_singles
+binary,efficientnet_b0,421,641,0.7403,0.713,0.742,0.7138,0.6385,0.7391,-0.0034,-0.0516,0.0469,0.7638,0.7443,0.765
+binary,dinov3_vits16,421,641,0.7497,0.6764,0.742,0.7501,0.6698,0.7467,0.0049,-0.0395,0.0504,0.7624,0.774,0.7654
+subtype,efficientnet_b0,421,641,0.3857,0.4346,0.4409,0.4607,0.3207,0.4403,0.0008,-0.0779,0.0831,0.441,0.4149,0.4706
+subtype,dinov3_vits16,421,641,0.4865,0.4291,0.4406,0.4694,0.3809,0.5446,0.1049,0.0367,0.1766,0.4609,0.4491,0.4902

@@ -1,0 +1,17 @@
+dataset,task,modalities,model,backbone,units,unit,classes,chance,imbalance,bal,bal_lo,bal_hi,norm_bal,norm_lo,norm_hi,macro_f1,auroc,qwk,seeds,centres,bal_ensemble,paired_units,fusion_gain,gain_lo,gain_hi
+cadsel,binary,WLE+EUS,two-tower,efficientnet_b0,641,patient,2,0.5,2.4462,0.7443,0.7064,0.7817,0.4886,0.4129,0.5634,0.7369,0.8261,nan,3,6 (Center-1 537 of 641),0.7648,421,0.0282,-0.005,0.065
+cadsel,binary,WLE+EUS,two-tower,dinov3_vits16,641,patient,2,0.5,2.4462,0.774,0.7359,0.8082,0.548,0.4718,0.6164,0.764,0.8454,nan,3,6 (Center-1 537 of 641),0.8055,421,-0.0082,-0.0471,0.0281
+cadsel,binary,EUS,single-backbone,efficientnet_b0,421,patient,2,0.5,3.3854,0.713,0.6599,0.7618,0.426,0.3199,0.5235,0.6706,0.7733,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,binary,EUS,single-backbone,dinov3_vits16,421,patient,2,0.5,3.3854,0.6764,0.6206,0.7279,0.3528,0.2413,0.4558,0.6679,0.745,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,binary,WLE,single-backbone,efficientnet_b0,641,patient,2,0.5,2.4462,0.7638,0.7255,0.7989,0.5275,0.451,0.5979,0.7413,0.8187,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,binary,WLE,single-backbone,dinov3_vits16,641,patient,2,0.5,2.4462,0.7624,0.7246,0.7997,0.5248,0.4493,0.5993,0.7599,0.8322,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,subtype,WLE+EUS,two-tower,efficientnet_b0,641,patient,5,0.2,17.125,0.4149,0.359,0.4705,0.2686,0.1987,0.3381,0.3511,0.7359,nan,3,6 (Center-1 537 of 641),0.4536,421,-0.0198,-0.0857,0.0373
+cadsel,subtype,WLE+EUS,two-tower,dinov3_vits16,641,patient,5,0.2,17.125,0.4491,0.3979,0.5025,0.3113,0.2474,0.3781,0.4269,0.7628,nan,3,6 (Center-1 537 of 641),0.4791,421,-0.0288,-0.0821,0.0259
+cadsel,subtype,EUS,single-backbone,efficientnet_b0,421,patient,5,0.2,21.3571,0.4346,0.3665,0.5071,0.2933,0.2081,0.3839,0.3229,0.6913,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,subtype,EUS,single-backbone,dinov3_vits16,421,patient,5,0.2,21.3571,0.4291,0.362,0.5008,0.2863,0.2025,0.3761,0.3551,0.7148,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,subtype,WLE,single-backbone,efficientnet_b0,641,patient,5,0.2,17.125,0.441,0.3863,0.4946,0.3012,0.2329,0.3683,0.3807,0.7286,nan,1,6 (Center-1 537 of 641),,,,,
+cadsel,subtype,WLE,single-backbone,dinov3_vits16,641,patient,5,0.2,17.125,0.4609,0.4105,0.5091,0.3261,0.2631,0.3864,0.4077,0.7572,nan,1,6 (Center-1 537 of 641),,,,,
+limuc,mayo,WL,single-backbone,efficientnet_b0,11276,image,4,0.25,7.0578,0.6991,0.6881,0.7103,0.5989,0.5842,0.6137,0.6703,0.9098,0.8099,1,1 (Marmara University),,,,,
+limuc,mayo,WL,single-backbone,dinov3_vits16,11276,image,4,0.25,7.0578,0.7127,0.7023,0.7231,0.617,0.603,0.6308,0.6904,0.9222,0.847,1,1 (Marmara University),,,,,
+limuc,remission,WL,single-backbone,efficientnet_b0,11276,image,2,0.5,4.3214,0.9166,0.9102,0.9229,0.8332,0.8204,0.8458,0.8741,0.9736,nan,1,1 (Marmara University),,,,,
+limuc,remission,WL,single-backbone,dinov3_vits16,11276,image,2,0.5,4.3214,0.923,0.9171,0.9288,0.846,0.8343,0.8577,0.8711,0.9783,nan,1,1 (Marmara University),,,,,
