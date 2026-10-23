@@ -8,9 +8,11 @@ skipped on a re-run.
   limuc       Zenodo 10.5281/zenodo.5827695 (CC BY 4.0): patient_based_classified_images.zip
               (1.9 GB), unzipped to limuc/patient_based_classified_images/<patient>/Mayo k/*.bmp.
   real_colon  figshare 22202866 (CC BY 4.0). The CSVs and per-video box annotations are small.
-              The frames come as one 6-11 GB tarball per video. Only the 44 videos holding a
-              histology-labelled polyp are fetched (~705 GiB), streamed, keeping up to
-              --frames-per-lesion frames per polyp and discarding the rest as it goes.
+              The frames come as one 6-20 GB tarball per video. Only the 44 videos holding a
+              histology-labelled polyp are fetched (~705 GiB). Each tarball is downloaded
+              with HTTP Range resume (a dropped connection costs a reconnect, not the video),
+              up to --frames-per-lesion frames per polyp are extracted, and the tarball is
+              deleted before the next video.
               The kept frames are the polyp's annotated frames among the larger half of its
               boxes, spaced evenly in time, each with a YOLO .txt holding only that polyp's box.
 
@@ -29,10 +31,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import http.client
 import json
 import shutil
 import sys
 import tarfile
+import time
+import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
@@ -67,17 +72,33 @@ def _open(url: str, start: int = 0):
     return urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=600)
 
 
-def download(url: str, dest: Path, size: int | None = None) -> Path:
-    """Stream ``url`` to ``dest``, resuming a partial file."""
+def download(url: str, dest: Path, size: int | None = None, attempts: int = 60) -> Path:
+    """Fetch ``url`` to ``dest``. A partial file (an earlier attempt or an
+    earlier run) is resumed with an HTTP Range request; a dropped connection
+    retries from where it stopped, with back-off."""
     dest.parent.mkdir(parents=True, exist_ok=True)
-    have = dest.stat().st_size if dest.exists() else 0
-    if size is not None and have == size:
-        return dest
-    with _open(url, have) as r, open(dest, "ab" if have else "wb") as fh:
-        shutil.copyfileobj(r, fh, length=1 << 22)
-    if size is not None and dest.stat().st_size != size:
-        raise SystemExit(f"{dest}: got {dest.stat().st_size} bytes, expected {size}")
-    return dest
+    for attempt in range(1, attempts + 1):
+        have = dest.stat().st_size if dest.exists() else 0
+        if size is not None and have == size:
+            return dest
+        if size is not None and have > size:
+            dest.unlink()
+            have = 0
+        try:
+            with _open(url, have) as r:
+                # a server that ignores Range answers 200 with the whole file: start over
+                resumed = have > 0 and r.status == 206
+                with open(dest, "ab" if resumed else "wb") as fh:
+                    shutil.copyfileobj(r, fh, length=1 << 22)
+            if size is None or dest.stat().st_size == size:
+                return dest
+            raise http.client.IncompleteRead(b"", size - dest.stat().st_size)
+        except (OSError, urllib.error.URLError, http.client.HTTPException) as e:
+            got = dest.stat().st_size if dest.exists() else 0
+            print(f"  {dest.name}: attempt {attempt} stopped at {got / 2**30:.2f} GiB ({type(e).__name__}); "
+                  f"resuming", flush=True)
+            time.sleep(min(120, 10 * attempt))
+    raise SystemExit(f"{dest}: still incomplete after {attempts} attempts")
 
 
 # ---------------------------------------------------------------------------
@@ -158,10 +179,11 @@ def prep_real_colon(frames_per_lesion: int, shard: tuple[int, int] = (0, 1)) -> 
                 for t_, fname, wh, box in _pick_frames(entries, frames_per_lesion):
                     want[fname].append((lesion, wh, box))
         frames = by_name[f"{video}_frames.tar.gz"]
-        print(f"[{i + 1}/{len(videos)}] {video}: streaming {frames['size'] / 2**30:.1f} GiB for "
+        print(f"[{i + 1}/{len(videos)}] {video}: downloading {frames['size'] / 2**30:.1f} GiB for "
               f"{len(want)} frames", flush=True)
+        tar_path = download(frames["download_url"], raw / frames["name"], frames["size"])
         got = 0
-        with _open(frames["download_url"]) as r, tarfile.open(fileobj=r, mode="r|gz") as t:
+        with tarfile.open(tar_path, mode="r|gz") as t:
             for member in t:
                 name = Path(member.name).name
                 if name not in want or not member.isfile():
@@ -178,6 +200,7 @@ def prep_real_colon(frames_per_lesion: int, shard: tuple[int, int] = (0, 1)) -> 
                     break                            # the rest of the tarball isn't needed
         if got != len(want):
             raise SystemExit(f"{video}: found {got} of {len(want)} wanted frames in the tarball")
+        tar_path.unlink()                            # frames are cached; the tarball isn't kept
         done.parent.mkdir(parents=True, exist_ok=True)
         done.write_text(str(got))
     missing = [v for v in videos if not (cache / "done" / v).exists()]
