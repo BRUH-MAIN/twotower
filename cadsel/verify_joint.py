@@ -31,6 +31,7 @@ from .data import (
     split_summary,
 )
 from .engine import _batch_modality
+from .fusion import FusionHead
 from .models import build_joint_detection_model, get_active_modality, set_active_modality
 
 
@@ -281,6 +282,22 @@ def check_unimodal_untouched(c: Checks) -> None:
             and bool(torch.isfinite(out[0]).all()))
 
 
+def check_modality_dropout(c: Checks) -> None:
+    """Every patient keeps a stream; WLE-only patients are never touched."""
+    print("\nmodality dropout")
+    torch.manual_seed(0)
+    p = 0.3
+    head = FusionHead(in_dim=8, n_classes=2, modality_dropout=p)
+    wle, eus = torch.ones(200_000), (torch.arange(200_000) % 2 == 0).float()
+    kept = head._drop_streams({"WLE": wle, "EUS": eus})
+    paired = eus > 0.5
+    c.check("no patient loses both streams", bool(((kept["WLE"] + kept["EUS"]) > 0.5).all()))
+    c.check("WLE-only patients keep WLE", bool((kept["WLE"][~paired] > 0.5).all()))
+    c.check("absent EUS stays absent", bool((kept["EUS"][~paired] < 0.5).all()))
+    rate = 1 - float(kept["EUS"][paired].mean())
+    c.check("paired drop rate is p - p^2/2", abs(rate - (p - p * p / 2)) < 0.005, f"{rate:.4f}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", type=Path, default=None)
@@ -301,6 +318,7 @@ def main() -> None:
         check_conditioning(c)
     check_loader_smoke(c, train, val)
     check_unimodal_untouched(c)
+    check_modality_dropout(c)
 
     print(f"\n{c.n - len(c.failures)}/{c.n} checks passed")
     if c.failures:

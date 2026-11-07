@@ -458,6 +458,7 @@ def main() -> None:
         f"{'' if not args.external_test_centres else '__ext-' + _centre_tag(args.external_test_centres)}"
         f"{'' if args.dataset == 'cadsel' else '__ds-' + args.dataset}"
         f"{'' if args.mods == list(args.spec.modalities) else '__mod-' + '+'.join(args.mods)}"
+        f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"
     )
     out_path = args.output_dir / f"{run_name}.json"
@@ -524,8 +525,8 @@ def main() -> None:
             "run_name": run_name, "backbone": args.backbone, "task": args.task,
             "freeze": args.freeze, "unfreeze_last_n": args.unfreeze_last_n,
             "fusion": args.fusion, "loss": args.loss,
-            "modality_dropout": args.modality_dropout, "max_frames": args.max_frames,
-            "img_size": args.img_size, "epochs": args.epochs, "lr": args.lr,
+            "modality_dropout": args.modality_dropout, "keep_one_stream": len(args.mods) == 2,
+            "max_frames": args.max_frames, "img_size": args.img_size, "epochs": args.epochs, "lr": args.lr,
             "weight_decay": args.weight_decay, "dropout": args.dropout,
             "backbone_lr": args.backbone_lr, "early_stop_patience": args.early_stop_patience,
             "lesion_crop": args.lesion_crop, "bg_remove_prob": args.bg_remove_prob,

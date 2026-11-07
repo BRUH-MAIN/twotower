@@ -72,7 +72,7 @@ def parse_run(stem: str) -> dict | None:
     except SystemExit:
         return None
     on_protocol = ("fusion-gated" in cfg and "__nested0.2" in cfg and "__ep100__es20" in cfg
-                   and "__ext-" not in cfg and "__paired" not in cfg
+                   and "__ext-" not in cfg and "__paired" not in cfg and "__keep1" not in cfg
                    and ("__lesioncrop" in cfg) == spec.has_boxes)
     if not on_protocol:
         return None

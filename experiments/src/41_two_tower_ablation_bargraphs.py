@@ -96,9 +96,11 @@ SURFACE, INK, INK2, MUTED, GRID, AXIS = "#fcfcfb", "#0b0b0b", "#52514e", "#89878
 # ---------------------------------------------------------------------------
 def is_ablation_config(run: dict) -> bool:
     """The ablation's own configuration; the follow-up variants (full
-    frame, symmetric fusion, external-centre test) are compared elsewhere."""
+    frame, symmetric fusion, external-centre test, the runs retrained with
+    the modality-dropout fix) are compared elsewhere."""
     return (bool(run.get("lesion_crop")) and run.get("fusion", "gated") == "gated"
             and not run.get("external_test_centres") and not run.get("paired_only")
+            and not run.get("keep_one_stream")
             and run.get("dataset", "cadsel") == "cadsel"
             and run.get("modalities", MODALITY_NAMES) == MODALITY_NAMES)
 

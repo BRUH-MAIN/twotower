@@ -360,9 +360,10 @@ class SymmetricCrossAttentionFusion(nn.Module):
 class FusionHead(nn.Module):
     """Two-stream patient-level classifier.
 
-    ``modality_dropout`` randomly zeroes a stream during training. WLE is never
-    dropped when EUS is already absent, so a patient always keeps at least one
-    stream and the loss stays defined.
+    ``modality_dropout`` randomly zeroes a stream during training. Availability
+    is decided for both streams together, so a patient always keeps at least
+    one stream: a patient with one modality keeps it, and when both draws fire
+    for a paired patient one stream survives at random.
 
     ``modalities`` names the streams, first = the one GatedFusion falls back
     to. With a single modality there is nothing to fuse: the pooled, encoded
@@ -403,27 +404,30 @@ class FusionHead(nn.Module):
             nn.Linear(hidden, n_classes),
         )
 
+    def _drop_streams(self, present: dict) -> dict:
+        """Zero whole streams at random, leaving every patient at least one."""
+        a, b = self.modalities
+        paired = (present[a] * present[b]) > 0.5
+        drop_a = torch.rand_like(present[a]) < self.modality_dropout
+        drop_b = torch.rand_like(present[b]) < self.modality_dropout
+        both, keep_a = drop_a & drop_b, torch.rand_like(present[a]) < 0.5
+        drop_a, drop_b = drop_a & ~(both & keep_a), drop_b & ~(both & ~keep_a)
+        return {a: present[a] * (~(drop_a & paired)).float(),
+                b: present[b] * (~(drop_b & paired)).float()}
+
     def forward(self, batch: dict) -> torch.Tensor:
-        pooled, avail = {}, {}
+        pooled = {}
         if self.fuse is None:
             m = self.modalities[0]
             return self.classifier(self.encoders[m](self.pools[m](batch[m], batch[f"{m}_mask"])))
+        avail = {m: (batch[f"{m}_mask"].sum(dim=1) > 0.5).float() for m in self.modalities}
+        if self.training and self.modality_dropout > 0:
+            avail = self._drop_streams(avail)
         for modality in self.modalities:
-            frames, mask = batch[modality], batch[f"{modality}_mask"]
-            present = (mask.sum(dim=1) > 0.5).float()
-
-            if self.training and self.modality_dropout > 0:
-                drop = torch.rand_like(present) < self.modality_dropout
-                # Never drop the last remaining stream.
-                other = self.modalities[1] if modality == self.modalities[0] else self.modalities[0]
-                other_present = batch[f"{other}_mask"].sum(dim=1) > 0.5
-                drop = drop & other_present
-                present = present * (~drop).float()
-                mask = mask * present.unsqueeze(1)
-
-            pooled[modality] = self.encoders[modality](self.pools[modality](frames, mask))
+            present = avail[modality]
+            mask = batch[f"{modality}_mask"] * present.unsqueeze(1)
+            pooled[modality] = self.encoders[modality](self.pools[modality](batch[modality], mask))
             pooled[modality] = pooled[modality] * present.unsqueeze(1)
-            avail[modality] = present
 
         a, b = (pooled[m] for m in self.modalities)
         flags = torch.stack([avail[m] for m in self.modalities], dim=1)
