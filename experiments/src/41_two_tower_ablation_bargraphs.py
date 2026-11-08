@@ -160,7 +160,8 @@ def build_fold_inputs(run: dict, num_workers: int) -> list[dict]:
         ds = JointPatientDataset(test_samples, run["task"], img_size=run["img_size"],
                                   max_frames=run["max_frames"], train=False, seed=run["seed"],
                                   lesion_crop=run.get("lesion_crop", False),
-                                  bg_remove_prob=run.get("bg_remove_prob", 0.0), modalities=mods,
+                                  bg_remove_prob=run.get("bg_remove_prob", 0.0),
+                                  input_variant=run.get("input_variant"), modalities=mods,
                                   classes=spec.classes(run["task"]), label_of=spec.label_of)
         loader = DataLoader(ds, batch_size=16, shuffle=False, collate_fn=joint_collate,
                             num_workers=num_workers)
@@ -188,7 +189,9 @@ def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
                                     freeze=ck["freeze"], fusion=ck["fusion"],
                                     modality_dropout=ck["modality_dropout"],
                                     unfreeze_last_n=ck.get("unfreeze_last_n", 4),
-                                    modalities=ck.get("modalities", mods)).to(device).eval()
+                                    modalities=ck.get("modalities", mods),
+                                    aux_heads=ck.get("aux_heads", False),
+                                    aux_detach=ck.get("aux_detach", False)).to(device).eval()
         model.load_state_dict(ck["model_state_dict"])
         inp = fold_inputs[k]
         for images, masks in inp["batches"]:
@@ -250,7 +253,7 @@ def collect(runs: list[dict], device: torch.device, num_workers: int) -> None:
         key = (run["seed"], run["n_splits"], run.get("paired_only", False), run["img_size"],
                run["max_frames"], run.get("lesion_crop", False), run.get("bg_remove_prob", 0.0),
                run.get("external_test_centres"), run.get("dataset", "cadsel"),
-               tuple(run.get("modalities") or ()))
+               tuple(run.get("modalities") or ()), run.get("input_variant"))
         groups[key].append(run)
     for key, group in groups.items():
         print(f"seed {key[0]}: loading test-fold inputs for {len(group)} run(s)", flush=True)

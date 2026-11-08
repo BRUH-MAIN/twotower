@@ -35,6 +35,13 @@ ablations are then scored on the untouched outer fold. The default (0) keeps
 the original protocol, where the scored fold also picks the checkpoint --
 an optimistic estimate.
 
+Strategies against the EUS tower being under-trained (two modalities only):
+``--aux-weight`` adds a unimodal loss on each tower's descriptor, ``--ogm-alpha``
+applies OGM-GE gradient modulation (Peng et al., CVPR 2022), and
+``--warm-start`` starts each tower from the single-modality run of the same
+backbone, task, seed and fold. ``--input-variant`` trains and tests on
+lesion-free (``bg_patch``) or box-only (``boxmap``) frames.
+
     python -m experiments.src.34_joint_fusion_train --task subtype --seed 42
     python -m experiments.src.34_joint_fusion_train --task binary --backbone resnet50 \\
         --freeze none --lesion-crop --epochs 100 --early-stop-patience 20 --inner-val-fraction 0.2
@@ -45,6 +52,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import sys
 import time
 from pathlib import Path
@@ -68,6 +76,7 @@ from probes import balanced_accuracy
 
 OUT_DEFAULT = PROJECT_ROOT / "experiments" / "results" / "joint_fusion_runs"
 ABLATION_MODALITIES = {"wle_only": ["WLE"], "eus_only": ["EUS"], "fused": MODALITY_NAMES}
+OGM_LAST_EPOCH = 50   # OGM-GE's default modulation window: epochs 0-50
 
 
 def keep_modalities(samples, modalities: list[str]) -> list:
@@ -83,6 +92,59 @@ def _normalize_frames(images: dict, normalizers: dict, device: torch.device) -> 
         flat = normalizers[m](x.reshape(B * T, C, H, W).float())
         out[m] = flat.reshape(B, T, C, H, W)
     return out
+
+
+def masked_ce(logits, labels, keep, weight):
+    """Class-weighted CE averaged over the patients where ``keep`` is 1."""
+    ce = F.cross_entropy(logits, labels, weight=weight, reduction="none")
+    norm = keep if weight is None else keep * weight[labels]
+    return (ce * keep).sum() / norm.sum().clamp(min=1e-6)
+
+
+def ogm_coefficients(aux: dict, avail: dict, labels, alpha: float, mods: list[str]) -> dict:
+    """OGM-GE's gradient coefficients, as in the authors' code: the stream whose
+    probe gives the true class more probability is scaled by
+    1 - tanh(alpha * ratio), the other keeps 1. Scored on the patients that
+    still have both streams after modality dropout."""
+    a, b = mods
+    both = (avail[a] * avail[b]) > 0.5
+    if not both.any():
+        return {a: 1.0, b: 1.0}
+    score = {m: torch.softmax(aux[m][both].float(), 1).gather(1, labels[both, None]).sum() for m in mods}
+    ratio = float(score[a] / score[b].clamp(min=1e-8))
+    if ratio > 1:
+        return {a: 1 - math.tanh(alpha * ratio), b: 1.0}
+    return {a: 1.0, b: 1 - math.tanh(alpha / max(ratio, 1e-8))}
+
+
+def modulate_gradients(model, coeff: dict, mods: list[str]) -> None:
+    """Scale each tower's weight gradients and add OGM-GE's Gaussian noise
+    (std = the gradient's own). The authors' code touches conv kernels only;
+    here every weight matrix or kernel of the tower (ndim >= 2), so ViT towers
+    are modulated too."""
+    for m in mods:
+        for p in model.tower_parameters(m):
+            if p.grad is not None and p.grad.ndim >= 2:
+                p.grad = p.grad * coeff[m] + torch.zeros_like(p.grad).normal_(0, p.grad.std().item() + 1e-8)
+
+
+def warm_start(model, args, fold_idx: int) -> None:
+    """Load each tower (backbone, attention pool, encoder) from the single-
+    modality run of the same backbone, task, seed and fold. Those runs use
+    the same outer and inner splits, so no select or test patient leaks in."""
+    for m in args.mods:
+        path = args.output_dir / args.single_runs[m] / f"fold{fold_idx}_best.pt"
+        if not path.exists():
+            raise SystemExit(f"--warm-start: {path} missing")
+        state = torch.load(path, map_location="cpu", weights_only=False)["model_state_dict"]
+        prefixes = (f"backbones.{m}.", f"head.pools.{m}.", f"head.encoders.{m}.")
+        part = {k: v for k, v in state.items() if k.startswith(prefixes)}
+        unexpected = model.load_state_dict(part, strict=False).unexpected_keys
+        missing = [k for k in model.state_dict() if k.startswith(prefixes) and k not in part]
+        if not part or unexpected or missing:
+            raise SystemExit(f"--warm-start: {path} does not match this model "
+                             f"(unexpected {unexpected[:3]}, missing {missing[:3]})")
+        print(f"    fold {fold_idx}: {m} tower from {args.single_runs[m]} ({len(part)} tensors)", flush=True)
 
 
 def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
@@ -113,10 +175,12 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
 
     train_ds = JointPatientDataset(train_samples, task, img_size=args.img_size,
                                     max_frames=args.max_frames, train=True, seed=args.seed,
-                                    lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob, **data_kw)
+                                    lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
+                                    input_variant=args.input_variant, **data_kw)
     val_ds = JointPatientDataset(val_samples, task, img_size=args.img_size,
                                   max_frames=args.max_frames, train=False, seed=args.seed,
-                                  lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob, **data_kw)
+                                  lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
+                                    input_variant=args.input_variant, **data_kw)
 
     train_loader = DataLoader(
         train_ds, batch_size=args.batch_size, shuffle=True, collate_fn=joint_collate,
@@ -133,7 +197,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         test_ds = JointPatientDataset(test_samples, task, img_size=args.img_size,
                                        max_frames=args.max_frames, train=False, seed=args.seed,
                                        lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
-                                       **data_kw)
+                                       input_variant=args.input_variant, **data_kw)
         test_loader = DataLoader(
             test_ds, batch_size=args.batch_size, shuffle=False, collate_fn=joint_collate,
             num_workers=min(2, args.num_workers), pin_memory=device.type == "cuda",
@@ -143,7 +207,9 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         n_classes, backbone=args.backbone, freeze=args.freeze, fusion=args.fusion,
         modality_dropout=args.modality_dropout, dropout=args.dropout,
         unfreeze_last_n=args.unfreeze_last_n, modalities=mods,
+        aux_heads=args.aux_weight > 0 or args.ogm_alpha > 0, aux_detach=args.ogm_alpha > 0,
     ).to(device)
+    use_aux = args.aux_weight > 0 or args.ogm_alpha > 0
     n_params = {"total": sum(p.numel() for p in model.parameters()),
                 "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad)}
     normalizers = tower_normalizers(args.backbone, mods, spec.modality_stats())
@@ -185,6 +251,8 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         best, history, start_epoch = rs["best"], rs["history"], rs["epoch"]
         print(f"    fold {fold_idx}: resuming from epoch {start_epoch+1}/{args.epochs} "
               f"(best so far: bal={best['bal']:.4f} @ epoch {best['epoch']})", flush=True)
+    elif args.warm_start:
+        warm_start(model, args, fold_idx)
 
     for epoch in range(start_epoch, args.epochs):
         epoch_t0 = time.time()
@@ -196,14 +264,24 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
             masks_dev = {m: masks[m].to(device, non_blocking=True) for m in mods}
             labels = labels.to(device, non_blocking=True)
             with torch.amp.autocast("cuda", enabled=device.type == "cuda"):
-                logits = model(images_norm, masks_dev)
-                loss = F.cross_entropy(logits, labels, weight=weight_tensor)
+                if use_aux:
+                    logits, aux, avail = model(images_norm, masks_dev, return_aux=True)
+                    main_loss = F.cross_entropy(logits, labels, weight=weight_tensor)
+                    # OGM-GE's probes read detached streams, so their loss trains only them
+                    aux_loss = sum(masked_ce(aux[m].float(), labels, avail[m], weight_tensor) for m in mods)
+                    loss = main_loss + (args.aux_weight if args.aux_weight > 0 else 1.0) * aux_loss
+                else:
+                    logits = model(images_norm, masks_dev)
+                    loss = main_loss = F.cross_entropy(logits, labels, weight=weight_tensor)
             scaler.scale(loss / args.grad_accum).backward()
             if (step + 1) % args.grad_accum == 0 or step + 1 == len(train_loader):
+                if args.ogm_alpha > 0 and epoch <= OGM_LAST_EPOCH:
+                    scaler.unscale_(optimizer)
+                    modulate_gradients(model, ogm_coefficients(aux, avail, labels, args.ogm_alpha, mods), mods)
                 scaler.step(optimizer)
                 scaler.update()
                 optimizer.zero_grad(set_to_none=True)
-            train_loss_sum += float(loss.item()) * len(labels)
+            train_loss_sum += float(main_loss.item()) * len(labels)
             train_n += len(labels)
         train_loss = train_loss_sum / max(train_n, 1)
 
@@ -245,6 +323,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
                     "max_frames": args.max_frames, "fold": fold_idx, "bal": bal,
                     "inner_val_fraction": args.inner_val_fraction,
                     "lesion_crop": args.lesion_crop, "bg_remove_prob": args.bg_remove_prob,
+                    "input_variant": args.input_variant, "aux_heads": use_aux, "aux_detach": args.ogm_alpha > 0,
                     "dataset": spec.name, "modalities": mods,
                 }, ckpt_dir / f"fold{fold_idx}_best.pt")
         history.append({"epoch": epoch + 1, "train_loss": train_loss, "val_loss": val_loss,
@@ -358,6 +437,16 @@ def build_parser() -> argparse.ArgumentParser:
                          "be classified without background signal -- directly targets "
                          "Experiment 3's finding that labels are 68-95%% recoverable from "
                          "lesion-free crops alone. Default 0.0 (off).")
+    p.add_argument("--input-variant", choices=["bg_patch", "boxmap"], default=None,
+                    help="train and test on lesion-free frames: the largest strip no box touches "
+                         "(bg_patch) or the boxes drawn white on black (boxmap). Excludes --lesion-crop")
+    p.add_argument("--aux-weight", type=float, default=0.0,
+                    help="two-tower only: add this weight times a unimodal CE on each tower's descriptor")
+    p.add_argument("--ogm-alpha", type=float, default=0.0,
+                    help="two-tower only: OGM-GE gradient modulation with this alpha (epochs 0-50)")
+    p.add_argument("--warm-start", action="store_true",
+                    help="two-tower only: start each tower from the finished single-modality run "
+                         "(__mod-<M>) of the same backbone, task, seed and fold in --output-dir")
     p.add_argument("--img-size", type=int, default=224)
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--lr", type=float, default=1e-4)
@@ -436,6 +525,16 @@ def main() -> None:
                          f"{list(args.spec.modalities)}")
     if args.external_test_centres and args.dataset != "cadsel":
         raise SystemExit("--external-test-centres is defined for CAD-SEL's centres only")
+    if args.input_variant and (args.lesion_crop or args.bg_remove_prob > 0):
+        raise SystemExit("--input-variant replaces the frame; drop --lesion-crop / --bg-remove-prob")
+    if (args.aux_weight > 0 or args.ogm_alpha > 0 or args.warm_start) and len(args.mods) != 2:
+        raise SystemExit("--aux-weight, --ogm-alpha and --warm-start need two modalities")
+    if sum([args.aux_weight > 0, args.ogm_alpha > 0, args.warm_start]) > 1:
+        raise SystemExit("--aux-weight, --ogm-alpha and --warm-start are separate strategies; use one")
+    if args.ogm_alpha > 0 and args.grad_accum != 1:
+        raise SystemExit("--ogm-alpha needs --grad-accum 1")
+    if args.warm_start and (args.external_test_centres or args.paired_only or args.input_variant):
+        raise SystemExit("--warm-start needs the single-modality runs' own k-fold splits and inputs")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -458,10 +557,23 @@ def main() -> None:
         f"{'' if not args.external_test_centres else '__ext-' + _centre_tag(args.external_test_centres)}"
         f"{'' if args.dataset == 'cadsel' else '__ds-' + args.dataset}"
         f"{'' if args.mods == list(args.spec.modalities) else '__mod-' + '+'.join(args.mods)}"
+        f"{'' if args.input_variant is None else '__input-' + args.input_variant}"
+        f"{'' if args.aux_weight == 0 else f'__aux{args.aux_weight:g}'}"
+        f"{'' if args.ogm_alpha == 0 else f'__ogm{args.ogm_alpha:g}'}"
+        f"{'__warmstart' if args.warm_start else ''}"
         f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"
     )
     out_path = args.output_dir / f"{run_name}.json"
+    args.single_runs = None
+    if args.warm_start:
+        head, seed_tail = run_name.replace("__warmstart", "").replace("__keep1", "").rsplit("__s", 1)
+        args.single_runs = {m: f"{head}__mod-{m}__s{seed_tail}" for m in args.mods}
+        for name in args.single_runs.values():
+            path = args.output_dir / f"{name}.json"
+            single = json.loads(path.read_text()) if path.exists() else None
+            if single is None or single["folds_done"] != single["n_splits"]:
+                raise SystemExit(f"--warm-start: finished single-modality run {name} not found")
     ckpt_dir = (args.output_dir / run_name) if args.save_checkpoint else None
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -530,6 +642,8 @@ def main() -> None:
             "weight_decay": args.weight_decay, "dropout": args.dropout,
             "backbone_lr": args.backbone_lr, "early_stop_patience": args.early_stop_patience,
             "lesion_crop": args.lesion_crop, "bg_remove_prob": args.bg_remove_prob,
+            "input_variant": args.input_variant, "aux_weight": args.aux_weight, "ogm_alpha": args.ogm_alpha,
+            "warm_start_from": args.single_runs,
             "batch_size": args.batch_size, "grad_accum": args.grad_accum,
             "n_splits": args.n_splits, "seed": args.seed,
             "paired_only": args.paired_only, "n_patients": n_patients,

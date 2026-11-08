@@ -177,7 +177,8 @@ class JointTwoTowerModel(nn.Module):
 
     def __init__(self, n_classes: int, backbone: str = "efficientnet_b0", freeze: str = "partial",
                  fusion: str = "gated", modality_dropout: float = 0.3,
-                 dropout: float = 0.3, unfreeze_last_n: int = 4, modalities=None) -> None:
+                 dropout: float = 0.3, unfreeze_last_n: int = 4, modalities=None,
+                 aux_heads: bool = False, aux_detach: bool = False) -> None:
         super().__init__()
         self.backbone_name = backbone
         self.feat_dim = TOWERS[backbone][0]
@@ -189,10 +190,17 @@ class JointTwoTowerModel(nn.Module):
         self.head = FusionHead(
             self.feat_dim, n_classes,
             modality_dropout=modality_dropout, fusion=fusion, dropout=dropout,
-            modalities=self.modalities,
+            modalities=self.modalities, aux_heads=aux_heads, aux_detach=aux_detach,
         )
 
-    def forward(self, images: dict[str, torch.Tensor], masks: dict[str, torch.Tensor]) -> torch.Tensor:
+    def tower_parameters(self, modality: str):
+        """Everything only ``modality`` passes through: backbone, attention pool, encoder."""
+        yield from self.backbones[modality].parameters()
+        yield from self.head.pools[modality].parameters()
+        yield from self.head.encoders[modality].parameters()
+
+    def forward(self, images: dict[str, torch.Tensor], masks: dict[str, torch.Tensor],
+                return_aux: bool = False):
         """``images[modality]``: (B, T, C, H, W) float, already normalised.
         ``masks[modality]``: (B, T), 1 for a real frame, 0 for padding.
 
@@ -216,4 +224,4 @@ class JointTwoTowerModel(nn.Module):
                 feats[real] = out.to(feats.dtype)
             batch[modality] = feats.reshape(B, T, -1) * mask.unsqueeze(-1)
             batch[f"{modality}_mask"] = mask
-        return self.head(batch)
+        return self.head(batch, return_aux=return_aux)

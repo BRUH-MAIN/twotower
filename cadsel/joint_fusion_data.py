@@ -26,10 +26,12 @@ modality (the 220 WLE-only patients' EUS side), not for ordinary frame
 scarcity, so EfficientNet-B0's BatchNorm layers see all-real, non-degenerate
 batches for every present-modality frame.
 
-Two optional, mutually-exclusive per-frame content transforms (applied
-before the standard augmentation pipeline): ``lesion_crop`` (always crop to
-the lesion box + context padding) and ``bg_remove_prob`` (stochastically,
-train-time only, erase everything outside the lesion box instead).
+Optional, mutually-exclusive per-frame content transforms (applied before
+the standard augmentation pipeline): ``lesion_crop`` (always crop to the lesion
+box + context padding), ``bg_remove_prob`` (stochastically, train-time only,
+erase everything outside the lesion box instead) and ``input_variant``
+(``bg_patch`` or ``boxmap``: train and test on lesion-free inputs, the
+retrained version of Experiment 3's shortcut test).
 """
 
 from __future__ import annotations
@@ -139,6 +141,41 @@ def _bg_remove(im: "Image.Image", sample: Sample, pad_frac: float = 0.3) -> "Ima
     return Image.fromarray(out)
 
 
+def _largest_free_rect(boxes, W: int, H: int):
+    """Biggest strip above/below/left/right of the box union, at least 24 px
+    each way. Same logic as ``experiments/ablation_inputs.py::largest_free_rect``,
+    duplicated for the reason given in ``_boxes_for``."""
+    x1, x2 = min(b[0] for b in boxes), max(b[2] for b in boxes)
+    y1, y2 = min(b[1] for b in boxes), max(b[3] for b in boxes)
+    cands = [(0, 0, W, y1), (0, y2, W, H), (0, 0, x1, H), (x2, 0, W, H)]
+    cands = [c for c in cands if c[2] - c[0] >= 24 and c[3] - c[1] >= 24]
+    return max(cands, key=lambda c: (c[2] - c[0]) * (c[3] - c[1])) if cands else None
+
+
+def _bg_patch(im: "Image.Image", sample: Sample) -> "Image.Image":
+    """The largest strip no lesion box touches: no lesion, no box outline.
+    As ``build_five_variants``'s ``bg_patch``, except that a frame without a
+    box, or without a free strip, becomes black rather than the full frame,
+    so a model trained on this never sees a lesion."""
+    W, H = im.size
+    boxes = _boxes_for(sample, W, H)
+    free = _largest_free_rect(boxes, W, H) if boxes else None
+    return im.crop(free) if free is not None else Image.new("RGB", (W, H))
+
+
+def _boxmap(im: "Image.Image", sample: Sample) -> "Image.Image":
+    """Black canvas with the lesion boxes drawn white: box geometry only, as
+    ``build_five_variants``'s ``boxmap``."""
+    W, H = im.size
+    canvas = np.zeros((H, W, 3), dtype=np.uint8)
+    for (x1, y1, x2, y2) in _boxes_for(sample, W, H):
+        canvas[y1:y2, x1:x2] = 255
+    return Image.fromarray(canvas)
+
+
+INPUT_VARIANTS = {"bg_patch": _bg_patch, "boxmap": _boxmap}
+
+
 class JointPatientDataset(Dataset):
     """Returns ``(images, masks, label)`` for one patient.
 
@@ -157,6 +194,7 @@ class JointPatientDataset(Dataset):
         seed: int = 0,
         lesion_crop: bool = False,
         bg_remove_prob: float = 0.0,
+        input_variant: str | None = None,
         modalities: Sequence[str] | None = None,
         classes: Sequence[str] | None = None,
         label_of=None,
@@ -173,6 +211,9 @@ class JointPatientDataset(Dataset):
         self.seed = seed
         self.lesion_crop = lesion_crop
         self.bg_remove_prob = bg_remove_prob
+        self.input_variant = input_variant
+        if input_variant is not None and (lesion_crop or bg_remove_prob > 0):
+            raise ValueError("input_variant replaces the frame; it excludes lesion_crop and bg_remove_prob")
 
         by_patient = _group_by_patient_modality(samples)
         self.patient_keys = sorted(by_patient)
@@ -203,7 +244,9 @@ class JointPatientDataset(Dataset):
         for i, s in enumerate(chosen):
             with Image.open(s.image) as im0:
                 im = im0.convert("RGB")
-            if self.lesion_crop:
+            if self.input_variant is not None:
+                im = INPUT_VARIANTS[self.input_variant](im, s)
+            elif self.lesion_crop:
                 im = _lesion_crop(im, s)
             elif self.train and self.bg_remove_prob > 0 and rng.random() < self.bg_remove_prob:
                 im = _bg_remove(im, s)

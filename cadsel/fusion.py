@@ -369,6 +369,12 @@ class FusionHead(nn.Module):
     to. With a single modality there is nothing to fuse: the pooled, encoded
     stream goes straight to the classifier (the single-backbone model, kept on
     the same code path so its protocol matches the two-tower runs).
+
+    ``aux_heads`` adds one linear classifier per modality on that stream's
+    encoded descriptor (``forward(..., return_aux=True)`` returns their
+    logits). Trained with the main loss they are auxiliary unimodal losses;
+    with ``aux_detach`` they only read the stream, as the per-modality
+    confidence probes OGM-GE needs.
     """
 
     def __init__(
@@ -380,6 +386,8 @@ class FusionHead(nn.Module):
         dropout: float = 0.3,
         fusion: Literal["gated", "symmetric"] = "gated",
         modalities: Sequence[str] = tuple(MODALITY_NAMES),
+        aux_heads: bool = False,
+        aux_detach: bool = False,
     ) -> None:
         super().__init__()
         if len(modalities) not in (1, 2):
@@ -403,6 +411,11 @@ class FusionHead(nn.Module):
             nn.Linear(hidden, hidden), nn.ReLU(), nn.Dropout(dropout),
             nn.Linear(hidden, n_classes),
         )
+        if aux_heads and self.fuse is None:
+            raise ValueError("auxiliary heads need two modalities")
+        self.aux_detach = aux_detach
+        self.aux = (nn.ModuleDict({m: nn.Linear(hidden, n_classes) for m in self.modalities})
+                    if aux_heads else None)
 
     def _drop_streams(self, present: dict) -> dict:
         """Zero whole streams at random, leaving every patient at least one."""
@@ -415,7 +428,7 @@ class FusionHead(nn.Module):
         return {a: present[a] * (~(drop_a & paired)).float(),
                 b: present[b] * (~(drop_b & paired)).float()}
 
-    def forward(self, batch: dict) -> torch.Tensor:
+    def forward(self, batch: dict, return_aux: bool = False):
         pooled = {}
         if self.fuse is None:
             m = self.modalities[0]
@@ -431,7 +444,11 @@ class FusionHead(nn.Module):
 
         a, b = (pooled[m] for m in self.modalities)
         flags = torch.stack([avail[m] for m in self.modalities], dim=1)
-        return self.classifier(self.fuse(a, b, flags))
+        logits = self.classifier(self.fuse(a, b, flags))
+        if not return_aux:
+            return logits
+        aux = {m: self.aux[m](pooled[m].detach() if self.aux_detach else pooled[m]) for m in self.modalities}
+        return logits, aux, avail
 
 
 # ---------------------------------------------------------------------------
