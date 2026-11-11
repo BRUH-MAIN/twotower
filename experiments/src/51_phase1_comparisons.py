@@ -18,6 +18,8 @@ configuration retrained with the modality-dropout fix (``__keep1``).
   * ``external.csv``: held-out centres (Centres 2-6, or Center-3). The
     two-tower, its WLE view, the separately trained models and their late
     fusion, and the clinical model refitted on the training centres only.
+  * ``eus_value.csv`` and ``image_vs_clinical.csv``: 50's and 49's analyses
+    redone on the re-baseline, whose runs are free of the dropout bug.
 
     python -m experiments.src.51_phase1_comparisons
     python -m experiments.src.51_phase1_comparisons --baseline ablation   # before set A lands
@@ -41,6 +43,7 @@ from cadsel.config import PROJECT_ROOT
 from cadsel.fusion import patient_classes, patient_label
 
 exp49 = importlib.import_module("experiments.src.49_clinical_baseline")
+exp50 = importlib.import_module("experiments.src.50_two_tower_subgroups")
 exp44, exp42 = exp49.exp44, exp49.exp42
 
 OUT_DIR = PROJECT_ROOT / "experiments" / "results" / "51_phase1_comparisons"
@@ -254,6 +257,17 @@ def external_table(groups: dict, meta: dict, centres: dict) -> list[dict]:
     return rows
 
 
+def baseline_sources(groups: dict, baseline: str) -> dict:
+    """(task, tag) -> {backbone: src} for one condition, the shape 49 and 50 take."""
+    out = {}
+    for task in exp49.TASKS:
+        for tag in exp49.TAGS:
+            out[(task, tag)] = {b: src for b in BACKBONES
+                                if (baseline, b, task) in groups
+                                and (src := pick(groups[(baseline, b, task)], tag)) is not None}
+    return out
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--baseline", default="baseline", choices=sorted(CONDITIONS),
@@ -269,9 +283,17 @@ def main() -> None:
     print("runs found (backbone/task:seeds):")
     for cond in CONDITIONS:
         print(f"  {cond:22s}{' '.join(found[cond]) if found[cond] else '-'}")
+    sources = baseline_sources(groups, args.baseline)
+    versus_clinical = []
+    for task in exp49.TASKS:
+        if all(sources[(task, tag)] for tag in exp49.TAGS):
+            clinical = exp49.clinical_sources(meta, task, len(patient_classes(task)))
+            versus_clinical += exp49.image_vs_clinical(task, sources, clinical, meta)
+    eus = exp50.eus_value(sources, meta) if all(sources.values()) else []
     for name, rows in (("conditions", conditions_table(groups, meta)),
                        ("versus_baseline", versus_baseline(groups, meta, args.baseline)),
-                       ("external", external_table(groups, meta, centres))):
+                       ("external", external_table(groups, meta, centres)),
+                       ("eus_value", eus), ("image_vs_clinical", versus_clinical)):
         if rows:
             exp44.write_csv(OUT_DIR / f"{name}.csv", rows)
         else:
