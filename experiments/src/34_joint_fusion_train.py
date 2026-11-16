@@ -121,11 +121,17 @@ def modulate_gradients(model, coeff: dict, mods: list[str]) -> None:
     """Scale each tower's weight gradients and add OGM-GE's Gaussian noise
     (std = the gradient's own). The authors' code touches conv kernels only;
     here every weight matrix or kernel of the tower (ndim >= 2), so ViT towers
-    are modulated too."""
-    for m in mods:
-        for p in model.tower_parameters(m):
-            if p.grad is not None and p.grad.ndim >= 2:
-                p.grad = p.grad * coeff[m] + torch.zeros_like(p.grad).normal_(0, p.grad.std().item() + 1e-8)
+    are modulated too.
+
+    Left alone on a step whose unscaled gradients are not finite: the fp16
+    GradScaler skips that step anyway, and noise with a NaN std would raise."""
+    grads = {m: [p for p in model.tower_parameters(m) if p.grad is not None and p.grad.ndim >= 2]
+             for m in mods}
+    if not all(torch.isfinite(p.grad).all() for ps in grads.values() for p in ps):
+        return
+    for m, ps in grads.items():
+        for p in ps:
+            p.grad = p.grad * coeff[m] + torch.zeros_like(p.grad).normal_(0, p.grad.std().item() + 1e-8)
 
 
 def warm_start(model, args, fold_idx: int) -> None:
@@ -559,7 +565,7 @@ def main() -> None:
         f"{'' if args.mods == list(args.spec.modalities) else '__mod-' + '+'.join(args.mods)}"
         f"{'' if args.input_variant is None else '__input-' + args.input_variant}"
         f"{'' if args.aux_weight == 0 else f'__aux{args.aux_weight:g}'}"
-        f"{'' if args.ogm_alpha == 0 else f'__ogm{args.ogm_alpha:g}'}"
+        f"{'' if args.ogm_alpha == 0 else f'__ogmge{args.ogm_alpha:g}'}"
         f"{'__warmstart' if args.warm_start else ''}"
         f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"

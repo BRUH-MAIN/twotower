@@ -59,8 +59,8 @@ CONDITIONS = {
     "boxmap": r"__es20__nested0\.2__input-boxmap__keep1$",
     "symmetric": r"__fusion-symmetric__.*__lesioncrop__nested0\.2__keep1$",
     "aux": r"__lesioncrop__nested0\.2__aux1__keep1$",
-    "ogm0.1": r"__lesioncrop__nested0\.2__ogm0\.1__keep1$",
-    "ogm0.8": r"__lesioncrop__nested0\.2__ogm0\.8__keep1$",
+    "ogm0.1": r"__lesioncrop__nested0\.2__ogmge0\.1__keep1$",     # __ogm<alpha> runs predate the
+    "ogm0.8": r"__lesioncrop__nested0\.2__ogmge0\.8__keep1$",     # non-finite-gradient fix; ignored
     "warm_start": r"__lesioncrop__nested0\.2__warmstart__keep1$",
     "paired_only": r"__lesioncrop__nested0\.2__paired__keep1$",
     "wle_model": r"__lesioncrop__nested0\.2__mod-WLE$",
