@@ -18,6 +18,15 @@ configuration retrained with the modality-dropout fix (``__keep1``).
   * ``external.csv``: held-out centres (Centres 2-6, or Center-3). The
     two-tower, its WLE view, the separately trained models and their late
     fusion, and the clinical model refitted on the training centres only.
+  * ``fusion_vs_wle.csv``: does any way of adding EUS beat the separately
+    trained WLE model? Every two-tower strategy and late fusion of the
+    separate models, minus the WLE model, on patients with EUS (and the
+    rectal ones), Holm-corrected over the strategies.
+  * ``site_shift.csv``: binary only. Held-out patients scored by the pooled-CV
+    single-modality model (their centre seen in training) vs the model
+    trained without their centre, per modality. Then, on the held-out
+    centres: two-tower minus the WLE model, late fusion minus the WLE model,
+    and two-tower minus its own WLE view.
   * ``eus_value.csv`` and ``image_vs_clinical.csv``: 50's and 49's analyses
     redone on the re-baseline, whose runs are free of the dropout bug.
 
@@ -132,7 +141,19 @@ def late_models(groups: dict, prefix: str, backbone: str, task: str, tag: str) -
 # ---------------------------------------------------------------------------
 # Tables
 # ---------------------------------------------------------------------------
+def eus_patients(groups: dict) -> set:
+    """Patients with EUS frames, from a two-tower run. A single-modality run's
+    ``paired`` only says all of *its* modalities are present, which a WLE-only
+    run says of everyone."""
+    for (cond, _, _), runs in groups.items():
+        if cond in ("baseline", "ablation"):
+            src = next(iter(runs.values()))
+            return set(src["patient_key"][src["paired"]].tolist())
+    raise SystemExit("no two-tower run to read EUS availability from")
+
+
 def conditions_table(groups: dict, meta: dict) -> list[dict]:
+    has_eus = eus_patients(groups)
     rows = []
     for (cond, backbone, task), runs in sorted(groups.items()):
         n_classes = len(patient_classes(task))
@@ -141,9 +162,10 @@ def conditions_table(groups: dict, meta: dict) -> list[dict]:
             if src is None:
                 continue
             keys = src["patient_key"]
+            paired = np.isin(keys, list(has_eus))
             pops = [("all", np.ones(len(keys), bool)),
-                    ("eus", src["paired"]),
-                    ("rectum", exp49.population_mask("rectum", keys, src["paired"], meta))]
+                    ("eus", paired),
+                    ("rectum", exp49.population_mask("rectum", keys, paired, meta))]
             for pop, m in pops:
                 y = src["y"][m]
                 if m.sum() == 0 or len(np.unique(y)) < 2:
@@ -151,7 +173,7 @@ def conditions_table(groups: dict, meta: dict) -> list[dict]:
                 for view in [v for v in VIEWS if f"probs_{v}" in src]:
                     if view == "eus_only" and pop == "all":
                         continue            # an EUS-only read needs EUS: scored under "eus"/"rectum"
-                    vm = m & src["paired"] if view == "eus_only" else m
+                    vm = m & paired if view == "eus_only" else m
                     yv = src["y"][vm]
                     idx = exp44.boot_indices(yv, np.random.default_rng(0))
                     rows.append({"condition": cond, "backbone": backbone, "task": task, "seeds": tag,
@@ -203,6 +225,108 @@ def versus_baseline(groups: dict, meta: dict, baseline: str) -> list[dict]:
                             for r, adj in zip(panel, exp44.holm([r[key] for r in panel])):
                                 r[f"{key}_holm"] = adj
                     rows += panel
+    return rows
+
+
+FUSION_STRATEGIES = ("baseline", "symmetric", "aux", "ogm0.1", "ogm0.8", "warm_start", "paired_only",
+                     "late_models")
+
+
+def fusion_vs_wle(groups: dict, meta: dict) -> list[dict]:
+    has_eus = eus_patients(groups)
+    rows = []
+    for backbone in BACKBONES:
+        for task in exp49.TASKS:
+            n_classes = len(patient_classes(task))
+            for tag in exp49.TAGS:
+                ref = groups.get(("wle_model", backbone, task))
+                ref = pick(ref, tag) if ref else None
+                if ref is None:
+                    continue
+                strategies = {c: pick(groups[(c, backbone, task)], tag)
+                              for c in FUSION_STRATEGIES if (c, backbone, task) in groups}
+                strategies["late_models"] = late_models(groups, "", backbone, task, tag)
+                for pop in ("eus", "rectum"):
+                    panel = []
+                    for cond, src in strategies.items():
+                        if src is None:
+                            continue
+                        keys = np.array(sorted(set(src["patient_key"].tolist()) & has_eus))
+                        r, o = align(ref, keys), align(src, keys)
+                        m = exp49.population_mask(pop, keys, np.ones(len(keys), bool), meta)
+                        y = r["y"][m]
+                        assert np.array_equal(y, o["y"][m])
+                        idx = exp44.boot_indices(y, np.random.default_rng(0))
+                        pr, po = r["probs_fused"][m], o["probs_fused"][m]
+                        d, lo, hi, p = exp49.delta(exp49.boot_bal(y, po.argmax(1), idx, n_classes),
+                                                   exp49.boot_bal(y, pr.argmax(1), idx, n_classes))
+                        row = {"backbone": backbone, "task": task, "seeds": tag,
+                               "population": "eus" if pop == "eus" else "rectum_eus", "strategy": cond,
+                               "n": int(m.sum()), "bal_wle_model": exp44.bal_acc(y, pr.argmax(1), n_classes),
+                               "bal": exp44.bal_acc(y, po.argmax(1), n_classes),
+                               "delta_bal": d, "delta_lo": lo, "delta_hi": hi, "p": p,
+                               "auroc_wle_model": exp44.auroc(y, pr), "auroc": exp44.auroc(y, po)}
+                        if n_classes == 2:
+                            da, alo, ahi, ap = exp49.delta(exp49.boot_auroc(y, po[:, 0], idx),
+                                                           exp49.boot_auroc(y, pr[:, 0], idx))
+                            row.update(delta_auroc=da, delta_auroc_lo=alo, delta_auroc_hi=ahi, p_auroc=ap)
+                        panel.append(row)
+                    for key in ("p", "p_auroc"):
+                        if panel and key in panel[0]:
+                            for r_, adj in zip(panel, exp44.holm([r_[key] for r_ in panel])):
+                                r_[f"{key}_holm"] = adj
+                    rows += panel
+    return rows
+
+
+def paired_delta(y: np.ndarray, a: np.ndarray, b: np.ndarray) -> dict:
+    """a - b for one binary panel: balanced accuracy and AUROC, paired bootstrap."""
+    idx = exp44.boot_indices(y, np.random.default_rng(0))
+    d, lo, hi, p = exp49.delta(exp49.boot_bal(y, a.argmax(1), idx, 2), exp49.boot_bal(y, b.argmax(1), idx, 2))
+    da, alo, ahi, ap = exp49.delta(exp49.boot_auroc(y, a[:, 0], idx), exp49.boot_auroc(y, b[:, 0], idx))
+    return {"bal_a": exp44.bal_acc(y, a.argmax(1), 2), "bal_b": exp44.bal_acc(y, b.argmax(1), 2),
+            "delta_bal": d, "delta_lo": lo, "delta_hi": hi, "p": p,
+            "auroc_a": exp44.auroc(y, a), "auroc_b": exp44.auroc(y, b),
+            "delta_auroc": da, "delta_auroc_lo": alo, "delta_auroc_hi": ahi, "p_auroc": ap}
+
+
+def site_shift(groups: dict, meta: dict) -> list[dict]:
+    rows = []
+    for tag_ext, name in EXTERNAL.items():
+        for backbone in BACKBONES:
+            for tag in exp49.TAGS:
+                for mod in ("wle", "eus"):
+                    pooled = groups.get((f"{mod}_model", backbone, "binary"))
+                    held = groups.get((f"ext_{tag_ext}_{mod}_model", backbone, "binary"))
+                    pooled, held = (pick(pooled, tag) if pooled else None), (pick(held, tag) if held else None)
+                    if pooled is None or held is None:
+                        continue
+                    pooled = align(pooled, held["patient_key"])
+                    rows.append({"held_out": name, "backbone": backbone, "seeds": tag, "population": "all",
+                                 "comparison": f"{mod.upper()} model: centre unseen - centre seen",
+                                 "n": len(held["y"]),
+                                 **paired_delta(held["y"], held["probs_fused"], pooled["probs_fused"])})
+                tt = groups.get((f"ext_{tag_ext}", backbone, "binary"))
+                tt = pick(tt, tag) if tt else None
+                late = late_models(groups, f"ext_{tag_ext}_", backbone, "binary", tag)
+                if tt is None or late is None:
+                    continue
+                for pop in ("all", "rectum"):
+                    keys = tt["patient_key"][exp49.population_mask(pop, tt["patient_key"], tt["paired"], meta)]
+                    keys = keys[np.isin(keys, late["patient_key"])]
+                    t, l = align(tt, keys), align(late, keys)
+                    for comp, a, b in (("two-tower - WLE model", t["probs_fused"], l["probs_wle_only"]),
+                                       ("late fusion - WLE model", l["probs_fused"], l["probs_wle_only"]),
+                                       ("two-tower - its WLE view", t["probs_fused"], t["probs_wle_only"])):
+                        rows.append({"held_out": name, "backbone": backbone, "seeds": tag, "population": pop,
+                                     "comparison": comp, "n": len(keys), **paired_delta(t["y"], a, b)})
+    for tag in exp49.TAGS:          # Holm over the 2 backbones x 2 sites, per comparison and population
+        for comp in {r["comparison"] for r in rows}:
+            for pop in ("all", "rectum"):
+                panel = [r for r in rows if r["seeds"] == tag and r["comparison"] == comp and r["population"] == pop]
+                for key in ("p", "p_auroc"):
+                    for r, adj in zip(panel, exp44.holm([r[key] for r in panel])):
+                        r[f"{key}_holm"] = adj
     return rows
 
 
@@ -293,6 +417,8 @@ def main() -> None:
     for name, rows in (("conditions", conditions_table(groups, meta)),
                        ("versus_baseline", versus_baseline(groups, meta, args.baseline)),
                        ("external", external_table(groups, meta, centres)),
+                       ("fusion_vs_wle", fusion_vs_wle(groups, meta)),
+                       ("site_shift", site_shift(groups, meta)),
                        ("eus_value", eus), ("image_vs_clinical", versus_clinical)):
         if rows:
             exp44.write_csv(OUT_DIR / f"{name}.csv", rows)
