@@ -13,16 +13,22 @@ otherwise depend on ``experiments/``) -- keep them in sync by hand if those
 change. Each tower outputs one pooled descriptor per frame, never class
 logits: ``FusionHead`` supplies its own classifier on top of the fused
 patient descriptor.
+
+The ultrasound towers (``US_TOWERS``) are timm ViTs loaded from the authors'
+released checkpoints, which must be downloaded into ``CADSEL_US_WEIGHTS``.
 """
 
 from __future__ import annotations
+
+import os
+from pathlib import Path
 
 import torch
 import torch.nn as nn
 import torchvision.models as tvm
 
 from .classification_data import make_classification_normalizer
-from .config import MODALITY_NAMES, MODALITY_STATS
+from .config import MODALITY_NAMES, MODALITY_STATS, PROJECT_ROOT
 from .fusion import FusionHead
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
@@ -43,6 +49,11 @@ TOWERS = {
     "dinov3_vits16": (384, "imagenet"),
     "dinov3_vitb16": (768, "imagenet"),
     "dinov3_vitl16": (1024, "imagenet"),
+    # ultrasound-pretrained; all three were pretrained on grayscale-as-RGB
+    # images with ImageNet normalisation, at 224 px
+    "usfmae_vitb16": (768, "imagenet"),
+    "usfm_vitb16": (768, "imagenet"),
+    "tinyusfm": (192, "imagenet"),
 }
 HF_MODEL_NAMES = {
     "mobilevit_s": "apple/mobilevit-small",
@@ -51,6 +62,18 @@ HF_MODEL_NAMES = {
     "dinov3_vitb16": "facebook/dinov3-vitb16-pretrain-lvd1689m",
     "dinov3_vitl16": "facebook/dinov3-vitl16-pretrain-lvd1689m",
 }
+
+
+# backbone -> (checkpoint file in CADSEL_US_WEIGHTS, where it comes from)
+US_TOWERS = {
+    "usfmae_vitb16": ("usfmae_100ep.pth",
+                      "USF-MAE, Megahed et al., BSPC 2026 (MIT); github.com/Yusufii9/USF-MAE, 100-epoch checkpoint"),
+    "usfm_vitb16": ("usfm_latest.pth",
+                    "USFM, Jiao et al., Med Image Anal 2024 (CC BY-NC 4.0); github.com/openmedlab/USFM, USFM_latest.pth"),
+    "tinyusfm": ("tinyusfm.pth",
+                 "TinyUSFM, IEEE JBHI 2026 (Apache-2.0); github.com/MacDunno/TinyUSFM"),
+}
+US_WEIGHTS_DIR = Path(os.environ.get("CADSEL_US_WEIGHTS", PROJECT_ROOT / "weights" / "ultrasound"))
 
 
 def _freeze_all_but(model: nn.Module, trainable_modules: list[nn.Module]) -> None:
@@ -130,6 +153,62 @@ def _build_hf_tower(backbone: str, unfreeze_last_n: int) -> tuple[nn.Module, lis
     raise ValueError(f"unknown HF tower {backbone!r}")
 
 
+def _us_state_dict(path: Path) -> dict:
+    """Encoder weights from an ultrasound checkpoint, with wrapper prefixes
+    and the MAE decoder / classifier head stripped. ``weights_only`` loading,
+    so an untrusted pickle cannot run code."""
+    state = torch.load(path, map_location="cpu", weights_only=True)
+    for key in ("model", "state_dict", "teacher", "student"):
+        if isinstance(state, dict) and isinstance(state.get(key), dict):
+            state = state[key]
+            break
+    out = {}
+    for k, v in state.items():
+        for prefix in ("module.model.", "module.", "model.", "backbone.", "encoder."):
+            if k.startswith(prefix):
+                k = k[len(prefix):]
+                break
+        if k.startswith(("decoder", "mask_token", "head.", "head_dist.")):
+            continue
+        out[k] = v
+    return out
+
+
+def _build_us_tower(backbone: str, unfreeze_last_n: int) -> tuple[nn.Module, list[nn.Module]]:
+    """An ultrasound-pretrained ViT that returns the mean of its patch tokens
+    after a final LayerNorm, the pooling all three were fine-tuned with."""
+    from timm.models.beit import Beit
+    from timm.models.vision_transformer import VisionTransformer
+
+    if backbone == "usfm_vitb16":       # BEiT-style: relative position bias, layer scale
+        model = Beit(img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4,
+                     qkv_bias=True, use_abs_pos_emb=False, use_rel_pos_bias=True,
+                     use_shared_rel_pos_bias=False, init_values=0.1, global_pool="avg", num_classes=0)
+    else:
+        dim = TOWERS[backbone][0]
+        model = VisionTransformer(img_size=224, patch_size=16, embed_dim=dim, depth=12, num_heads=12,
+                                  qkv_bias=True, global_pool="avg", fc_norm=True, num_classes=0)
+    path = US_WEIGHTS_DIR / US_TOWERS[backbone][0]
+    if not path.exists():
+        raise SystemExit(f"{path} missing: download it ({US_TOWERS[backbone][1]}) or set CADSEL_US_WEIGHTS")
+    state = _us_state_dict(path)
+    shared = state.pop("rel_pos_bias.relative_position_bias_table", None)
+    state.pop("rel_pos_bias.relative_position_index", None)
+    if shared is not None:
+        # BEiT pretraining shares one relative-position table across blocks; the
+        # USFM fine-tuning config gives each block its own, copied from it
+        for i in range(len(model.blocks)):
+            state[f"blocks.{i}.attn.relative_position_bias_table"] = shared.clone()
+    if "fc_norm.weight" not in state and "norm.weight" in state:
+        # pretrained with a final norm on the CLS path: reuse it for the pooled tokens
+        state["fc_norm.weight"], state["fc_norm.bias"] = state.pop("norm.weight"), state.pop("norm.bias")
+    result = model.load_state_dict(state, strict=False)
+    missing = [k for k in result.missing_keys if not k.endswith("relative_position_index")]
+    if missing:
+        raise SystemExit(f"{path.name} does not fit {backbone}: {len(missing)} missing, e.g. {missing[:4]}")
+    return model, [*model.blocks[-unfreeze_last_n:], model.fc_norm]
+
+
 def build_tower(backbone: str = "efficientnet_b0", freeze: str = "partial",
                 unfreeze_last_n: int = 4) -> nn.Module:
     """One modality's tower. ``'partial'`` leaves only the last stage (CNNs)
@@ -139,6 +218,8 @@ def build_tower(backbone: str = "efficientnet_b0", freeze: str = "partial",
         raise ValueError(f"unknown tower backbone {backbone!r}; expected one of {sorted(TOWERS)}")
     if backbone in HF_MODEL_NAMES:
         model, partial = _build_hf_tower(backbone, unfreeze_last_n)
+    elif backbone in US_TOWERS:
+        model, partial = _build_us_tower(backbone, unfreeze_last_n)
     else:
         model, partial = _build_cnn_tower(backbone)
 

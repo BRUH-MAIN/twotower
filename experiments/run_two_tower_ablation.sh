@@ -12,6 +12,7 @@
 #   EXT_CENTRES=Center-2,Center-3,Center-4,Center-5,Center-6   one external test set
 #   DATASET=limuc        another dataset from cadsel.external_datasets (TASKS must be its tasks)
 #   MODALITIES=WLE       a subset of the dataset's modalities (single-backbone run)
+#   CADSEL_US_WEIGHTS    folder holding the ultrasound towers' checkpoints (cadsel.joint_fusion_model.US_TOWERS)
 set -u
 cd "$(dirname "$0")/.."
 export CADSEL_DATA_ROOT="${CADSEL_DATA_ROOT:-/run/media/rohan/New Volume/CAD-SEL-Dataset}"
@@ -35,7 +36,8 @@ DS_ARG=(--dataset "$DATASET")
 
 # ViTs train only their last 4 blocks (full DINOv3 fine-tuning collapsed in
 # the single-modality screen); everything else is fully fine-tuned.
-declare -A FREEZE=([deit_s]=partial [dinov3_vits16]=partial [dinov3_vitb16]=partial [dinov3_vitl16]=partial)
+declare -A FREEZE=([deit_s]=partial [dinov3_vits16]=partial [dinov3_vitb16]=partial [dinov3_vitl16]=partial
+                  [usfmae_vitb16]=partial [usfm_vitb16]=partial [tinyusfm]=partial)
 # Per-backbone overrides from the stage-0 smoke test (memory), e.g.
 # [resnet50]="--batch-size 4 --grad-accum 2"
 declare -A EXTRA=()
