@@ -42,7 +42,7 @@ from cadsel.data import build_joint_manifest, joint_strata_key, patient_level_fo
 from cadsel.external_datasets import get_spec, modality_views
 from cadsel.fusion import SUBTYPES, patient_classes, patient_label
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
-from cadsel.joint_fusion_model import JointTwoTowerModel, tower_normalizers
+from cadsel.joint_fusion_model import JointTwoTowerModel, model_normalizers
 
 RESULTS_DIR = PROJECT_ROOT / "experiments" / "results" / "joint_fusion_runs"
 OUT_DIR = PROJECT_ROOT / "experiments" / "results" / "41_two_tower_ablation"
@@ -178,7 +178,9 @@ def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
     spec, mods = _run_spec(run)
     classes = spec.classes(task)
     views = modality_views(mods)
-    normalizers = tower_normalizers(run.get("backbone", "efficientnet_b0"), mods, spec.modality_stats())
+    # runs from before mixed towers use one backbone for every modality
+    tower_backbones = run.get("tower_backbones") or {m: run.get("backbone", "efficientnet_b0") for m in mods}
+    normalizers = model_normalizers(tower_backbones, spec.modality_stats())
     keys, fold_of, y, paired = [], [], [], []
     probs = {name: [] for name in views}
     for f in sorted(run["folds"], key=lambda f: f["fold"]):
@@ -191,7 +193,8 @@ def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
                                     unfreeze_last_n=ck.get("unfreeze_last_n", 4),
                                     modalities=ck.get("modalities", mods),
                                     aux_heads=ck.get("aux_heads", False),
-                                    aux_detach=ck.get("aux_detach", False)).to(device).eval()
+                                    aux_detach=ck.get("aux_detach", False),
+                                    tower_backbones=ck.get("tower_backbones")).to(device).eval()
         model.load_state_dict(ck["model_state_dict"])
         inp = fold_inputs[k]
         for images, masks in inp["batches"]:

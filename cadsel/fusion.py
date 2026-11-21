@@ -36,7 +36,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal, Sequence
+from typing import Literal, Mapping, Sequence
 
 import numpy as np
 import torch
@@ -375,11 +375,14 @@ class FusionHead(nn.Module):
     logits). Trained with the main loss they are auxiliary unimodal losses;
     with ``aux_detach`` they only read the stream, as the per-modality
     confidence probes OGM-GE needs.
+
+    ``in_dim`` is one feature size for every stream, or ``{modality: size}``
+    when the towers differ (e.g. a DINOv3 WLE tower and a ViT-B EUS tower).
     """
 
     def __init__(
         self,
-        in_dim: int,
+        in_dim: int | Mapping[str, int],
         n_classes: int,
         hidden: int = 256,
         modality_dropout: float = 0.3,
@@ -394,11 +397,12 @@ class FusionHead(nn.Module):
             raise ValueError(f"FusionHead takes one or two modalities, got {list(modalities)}")
         self.modalities = list(modalities)
         self.modality_dropout = modality_dropout
+        dims = {m: in_dim[m] if isinstance(in_dim, Mapping) else in_dim for m in self.modalities}
         self.encoders = nn.ModuleDict({
-            m: nn.Sequential(nn.Linear(in_dim, hidden), nn.ReLU(), nn.Dropout(dropout))
+            m: nn.Sequential(nn.Linear(dims[m], hidden), nn.ReLU(), nn.Dropout(dropout))
             for m in self.modalities
         })
-        self.pools = nn.ModuleDict({m: AttentionPool(in_dim) for m in self.modalities})
+        self.pools = nn.ModuleDict({m: AttentionPool(dims[m]) for m in self.modalities})
         if len(self.modalities) == 1:
             self.fuse = None
         elif fusion == "gated":

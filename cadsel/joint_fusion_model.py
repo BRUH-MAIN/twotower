@@ -249,27 +249,40 @@ def tower_normalizers(backbone: str = "efficientnet_b0", modalities=None, modali
     return {m: make_classification_normalizer(*stats) for m in modalities}
 
 
+def model_normalizers(tower_backbones: dict, modality_stats=None) -> dict:
+    """``tower_normalizers`` per modality when the towers differ:
+    ``tower_backbones`` maps each modality to its tower backbone."""
+    return {m: tower_normalizers(b, [m], modality_stats)[m] for m, b in tower_backbones.items()}
+
+
 class JointTwoTowerModel(nn.Module):
-    """Two independent towers (one per modality, same ``backbone``) + an
-    unmodified ``cadsel.fusion.FusionHead``. ``backbone`` defaults to
-    EfficientNet-B0, the original (and only) architecture of every
+    """Two independent towers (one per modality) + an unmodified
+    ``cadsel.fusion.FusionHead``. Both towers use ``backbone`` unless
+    ``tower_backbones`` ({modality: backbone}) overrides one, e.g. an
+    ultrasound-pretrained EUS tower beside a DINOv3 WLE tower. ``backbone``
+    defaults to EfficientNet-B0, the original (and only) architecture of every
     checkpoint saved before the tower was made selectable.
     """
 
     def __init__(self, n_classes: int, backbone: str = "efficientnet_b0", freeze: str = "partial",
                  fusion: str = "gated", modality_dropout: float = 0.3,
                  dropout: float = 0.3, unfreeze_last_n: int = 4, modalities=None,
-                 aux_heads: bool = False, aux_detach: bool = False) -> None:
+                 aux_heads: bool = False, aux_detach: bool = False,
+                 tower_backbones: dict | None = None) -> None:
         super().__init__()
         self.backbone_name = backbone
-        self.feat_dim = TOWERS[backbone][0]
         # one tower per modality; a single modality gives the single-backbone model
         self.modalities = list(MODALITY_NAMES if modalities is None else modalities)
+        unknown = set(tower_backbones or {}) - set(self.modalities)
+        if unknown:
+            raise ValueError(f"tower_backbones names modalities {sorted(unknown)} not in {self.modalities}")
+        self.tower_backbones = {m: (tower_backbones or {}).get(m, backbone) for m in self.modalities}
+        self.feat_dims = {m: TOWERS[b][0] for m, b in self.tower_backbones.items()}
         self.backbones = nn.ModuleDict({
-            m: build_tower(backbone, freeze, unfreeze_last_n) for m in self.modalities
+            m: build_tower(b, freeze, unfreeze_last_n) for m, b in self.tower_backbones.items()
         })
         self.head = FusionHead(
-            self.feat_dim, n_classes,
+            self.feat_dims, n_classes,
             modality_dropout=modality_dropout, fusion=fusion, dropout=dropout,
             modalities=self.modalities, aux_heads=aux_heads, aux_detach=aux_detach,
         )
@@ -299,7 +312,7 @@ class JointTwoTowerModel(nn.Module):
             imgs, mask = images[modality], masks[modality]
             B, T, C, H, W = imgs.shape
             real = mask.reshape(B * T) > 0.5
-            feats = imgs.new_zeros(B * T, self.feat_dim)
+            feats = imgs.new_zeros(B * T, self.feat_dims[modality])
             if real.any():
                 out = self.backbones[modality](imgs.reshape(B * T, C, H, W)[real])
                 feats[real] = out.to(feats.dtype)

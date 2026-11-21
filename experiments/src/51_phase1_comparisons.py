@@ -30,6 +30,9 @@ configuration retrained with the modality-dropout fix (``__keep1``).
   * ``eus_towers.csv``: EUS-only models with ultrasound-pretrained towers
     (USF-MAE, USFM, TinyUSFM) against the DINOv3 EUS model on the same folds,
     on patients with EUS and the rectal ones; Holm over the other towers.
+  * ``eus_late_fusion.csv``: the DINOv3 WLE model averaged with each EUS
+    model (DINOv3, EfficientNet, USF-MAE, USFM), and the DINOv3 two-towers,
+    minus the WLE model on the same patients; Holm over the panel.
   * ``eus_value.csv`` and ``image_vs_clinical.csv``: 50's and 49's analyses
     redone on the re-baseline, whose runs are free of the dropout bug.
 
@@ -84,6 +87,10 @@ for tag in EXTERNAL:
     CONDITIONS[f"ext_{tag}"] = rf"__lesioncrop__nested0\.2__ext-{tag}__keep1$"
     CONDITIONS[f"ext_{tag}_wle_model"] = rf"__lesioncrop__nested0\.2__ext-{tag}__mod-WLE$"
     CONDITIONS[f"ext_{tag}_eus_model"] = rf"__lesioncrop__nested0\.2__ext-{tag}__mod-EUS$"
+# mixed towers: DINOv3/EfficientNet WLE tower + an ultrasound-pretrained EUS tower, warm-started
+for _bb in ("usfmae_vitb16", "usfm_vitb16", "tinyusfm"):
+    CONDITIONS[f"mixed_{_bb}"] = rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__keep1$"
+    CONDITIONS[f"mixed_{_bb}_frozen"] = rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__frozentowers__keep1$"
 COMPARED = ("ablation", "full_frame", "bg_patch", "boxmap", "symmetric", "aux", "ogm0.1", "ogm0.8",
             "warm_start", "paired_only", "late_models")
 
@@ -376,6 +383,61 @@ def eus_towers(meta: dict) -> list[dict]:
     return rows
 
 
+def eus_late_fusion(meta: dict) -> list[dict]:
+    """The DINOv3 WLE model averaged with each EUS model, and the DINOv3
+    two-towers, minus the WLE model on patients with EUS (all, rectal)."""
+    groups = load_conditions(BACKBONES + US_BACKBONES)
+    eus_backbones = ("dinov3_vits16", "efficientnet_b0", "usfmae_vitb16", "usfm_vitb16")
+    rows = []
+    for task in exp49.TASKS:
+        n_classes = len(patient_classes(task))
+        for tag in exp49.TAGS:
+            wle = pick(groups.get(("wle_model", "dinov3_vits16", task), {}), tag)
+            eus = {b: pick(groups.get(("eus_model", b, task), {}), tag) for b in eus_backbones}
+            if wle is None or any(v is None for v in eus.values()):
+                continue
+            keys = eus["dinov3_vits16"]["patient_key"]
+            assert all(np.array_equal(e["patient_key"], keys) for e in eus.values())
+            w = align(wle, keys)["probs_fused"]
+            models = {"wle_model": w}
+            for cond in ("baseline", "warm_start"):
+                src = pick(groups.get((cond, "dinov3_vits16", task), {}), tag)
+                if src is not None:
+                    models[f"two_tower_{cond}"] = align(src, keys)["probs_fused"]
+            for b, e in eus.items():
+                models[f"eus_model_{b}"] = e["probs_fused"]
+                models[f"average_wle_eus_{b}"] = (w + e["probs_fused"]) / 2
+            y_all = eus["dinov3_vits16"]["y"]
+            for pop in ("eus", "rectum"):
+                m = exp49.population_mask(pop, keys, np.ones(len(keys), bool), meta)
+                y = y_all[m]
+                idx = exp44.boot_indices(y, np.random.default_rng(0))
+                ref = models["wle_model"][m]
+                panel = []
+                for name, probs in models.items():
+                    p = probs[m]
+                    row = {"task": task, "seeds": tag, "population": "eus" if pop == "eus" else "rectum_eus",
+                           "model": name, "n": int(m.sum()), **exp49.score_row(y, p, idx, n_classes),
+                           **dict.fromkeys(("minus_wle_bal", "bal_lo", "bal_hi", "p_bal", "p_bal_holm"))}
+                    if n_classes == 2:
+                        row.update(dict.fromkeys(("minus_wle_auroc", "auroc_lo", "auroc_hi", "p_auroc", "p_auroc_holm")))
+                    if name != "wle_model" and not name.startswith("eus_model"):
+                        d, lo, hi, pv = exp49.delta(exp49.boot_bal(y, p.argmax(1), idx, n_classes),
+                                                    exp49.boot_bal(y, ref.argmax(1), idx, n_classes))
+                        row.update(minus_wle_bal=d, bal_lo=lo, bal_hi=hi, p_bal=pv)
+                        if n_classes == 2:
+                            d, lo, hi, pv = exp49.delta(exp49.boot_auroc(y, p[:, 0], idx),
+                                                        exp49.boot_auroc(y, ref[:, 0], idx))
+                            row.update(minus_wle_auroc=d, auroc_lo=lo, auroc_hi=hi, p_auroc=pv)
+                        panel.append(row)
+                    rows.append(row)
+                for key in ("p_bal", "p_auroc"):
+                    if panel and key in panel[0]:
+                        for r_, adj in zip(panel, exp44.holm([r_[key] for r_ in panel])):
+                            r_[f"{key}_holm"] = adj
+    return rows
+
+
 def clinical_external(meta: dict, task: str, held_out: set, centres: dict, keys: np.ndarray) -> np.ndarray:
     """Clinical logistic model fitted on the training centres only, mean over
     the three seeds' inner CV; probabilities for ``keys``."""
@@ -466,6 +528,7 @@ def main() -> None:
                        ("fusion_vs_wle", fusion_vs_wle(groups, meta)),
                        ("site_shift", site_shift(groups, meta)),
                        ("eus_towers", eus_towers(meta)),
+                       ("eus_late_fusion", eus_late_fusion(meta)),
                        ("eus_value", eus), ("image_vs_clinical", versus_clinical)):
         if rows:
             exp44.write_csv(OUT_DIR / f"{name}.csv", rows)

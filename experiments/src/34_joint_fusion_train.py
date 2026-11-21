@@ -42,6 +42,12 @@ applies OGM-GE gradient modulation (Peng et al., CVPR 2022), and
 backbone, task, seed and fold. ``--input-variant`` trains and tests on
 lesion-free (``bg_patch``) or box-only (``boxmap``) frames.
 
+Mixed towers: ``--eus-backbone`` gives the EUS tower its own backbone (e.g. an
+ultrasound-pretrained ViT beside a DINOv3 WLE tower); with ``--warm-start``
+each tower starts from the single-modality run of its own backbone.
+``--frozen-towers`` then keeps both warm-started backbones fixed and trains
+only the attention pools, encoders and fusion head.
+
     python -m experiments.src.34_joint_fusion_train --task subtype --seed 42
     python -m experiments.src.34_joint_fusion_train --task binary --backbone resnet50 \\
         --freeze none --lesion-crop --epochs 100 --early-stop-patience 20 --inner-val-fraction 0.2
@@ -69,7 +75,7 @@ from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
 from cadsel.data import patient_level_folds, patient_level_split, split_group
 from cadsel.external_datasets import SPECS, get_spec, modality_views as ablation_views
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
-from cadsel.joint_fusion_model import TOWERS, JointTwoTowerModel, tower_normalizers
+from cadsel.joint_fusion_model import TOWERS, JointTwoTowerModel, model_normalizers
 from cadsel.train_fusion import score
 from finetune_classifier import compute_classification_class_weights
 from probes import balanced_accuracy
@@ -214,11 +220,15 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         modality_dropout=args.modality_dropout, dropout=args.dropout,
         unfreeze_last_n=args.unfreeze_last_n, modalities=mods,
         aux_heads=args.aux_weight > 0 or args.ogm_alpha > 0, aux_detach=args.ogm_alpha > 0,
+        tower_backbones=args.tower_backbones,
     ).to(device)
+    if args.frozen_towers:
+        # before the optimizer is built, so it never holds the backbone weights
+        model.backbones.requires_grad_(False)
     use_aux = args.aux_weight > 0 or args.ogm_alpha > 0
     n_params = {"total": sum(p.numel() for p in model.parameters()),
                 "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad)}
-    normalizers = tower_normalizers(args.backbone, mods, spec.modality_stats())
+    normalizers = model_normalizers(args.tower_backbones, spec.modality_stats())
 
     ytr = np.array([
         classes.index(spec.label_of(train_ds.subtype[k], task)) for k in train_ds.patient_keys
@@ -263,6 +273,8 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     for epoch in range(start_epoch, args.epochs):
         epoch_t0 = time.time()
         model.train()
+        if args.frozen_towers:
+            model.backbones.eval()   # fixed towers: no dropout / BatchNorm updates
         train_loss_sum, train_n = 0.0, 0
         optimizer.zero_grad(set_to_none=True)
         for step, (images, masks, labels) in enumerate(train_loader):
@@ -331,6 +343,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
                     "lesion_crop": args.lesion_crop, "bg_remove_prob": args.bg_remove_prob,
                     "input_variant": args.input_variant, "aux_heads": use_aux, "aux_detach": args.ogm_alpha > 0,
                     "dataset": spec.name, "modalities": mods,
+                    "tower_backbones": args.tower_backbones, "frozen_towers": args.frozen_towers,
                 }, ckpt_dir / f"fold{fold_idx}_best.pt")
         history.append({"epoch": epoch + 1, "train_loss": train_loss, "val_loss": val_loss,
                          "lr": lr, "backbone_lr": backbone_lr, "acc": acc, "bal": bal})
@@ -453,6 +466,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--warm-start", action="store_true",
                     help="two-tower only: start each tower from the finished single-modality run "
                          "(__mod-<M>) of the same backbone, task, seed and fold in --output-dir")
+    p.add_argument("--frozen-towers", action="store_true",
+                    help="with --warm-start: keep both warm-started backbones fixed; train only the "
+                         "attention pools, encoders and fusion head")
     p.add_argument("--img-size", type=int, default=224)
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--lr", type=float, default=1e-4)
@@ -473,6 +489,9 @@ def build_parser() -> argparse.ArgumentParser:
                          "keeps an effective 8 patients when a large tower doesn't fit)")
     p.add_argument("--backbone", choices=sorted(TOWERS), default="efficientnet_b0",
                     help="tower backbone, same for both modalities (see cadsel.joint_fusion_model.TOWERS)")
+    p.add_argument("--eus-backbone", choices=sorted(TOWERS), default=None,
+                    help="two-tower only: a different backbone for the EUS tower (--backbone is then "
+                         "the WLE tower's)")
     p.add_argument("--unfreeze-last-n", type=int, default=4,
                     help="ViT towers with --freeze partial: trainable transformer blocks from the end")
     p.add_argument("--inner-val-fraction", type=float, default=0.0,
@@ -541,6 +560,14 @@ def main() -> None:
         raise SystemExit("--ogm-alpha needs --grad-accum 1")
     if args.warm_start and (args.external_test_centres or args.paired_only or args.input_variant):
         raise SystemExit("--warm-start needs the single-modality runs' own k-fold splits and inputs")
+    if args.frozen_towers and not args.warm_start:
+        raise SystemExit("--frozen-towers keeps warm-started towers fixed; add --warm-start")
+    if args.eus_backbone == args.backbone:
+        args.eus_backbone = None
+    if args.eus_backbone and (len(args.mods) != 2 or "EUS" not in args.mods):
+        raise SystemExit("--eus-backbone needs a two-tower run with an EUS stream (EUS-only: use --backbone)")
+    args.tower_backbones = {m: args.eus_backbone if m == "EUS" and args.eus_backbone else args.backbone
+                            for m in args.mods}
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -566,15 +593,24 @@ def main() -> None:
         f"{'' if args.input_variant is None else '__input-' + args.input_variant}"
         f"{'' if args.aux_weight == 0 else f'__aux{args.aux_weight:g}'}"
         f"{'' if args.ogm_alpha == 0 else f'__ogmge{args.ogm_alpha:g}'}"
+        f"{'' if not args.eus_backbone else '__eus-' + args.eus_backbone}"
         f"{'__warmstart' if args.warm_start else ''}"
+        f"{'__frozentowers' if args.frozen_towers else ''}"
         f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"
     )
     out_path = args.output_dir / f"{run_name}.json"
     args.single_runs = None
     if args.warm_start:
-        head, seed_tail = run_name.replace("__warmstart", "").replace("__keep1", "").rsplit("__s", 1)
-        args.single_runs = {m: f"{head}__mod-{m}__s{seed_tail}" for m in args.mods}
+        head = run_name
+        for tag in ("__warmstart", "__frozentowers", "__keep1", f"__eus-{args.eus_backbone}"):
+            head = head.replace(tag, "")
+        head, seed_tail = head.rsplit("__s", 1)
+        prefix = f"joint_{args.backbone}__"
+        assert head.startswith(prefix)
+        # each tower from the single-modality run of its own backbone
+        args.single_runs = {m: f"joint_{args.tower_backbones[m]}__{head[len(prefix):]}__mod-{m}__s{seed_tail}"
+                            for m in args.mods}
         for name in args.single_runs.values():
             path = args.output_dir / f"{name}.json"
             single = json.loads(path.read_text()) if path.exists() else None
@@ -650,6 +686,8 @@ def main() -> None:
             "lesion_crop": args.lesion_crop, "bg_remove_prob": args.bg_remove_prob,
             "input_variant": args.input_variant, "aux_weight": args.aux_weight, "ogm_alpha": args.ogm_alpha,
             "warm_start_from": args.single_runs,
+            "eus_backbone": args.eus_backbone, "tower_backbones": args.tower_backbones,
+            "frozen_towers": args.frozen_towers,
             "batch_size": args.batch_size, "grad_accum": args.grad_accum,
             "n_splits": args.n_splits, "seed": args.seed,
             "paired_only": args.paired_only, "n_patients": n_patients,
