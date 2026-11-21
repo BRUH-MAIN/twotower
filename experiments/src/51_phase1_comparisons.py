@@ -27,6 +27,9 @@ configuration retrained with the modality-dropout fix (``__keep1``).
     trained without their centre, per modality. Then, on the held-out
     centres: two-tower minus the WLE model, late fusion minus the WLE model,
     and two-tower minus its own WLE view.
+  * ``eus_towers.csv``: EUS-only models with ultrasound-pretrained towers
+    (USF-MAE, USFM, TinyUSFM) against the DINOv3 EUS model on the same folds,
+    on patients with EUS and the rectal ones; Holm over the other towers.
   * ``eus_value.csv`` and ``image_vs_clinical.csv``: 50's and 49's analyses
     redone on the re-baseline, whose runs are free of the dropout bug.
 
@@ -58,6 +61,7 @@ exp44, exp42 = exp49.exp44, exp49.exp42
 OUT_DIR = PROJECT_ROOT / "experiments" / "results" / "51_phase1_comparisons"
 CENTRES = PROJECT_ROOT / "experiments" / "data" / "patient_centre.csv"
 BACKBONES = ("efficientnet_b0", "dinov3_vits16")
+US_BACKBONES = ("usfmae_vitb16", "usfm_vitb16", "tinyusfm")      # ultrasound-pretrained EUS towers
 VIEWS = ("fused", "wle_only", "eus_only")
 # condition -> regex on the configuration part of the run name (between task and seed)
 CONDITIONS = {
@@ -87,12 +91,12 @@ COMPARED = ("ablation", "full_frame", "bg_patch", "boxmap", "symmetric", "aux", 
 # ---------------------------------------------------------------------------
 # Data
 # ---------------------------------------------------------------------------
-def load_conditions() -> dict:
+def load_conditions(backbones: tuple = BACKBONES) -> dict:
     """(condition, backbone, task) -> {seed: run}, rows sorted by patient."""
     out = defaultdict(dict)
     for path in sorted((exp42.OOF_DIR).glob("*.npz")):
         m = exp42.RUN_RE.match(path.stem)
-        if m is None or m["backbone"] not in BACKBONES:
+        if m is None or m["backbone"] not in backbones:
             continue
         cond = next((c for c, rx in CONDITIONS.items() if re.search(rx, m["config"])), None)
         if cond is None:
@@ -330,6 +334,48 @@ def site_shift(groups: dict, meta: dict) -> list[dict]:
     return rows
 
 
+def eus_towers(meta: dict) -> list[dict]:
+    groups = load_conditions(BACKBONES + US_BACKBONES)
+    rows = []
+    for task in exp49.TASKS:
+        n_classes = len(patient_classes(task))
+        for tag in exp49.TAGS:
+            models = {b: pick(groups[("eus_model", b, task)], tag)
+                      for b in BACKBONES + US_BACKBONES if ("eus_model", b, task) in groups}
+            models = {b: src for b, src in models.items() if src is not None}
+            ref = models.get("dinov3_vits16")
+            if ref is None or len(models) < 2:
+                continue
+            for pop in ("eus", "rectum"):
+                panel = []
+                for backbone, src in models.items():
+                    keys = np.intersect1d(src["patient_key"], ref["patient_key"])
+                    o, r = align(src, keys), align(ref, keys)
+                    m = exp49.population_mask(pop, keys, np.ones(len(keys), bool), meta)
+                    y = r["y"][m]
+                    assert np.array_equal(y, o["y"][m])
+                    idx = exp44.boot_indices(y, np.random.default_rng(0))
+                    po, pr = o["probs_fused"][m], r["probs_fused"][m]
+                    row = {"task": task, "seeds": tag, "population": "eus" if pop == "eus" else "rectum_eus",
+                           "backbone": backbone, "n": int(m.sum()), **exp49.score_row(y, po, idx, n_classes),
+                           "delta_bal_vs_dinov3": None, "delta_lo": None, "delta_hi": None, "p": None}
+                    if backbone != "dinov3_vits16":
+                        d, lo, hi, p = exp49.delta(exp49.boot_bal(y, po.argmax(1), idx, n_classes),
+                                                   exp49.boot_bal(y, pr.argmax(1), idx, n_classes))
+                        row.update(delta_bal_vs_dinov3=d, delta_lo=lo, delta_hi=hi, p=p)
+                        if n_classes == 2:
+                            da, alo, ahi, ap = exp49.delta(exp49.boot_auroc(y, po[:, 0], idx),
+                                                           exp49.boot_auroc(y, pr[:, 0], idx))
+                            row.update(delta_auroc_vs_dinov3=da, delta_auroc_lo=alo, delta_auroc_hi=ahi, p_auroc=ap)
+                        panel.append(row)
+                    rows.append(row)
+                for key in ("p", "p_auroc"):
+                    if panel and key in panel[0]:
+                        for r_, adj in zip(panel, exp44.holm([r_[key] for r_ in panel])):
+                            r_[f"{key}_holm"] = adj
+    return rows
+
+
 def clinical_external(meta: dict, task: str, held_out: set, centres: dict, keys: np.ndarray) -> np.ndarray:
     """Clinical logistic model fitted on the training centres only, mean over
     the three seeds' inner CV; probabilities for ``keys``."""
@@ -419,6 +465,7 @@ def main() -> None:
                        ("external", external_table(groups, meta, centres)),
                        ("fusion_vs_wle", fusion_vs_wle(groups, meta)),
                        ("site_shift", site_shift(groups, meta)),
+                       ("eus_towers", eus_towers(meta)),
                        ("eus_value", eus), ("image_vs_clinical", versus_clinical)):
         if rows:
             exp44.write_csv(OUT_DIR / f"{name}.csv", rows)
