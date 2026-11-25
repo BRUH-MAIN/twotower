@@ -82,6 +82,7 @@ from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
 from cadsel.data import patient_level_folds, patient_level_split, split_group
 from cadsel.external_datasets import SPECS, get_spec, modality_views as ablation_views
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
+from cadsel.fusion_ops import FUSIONS
 from cadsel.joint_fusion_model import TOWERS, JointTwoTowerModel, model_normalizers
 from cadsel.train_fusion import score
 from finetune_classifier import compute_classification_class_weights
@@ -261,6 +262,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         unfreeze_last_n=args.unfreeze_last_n, modalities=mods,
         aux_heads=args.aux_weight > 0 or args.ogm_alpha > 0, aux_detach=args.ogm_alpha > 0,
         tower_backbones=args.tower_backbones, align_dim=ALIGN_DIM if args.align_weight > 0 else 0,
+        film=args.film,
     ).to(device)
     queue = AlignQueue(mods) if args.align_weight > 0 else None
     if args.frozen_towers:
@@ -389,7 +391,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
                     "input_variant": args.input_variant, "aux_heads": use_aux, "aux_detach": args.ogm_alpha > 0,
                     "dataset": spec.name, "modalities": mods,
                     "tower_backbones": args.tower_backbones, "frozen_towers": args.frozen_towers,
-                    "align_dim": ALIGN_DIM if args.align_weight > 0 else 0,
+                    "align_dim": ALIGN_DIM if args.align_weight > 0 else 0, "film": args.film,
                 }, ckpt_dir / f"fold{fold_idx}_best.pt")
         history.append({"epoch": epoch + 1, "train_loss": train_loss, "val_loss": val_loss,
                          "lr": lr, "backbone_lr": backbone_lr, "acc": acc, "bal": bal})
@@ -484,7 +486,11 @@ def build_parser() -> argparse.ArgumentParser:
                    help="comma-separated subset of the dataset's modalities, e.g. WLE for a CAD-SEL "
                         "single-backbone run; folds are still built on all of them")
     p.add_argument("--freeze", choices=["none", "partial"], default="partial")
-    p.add_argument("--fusion", choices=["gated", "symmetric"], default="gated")
+    p.add_argument("--fusion", choices=["gated", "symmetric", *FUSIONS], default="gated",
+                   help="two-stream fusion operator (cadsel.fusion_ops: concat, mlb, mfb, mfb_res)")
+    p.add_argument("--film", action="store_true",
+                   help="two-tower only: bidirectional FiLM, each stream's per-frame features scaled and "
+                        "shifted from the other stream's descriptor before pooling (cadsel.fusion_ops.BiFiLM)")
     p.add_argument("--modality-dropout", type=float, default=0.3)
     p.add_argument("--loss", choices=["ce", "weighted_ce"], default="weighted_ce")
     p.add_argument("--max-frames", type=int, default=4)
@@ -611,6 +617,8 @@ def main() -> None:
         raise SystemExit("--warm-start needs the single-modality runs' own k-fold splits and inputs")
     if args.align_weight > 0 and (len(args.mods) != 2 or args.aux_weight > 0 or args.ogm_alpha > 0):
         raise SystemExit("--align-weight needs two modalities and no --aux-weight / --ogm-alpha")
+    if args.film and len(args.mods) != 2:
+        raise SystemExit("--film conditions one stream on the other; it needs two modalities")
     if args.frozen_towers and not args.warm_start:
         raise SystemExit("--frozen-towers keeps warm-started towers fixed; add --warm-start")
     if args.eus_backbone == args.backbone:
@@ -648,6 +656,7 @@ def main() -> None:
         f"{'__warmstart' if args.warm_start else ''}"
         f"{'__frozentowers' if args.frozen_towers else ''}"
         f"{'' if args.align_weight == 0 else f'__align{args.align_weight:g}'}"
+        f"{'__film' if args.film else ''}"
         f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"
     )
@@ -656,8 +665,10 @@ def main() -> None:
     if args.warm_start:
         head = run_name
         for tag in ("__warmstart", "__frozentowers", "__keep1", f"__eus-{args.eus_backbone}",
-                    f"__align{args.align_weight:g}"):
+                    f"__align{args.align_weight:g}", "__film"):
             head = head.replace(tag, "")
+        # single-modality runs have no fusion step and are named with the default
+        head = head.replace(f"__fusion-{args.fusion}__", "__fusion-gated__")
         head, seed_tail = head.rsplit("__s", 1)
         prefix = f"joint_{args.backbone}__"
         assert head.startswith(prefix)
@@ -740,7 +751,7 @@ def main() -> None:
             "input_variant": args.input_variant, "aux_weight": args.aux_weight, "ogm_alpha": args.ogm_alpha,
             "warm_start_from": args.single_runs,
             "eus_backbone": args.eus_backbone, "tower_backbones": args.tower_backbones,
-            "frozen_towers": args.frozen_towers, "align_weight": args.align_weight,
+            "frozen_towers": args.frozen_towers, "align_weight": args.align_weight, "film": args.film,
             "align": ({"dim": ALIGN_DIM, "temperature": ALIGN_TEMP, "queue": ALIGN_QUEUE}
                       if args.align_weight > 0 else None),
             "batch_size": args.batch_size, "grad_accum": args.grad_accum,

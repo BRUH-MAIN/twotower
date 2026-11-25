@@ -94,6 +94,11 @@ for _bb in ("usfmae_vitb16", "usfm_vitb16", "tinyusfm"):
     CONDITIONS[f"mixed_{_bb}_align"] = rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__align[\d.]+__keep1$"
     CONDITIONS[f"mixed_{_bb}_frozen_align"] = (
         rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__frozentowers__align[\d.]+__keep1$")
+    # bidirectional FiLM before pooling (cadsel.fusion_ops.BiFiLM), gated fusion
+    CONDITIONS[f"mixed_{_bb}_film"] = (
+        rf"^freeze-\w+__fusion-gated__.*__lesioncrop__nested0\.2__eus-{_bb}__warmstart__film__keep1$")
+    CONDITIONS[f"mixed_{_bb}_frozen_film"] = (
+        rf"^freeze-\w+__fusion-gated__.*__lesioncrop__nested0\.2__eus-{_bb}__warmstart__frozentowers__film__keep1$")
 COMPARED = ("ablation", "full_frame", "bg_patch", "boxmap", "symmetric", "aux", "ogm0.1", "ogm0.8",
             "warm_start", "paired_only", "late_models")
 

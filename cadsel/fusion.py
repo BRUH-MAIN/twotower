@@ -43,6 +43,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from . import fusion_ops
 from .config import MODALITY_NAMES, TASK_CLASSES
 from .data import Sample, make_normalizer
 from .models import set_active_modality
@@ -387,11 +388,12 @@ class FusionHead(nn.Module):
         hidden: int = 256,
         modality_dropout: float = 0.3,
         dropout: float = 0.3,
-        fusion: Literal["gated", "symmetric"] = "gated",
+        fusion: str = "gated",
         modalities: Sequence[str] = tuple(MODALITY_NAMES),
         aux_heads: bool = False,
         aux_detach: bool = False,
         align_dim: int = 0,
+        film: bool = False,
     ) -> None:
         super().__init__()
         if len(modalities) not in (1, 2):
@@ -410,8 +412,15 @@ class FusionHead(nn.Module):
             self.fuse = GatedFusion(hidden)
         elif fusion == "symmetric":
             self.fuse = SymmetricCrossAttentionFusion(hidden)
+        elif fusion in fusion_ops.FUSIONS:
+            self.fuse = fusion_ops.make_fusion(fusion, hidden)
         else:
-            raise ValueError(f"unknown fusion type {fusion!r}; expected 'gated' or 'symmetric'")
+            raise ValueError(f"unknown fusion type {fusion!r}; expected 'gated', 'symmetric' "
+                             f"or one of {fusion_ops.FUSIONS}")
+        if film and self.fuse is None:
+            raise ValueError("FiLM conditioning needs two modalities")
+        # frame-level cross-modal conditioning before pooling (cadsel.fusion_ops.BiFiLM)
+        self.film = fusion_ops.BiFiLM(dims, hidden, self.modalities) if film else None
         self.classifier = nn.Sequential(
             nn.Linear(hidden, hidden), nn.ReLU(), nn.Dropout(dropout),
             nn.Linear(hidden, n_classes),
@@ -458,6 +467,14 @@ class FusionHead(nn.Module):
             full[modality] = self.encoders[modality](
                 self.pools[modality](batch[modality], batch[f"{modality}_mask"]))
             pooled[modality] = full[modality] * present.unsqueeze(1)
+        if self.film is not None:
+            # each stream's frames conditioned on the other's unmodulated descriptor,
+            # then pooled and encoded again; alignment keeps the unmodulated ones
+            masks = {m: batch[f"{m}_mask"] for m in self.modalities}
+            frames = self.film({m: batch[m] for m in self.modalities}, masks, full, avail)
+            for modality in self.modalities:
+                pooled[modality] = self.encoders[modality](
+                    self.pools[modality](frames[modality], masks[modality])) * avail[modality].unsqueeze(1)
 
         a, b = (pooled[m] for m in self.modalities)
         flags = torch.stack([avail[m] for m in self.modalities], dim=1)

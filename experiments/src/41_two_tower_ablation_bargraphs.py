@@ -195,7 +195,8 @@ def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
                                     aux_heads=ck.get("aux_heads", False),
                                     aux_detach=ck.get("aux_detach", False),
                                     tower_backbones=ck.get("tower_backbones"),
-                                    align_dim=ck.get("align_dim", 0)).to(device).eval()
+                                    align_dim=ck.get("align_dim", 0),
+                                    film=ck.get("film", False)).to(device).eval()
         model.load_state_dict(ck["model_state_dict"])
         inp = fold_inputs[k]
         for images, masks in inp["batches"]:

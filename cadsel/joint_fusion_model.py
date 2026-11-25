@@ -268,7 +268,8 @@ class JointTwoTowerModel(nn.Module):
                  fusion: str = "gated", modality_dropout: float = 0.3,
                  dropout: float = 0.3, unfreeze_last_n: int = 4, modalities=None,
                  aux_heads: bool = False, aux_detach: bool = False,
-                 tower_backbones: dict | None = None, align_dim: int = 0) -> None:
+                 tower_backbones: dict | None = None, align_dim: int = 0,
+                 film: bool = False) -> None:
         super().__init__()
         self.backbone_name = backbone
         # one tower per modality; a single modality gives the single-backbone model
@@ -285,6 +286,7 @@ class JointTwoTowerModel(nn.Module):
             self.feat_dims, n_classes,
             modality_dropout=modality_dropout, fusion=fusion, dropout=dropout,
             modalities=self.modalities, aux_heads=aux_heads, aux_detach=aux_detach, align_dim=align_dim,
+            film=film,
         )
 
     def tower_parameters(self, modality: str):
