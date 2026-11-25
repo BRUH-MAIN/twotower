@@ -79,11 +79,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
-from cadsel.data import patient_level_folds
+from cadsel.data import patient_level_folds, patient_level_split, split_group
 from cadsel.external_datasets import SPECS, get_spec, modality_views as ablation_views
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
 from cadsel.joint_fusion_model import TOWERS, JointTwoTowerModel, model_normalizers
-from cadsel.offline_augmentation import INNER_FRACTION, N_FOLDS, RECIPE, SEEDS, OfflineAugmentation, fit_select_split
 from cadsel.train_fusion import score
 from finetune_classifier import compute_classification_class_weights
 from probes import balanced_accuracy
@@ -208,13 +207,15 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     # protocol, selection moves to a select split carved out of train.
     test_samples = val_samples
     if args.inner_val_fraction > 0:
-        train_samples, val_samples = fit_select_split(
-            train_samples, test_samples, seed=args.seed, fold=fold_idx,
-            fraction=args.inner_val_fraction, strata_key=spec.strata_key,
+        train_samples, val_samples = patient_level_split(
+            train_samples, val_fraction=args.inner_val_fraction,
+            seed=args.seed + 1000 + fold_idx, strata_key=spec.strata_key,
         )
-    offline_variants = None
-    if args.offline_cache is not None:
-        offline_variants = args.offline_cache.for_fold(fold_idx, train_samples, val_samples, test_samples, mods)
+        fit_keys = {split_group(s) for s in train_samples}
+        select_keys = {split_group(s) for s in val_samples}
+        test_keys = {split_group(s) for s in test_samples}
+        assert not (fit_keys & select_keys or fit_keys & test_keys or select_keys & test_keys), \
+            "fit/select/test patient sets overlap"
     # Splits are made on every modality, then reduced to this run's, so a
     # single-modality run scores exactly the patients of the full run's folds.
     same_split = test_samples is val_samples
@@ -227,7 +228,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     train_ds = JointPatientDataset(train_samples, task, img_size=args.img_size,
                                     max_frames=args.max_frames, train=True, seed=args.seed,
                                     lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
-                                    input_variant=args.input_variant, offline_variants=offline_variants, **data_kw)
+                                    input_variant=args.input_variant, **data_kw)
     val_ds = JointPatientDataset(val_samples, task, img_size=args.img_size,
                                   max_frames=args.max_frames, train=False, seed=args.seed,
                                   lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
@@ -268,8 +269,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     use_aux = args.aux_weight > 0 or args.ogm_alpha > 0
     n_params = {"total": sum(p.numel() for p in model.parameters()),
                 "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad)}
-    normalizers = model_normalizers(args.tower_backbones, spec.modality_stats(),
-                                    imagenet_for_modality=offline_variants is not None)
+    normalizers = model_normalizers(args.tower_backbones, spec.modality_stats())
 
     ytr = np.array([
         classes.index(spec.label_of(train_ds.subtype[k], task)) for k in train_ds.patient_keys
@@ -468,8 +468,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     if device.type == "cuda":
         torch.cuda.empty_cache()
     return {
-        "fold": fold_idx, "n_train": len(train_ds.patient_keys), "n_val": len(val_ds), "n_test": len(test_ds),
-        **({"n_train_examples": len(train_ds)} if offline_variants is not None else {}),
+        "fold": fold_idx, "n_train": len(train_ds), "n_val": len(val_ds), "n_test": len(test_ds),
         "best": best, "history": history, "ablations": ablation_results,
         "n_params": n_params, "peak_mem_gb": peak_mem_gb,
     }
@@ -520,8 +519,6 @@ def build_parser() -> argparse.ArgumentParser:
                     help="with --warm-start: keep both warm-started backbones fixed; train only the "
                          "attention pools, encoders and fusion head")
     p.add_argument("--img-size", type=int, default=224)
-    p.add_argument("--offline-augmentation", type=Path, metavar="CACHE",
-                   help="cache built by 53_two_tower_offline_augment for nested CAD-SEL CV")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--lr", type=float, default=1e-4)
     p.add_argument("--weight-decay", type=float, default=1e-4,
@@ -622,28 +619,6 @@ def main() -> None:
         raise SystemExit("--eus-backbone needs a two-tower run with an EUS stream (EUS-only: use --backbone)")
     args.tower_backbones = {m: args.eus_backbone if m == "EUS" and args.eus_backbone else args.backbone
                             for m in args.mods}
-    args.offline_cache = None
-    offline_tag = ""
-    if args.offline_augmentation is not None:
-        if (args.dataset != "cadsel" or args.inner_val_fraction != INNER_FRACTION
-                or args.n_splits != N_FOLDS or args.seed not in SEEDS):
-            raise SystemExit("--offline-augmentation needs CAD-SEL, 5 folds, --inner-val-fraction 0.2 "
-                             "and seed 42, 123 or 7")
-        if (args.warm_start or args.paired_only or args.external_test_centres or args.input_variant
-                or args.bg_remove_prob != 0):
-            raise SystemExit("--offline-augmentation is incompatible with warm starts, paired-only filtering, "
-                             "held-out centres, input variants and background removal")
-    samples = args.spec.manifest()
-    if args.offline_augmentation is not None:
-        try:
-            args.offline_cache = OfflineAugmentation(
-                args.offline_augmentation, samples, seed=args.seed, img_size=args.img_size,
-                lesion_crop=args.lesion_crop,
-            )
-        except (OSError, ValueError, KeyError) as exc:
-            raise SystemExit(f"--offline-augmentation: {exc}") from exc
-        offline_tag = (f"__offlineaug{RECIPE}-{args.offline_cache.factor}x-i{args.img_size}-"
-                       f"{args.offline_cache.cache_id[:16]}")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -673,7 +648,6 @@ def main() -> None:
         f"{'__warmstart' if args.warm_start else ''}"
         f"{'__frozentowers' if args.frozen_towers else ''}"
         f"{'' if args.align_weight == 0 else f'__align{args.align_weight:g}'}"
-        f"{offline_tag}"
         f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"
     )
@@ -698,6 +672,7 @@ def main() -> None:
     ckpt_dir = (args.output_dir / run_name) if args.save_checkpoint else None
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    samples = args.spec.manifest()
     if args.paired_only:
         have = {}
         for s in samples:
@@ -783,13 +758,6 @@ def main() -> None:
             "folds": fold_results,
             "elapsed_sec": round(sum(f.get("elapsed_sec", 0.0) for f in fold_results), 1),
         }
-        if args.offline_cache is not None:
-            result["offline_augmentation"] = {
-                "recipe": RECIPE,
-                "factor": args.offline_cache.factor,
-                "cache_sha256": args.offline_cache.cache_id,
-                "cnn_normalization": "imagenet",
-            }
         out_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
         return result
 

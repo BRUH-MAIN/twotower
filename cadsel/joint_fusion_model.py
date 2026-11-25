@@ -249,11 +249,9 @@ def tower_normalizers(backbone: str = "efficientnet_b0", modalities=None, modali
     return {m: make_classification_normalizer(*stats) for m in modalities}
 
 
-def model_normalizers(tower_backbones: dict, modality_stats=None, *, imagenet_for_modality=False) -> dict:
+def model_normalizers(tower_backbones: dict, modality_stats=None) -> dict:
     """``tower_normalizers`` per modality when the towers differ:
     ``tower_backbones`` maps each modality to its tower backbone."""
-    if imagenet_for_modality:
-        modality_stats = {m: (IMAGENET_MEAN, IMAGENET_STD) for m in tower_backbones}
     return {m: tower_normalizers(b, [m], modality_stats)[m] for m, b in tower_backbones.items()}
 
 

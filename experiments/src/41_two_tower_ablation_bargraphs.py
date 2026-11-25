@@ -43,7 +43,6 @@ from cadsel.external_datasets import get_spec, modality_views
 from cadsel.fusion import SUBTYPES, patient_classes, patient_label
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
 from cadsel.joint_fusion_model import JointTwoTowerModel, model_normalizers
-from cadsel.train_fusion import score as recorded_metrics
 
 RESULTS_DIR = PROJECT_ROOT / "experiments" / "results" / "joint_fusion_runs"
 OUT_DIR = PROJECT_ROOT / "experiments" / "results" / "41_two_tower_ablation"
@@ -102,7 +101,6 @@ def is_ablation_config(run: dict) -> bool:
     return (bool(run.get("lesion_crop")) and run.get("fusion", "gated") == "gated"
             and not run.get("external_test_centres") and not run.get("paired_only")
             and not run.get("keep_one_stream")
-            and not run.get("offline_augmentation")
             and run.get("dataset", "cadsel") == "cadsel"
             and run.get("modalities", MODALITY_NAMES) == MODALITY_NAMES)
 
@@ -165,8 +163,7 @@ def build_fold_inputs(run: dict, num_workers: int) -> list[dict]:
                                   bg_remove_prob=run.get("bg_remove_prob", 0.0),
                                   input_variant=run.get("input_variant"), modalities=mods,
                                   classes=spec.classes(run["task"]), label_of=spec.label_of)
-        batch_size = run["batch_size"] if run.get("offline_augmentation") else 16
-        loader = DataLoader(ds, batch_size=batch_size, shuffle=False, collate_fn=joint_collate,
+        loader = DataLoader(ds, batch_size=16, shuffle=False, collate_fn=joint_collate,
                             num_workers=num_workers)
         batches = [(images, masks) for images, masks, _ in loader]
         out.append({"patient_keys": list(ds.patient_keys),
@@ -183,8 +180,7 @@ def score_run(run: dict, fold_inputs: list[dict], device: torch.device) -> dict:
     views = modality_views(mods)
     # runs from before mixed towers use one backbone for every modality
     tower_backbones = run.get("tower_backbones") or {m: run.get("backbone", "efficientnet_b0") for m in mods}
-    normalizers = model_normalizers(tower_backbones, spec.modality_stats(),
-                                    imagenet_for_modality=bool(run.get("offline_augmentation")))
+    normalizers = model_normalizers(tower_backbones, spec.modality_stats())
     keys, fold_of, y, paired = [], [], [], []
     probs = {name: [] for name in views}
     for f in sorted(run["folds"], key=lambda f: f["fold"]):
@@ -261,8 +257,7 @@ def collect(runs: list[dict], device: torch.device, num_workers: int) -> None:
         key = (run["seed"], run["n_splits"], run.get("paired_only", False), run["img_size"],
                run["max_frames"], run.get("lesion_crop", False), run.get("bg_remove_prob", 0.0),
                run.get("external_test_centres"), run.get("dataset", "cadsel"),
-               tuple(run.get("modalities") or ()), run.get("input_variant"),
-               run["batch_size"] if run.get("offline_augmentation") else 16)
+               tuple(run.get("modalities") or ()), run.get("input_variant"))
         groups[key].append(run)
     for key, group in groups.items():
         print(f"seed {key[0]}: loading test-fold inputs for {len(group)} run(s)", flush=True)
@@ -273,14 +268,11 @@ def collect(runs: list[dict], device: torch.device, num_workers: int) -> None:
             worst = 0.0
             for f in run["folds"]:
                 sel = pred["fold"] == f["fold"]
-                probs = pred["probs_fused"][sel]
-                m = recorded_metrics(probs.argmax(1), pred["y"][sel], probs.shape[1])
+                m = fold_metrics(pred["probs_fused"][sel], pred["y"][sel], run["task"])
                 worst = max(worst, abs(m["bal"] - f["ablations"]["fused"]["unpaired"]["bal"]))
             flag = "" if worst < 5e-4 else "   <-- differs from the recorded fold scores"
             print(f"  {run['backbone']:20s} {run['task']:8s} s{run['seed']:<4d} "
                   f"max |bal - recorded| over folds = {worst:.4f}{flag}", flush=True)
-            if run.get("offline_augmentation") and worst != 0.0:
-                raise RuntimeError(f"{run['run_name']}: offline augmentation rescoring differs from training")
             np.savez_compressed(OUT_DIR / "oof" / f"{run['run_name']}.npz", **pred)
         del fold_inputs
 
