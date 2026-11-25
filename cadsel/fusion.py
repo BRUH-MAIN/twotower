@@ -391,6 +391,7 @@ class FusionHead(nn.Module):
         modalities: Sequence[str] = tuple(MODALITY_NAMES),
         aux_heads: bool = False,
         aux_detach: bool = False,
+        align_dim: int = 0,
     ) -> None:
         super().__init__()
         if len(modalities) not in (1, 2):
@@ -420,6 +421,11 @@ class FusionHead(nn.Module):
         self.aux_detach = aux_detach
         self.aux = (nn.ModuleDict({m: nn.Linear(hidden, n_classes) for m in self.modalities})
                     if aux_heads else None)
+        if align_dim and self.fuse is None:
+            raise ValueError("cross-modal alignment needs two modalities")
+        # projections for a cross-modal contrastive loss on each stream's descriptor
+        self.align = (nn.ModuleDict({m: nn.Linear(hidden, align_dim) for m in self.modalities})
+                      if align_dim else None)
 
     def _drop_streams(self, present: dict) -> dict:
         """Zero whole streams at random, leaving every patient at least one."""
@@ -432,23 +438,33 @@ class FusionHead(nn.Module):
         return {a: present[a] * (~(drop_a & paired)).float(),
                 b: present[b] * (~(drop_b & paired)).float()}
 
-    def forward(self, batch: dict, return_aux: bool = False):
+    def forward(self, batch: dict, return_aux: bool = False, return_embed: bool = False):
+        """``return_aux``: also the per-stream auxiliary logits and availability.
+        ``return_embed``: also each stream's L2-normalised alignment embedding,
+        computed before modality dropout, and which patients have both streams."""
         pooled = {}
         if self.fuse is None:
             m = self.modalities[0]
             return self.classifier(self.encoders[m](self.pools[m](batch[m], batch[f"{m}_mask"])))
         avail = {m: (batch[f"{m}_mask"].sum(dim=1) > 0.5).float() for m in self.modalities}
+        has_both = (avail[self.modalities[0]] * avail[self.modalities[1]]) > 0.5
         if self.training and self.modality_dropout > 0:
             avail = self._drop_streams(avail)
+        full = {}
         for modality in self.modalities:
             present = avail[modality]
-            mask = batch[f"{modality}_mask"] * present.unsqueeze(1)
-            pooled[modality] = self.encoders[modality](self.pools[modality](batch[modality], mask))
-            pooled[modality] = pooled[modality] * present.unsqueeze(1)
+            # pooled over the stream's own frames; a dropped stream is zeroed after,
+            # so the fused input is as before and the alignment sees the undropped stream
+            full[modality] = self.encoders[modality](
+                self.pools[modality](batch[modality], batch[f"{modality}_mask"]))
+            pooled[modality] = full[modality] * present.unsqueeze(1)
 
         a, b = (pooled[m] for m in self.modalities)
         flags = torch.stack([avail[m] for m in self.modalities], dim=1)
         logits = self.classifier(self.fuse(a, b, flags))
+        if return_embed:
+            emb = {m: F.normalize(self.align[m](full[m]).float(), dim=1) for m in self.modalities}
+            return logits, emb, has_both
         if not return_aux:
             return logits
         aux = {m: self.aux[m](pooled[m].detach() if self.aux_detach else pooled[m]) for m in self.modalities}

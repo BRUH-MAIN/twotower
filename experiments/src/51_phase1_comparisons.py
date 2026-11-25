@@ -82,6 +82,13 @@ CONDITIONS = {
     "wle_model": r"__lesioncrop__nested0\.2__mod-WLE$",
     "eus_model": r"__lesioncrop__nested0\.2__mod-EUS$",
 }
+OFFLINE_CONDITIONS = []
+for factor in (3, 4):
+    suffix = rf"__nested0\.2__offlineaug1-{factor}x-i224-[0-9a-f]{{16}}__keep1$"
+    crop, full = f"offline_{factor}x", f"offline_{factor}x_full"
+    CONDITIONS[crop] = r"^freeze-\w+__fusion-gated__.*__lesioncrop" + suffix
+    CONDITIONS[full] = r"^freeze-\w+__fusion-gated__(?!.*__lesioncrop).*" + suffix
+    OFFLINE_CONDITIONS.extend((crop, full))
 EXTERNAL = {"C2-6": "Centres 2-6", "C3": "Center-3"}
 for tag in EXTERNAL:
     CONDITIONS[f"ext_{tag}"] = rf"__lesioncrop__nested0\.2__ext-{tag}__keep1$"
@@ -91,8 +98,11 @@ for tag in EXTERNAL:
 for _bb in ("usfmae_vitb16", "usfm_vitb16", "tinyusfm"):
     CONDITIONS[f"mixed_{_bb}"] = rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__keep1$"
     CONDITIONS[f"mixed_{_bb}_frozen"] = rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__frozentowers__keep1$"
+    CONDITIONS[f"mixed_{_bb}_align"] = rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__align[\d.]+__keep1$"
+    CONDITIONS[f"mixed_{_bb}_frozen_align"] = (
+        rf"__lesioncrop__nested0\.2__eus-{_bb}__warmstart__frozentowers__align[\d.]+__keep1$")
 COMPARED = ("ablation", "full_frame", "bg_patch", "boxmap", "symmetric", "aux", "ogm0.1", "ogm0.8",
-            "warm_start", "paired_only", "late_models")
+            "warm_start", "paired_only", "late_models", *OFFLINE_CONDITIONS)
 
 
 # ---------------------------------------------------------------------------

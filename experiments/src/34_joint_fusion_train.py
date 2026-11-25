@@ -48,6 +48,13 @@ each tower starts from the single-modality run of its own backbone.
 ``--frozen-towers`` then keeps both warm-started backbones fixed and trains
 only the attention pools, encoders and fusion head.
 
+Cross-modal alignment: ``--align-weight`` adds a symmetric InfoNCE loss that
+pulls a patient's WLE and EUS descriptors together (projected to
+``ALIGN_DIM``, temperature ``ALIGN_TEMP``), against the other patients in the
+batch plus a queue of the last ``ALIGN_QUEUE`` descriptors of each stream.
+Only patients with both streams take part; it is computed before modality
+dropout.
+
     python -m experiments.src.34_joint_fusion_train --task subtype --seed 42
     python -m experiments.src.34_joint_fusion_train --task binary --backbone resnet50 \\
         --freeze none --lesion-crop --epochs 100 --early-stop-patience 20 --inner-val-fraction 0.2
@@ -72,10 +79,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from cadsel.config import MODALITY_NAMES, PROJECT_ROOT
-from cadsel.data import patient_level_folds, patient_level_split, split_group
+from cadsel.data import patient_level_folds
 from cadsel.external_datasets import SPECS, get_spec, modality_views as ablation_views
 from cadsel.joint_fusion_data import JointPatientDataset, joint_collate
 from cadsel.joint_fusion_model import TOWERS, JointTwoTowerModel, model_normalizers
+from cadsel.offline_augmentation import INNER_FRACTION, N_FOLDS, RECIPE, SEEDS, OfflineAugmentation, fit_select_split
 from cadsel.train_fusion import score
 from finetune_classifier import compute_classification_class_weights
 from probes import balanced_accuracy
@@ -98,6 +106,39 @@ def _normalize_frames(images: dict, normalizers: dict, device: torch.device) -> 
         flat = normalizers[m](x.reshape(B * T, C, H, W).float())
         out[m] = flat.reshape(B, T, C, H, W)
     return out
+
+
+ALIGN_DIM, ALIGN_TEMP, ALIGN_QUEUE = 128, 0.1, 64
+
+
+class AlignQueue:
+    """The last ``size`` detached embeddings of each stream, as extra negatives."""
+
+    def __init__(self, mods: list[str], size: int = ALIGN_QUEUE) -> None:
+        self.size, self.items = size, {m: None for m in mods}
+
+    def get(self, m: str, like: torch.Tensor) -> torch.Tensor:
+        q = self.items[m]
+        return like.new_zeros(0, like.shape[1]) if q is None else q
+
+    def push(self, emb: dict) -> None:
+        for m, e in emb.items():
+            q = e.detach() if self.items[m] is None else torch.cat([e.detach(), self.items[m]])
+            self.items[m] = q[: self.size]
+
+
+def align_loss(emb: dict, both: torch.Tensor, queue: AlignQueue, mods: list[str]) -> torch.Tensor:
+    """Symmetric InfoNCE between the two streams of the patients that have both:
+    a patient's other stream is the positive; the other patients in the batch
+    and the queue are negatives."""
+    a, b = (emb[m][both] for m in mods)
+    if len(a) == 0:
+        return emb[mods[0]].sum() * 0.0
+    target = torch.arange(len(a), device=a.device)
+    loss_a = F.cross_entropy(a @ torch.cat([b, queue.get(mods[1], b)]).T / ALIGN_TEMP, target)
+    loss_b = F.cross_entropy(b @ torch.cat([a, queue.get(mods[0], a)]).T / ALIGN_TEMP, target)
+    queue.push({mods[0]: a, mods[1]: b})
+    return (loss_a + loss_b) / 2
 
 
 def masked_ce(logits, labels, keep, weight):
@@ -167,15 +208,13 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     # protocol, selection moves to a select split carved out of train.
     test_samples = val_samples
     if args.inner_val_fraction > 0:
-        train_samples, val_samples = patient_level_split(
-            train_samples, val_fraction=args.inner_val_fraction,
-            seed=args.seed + 1000 + fold_idx, strata_key=spec.strata_key,
+        train_samples, val_samples = fit_select_split(
+            train_samples, test_samples, seed=args.seed, fold=fold_idx,
+            fraction=args.inner_val_fraction, strata_key=spec.strata_key,
         )
-        fit_keys = {split_group(s) for s in train_samples}
-        select_keys = {split_group(s) for s in val_samples}
-        test_keys = {split_group(s) for s in test_samples}
-        assert not (fit_keys & select_keys or fit_keys & test_keys or select_keys & test_keys), \
-            "fit/select/test patient sets overlap"
+    offline_variants = None
+    if args.offline_cache is not None:
+        offline_variants = args.offline_cache.for_fold(fold_idx, train_samples, val_samples, test_samples, mods)
     # Splits are made on every modality, then reduced to this run's, so a
     # single-modality run scores exactly the patients of the full run's folds.
     same_split = test_samples is val_samples
@@ -188,7 +227,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     train_ds = JointPatientDataset(train_samples, task, img_size=args.img_size,
                                     max_frames=args.max_frames, train=True, seed=args.seed,
                                     lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
-                                    input_variant=args.input_variant, **data_kw)
+                                    input_variant=args.input_variant, offline_variants=offline_variants, **data_kw)
     val_ds = JointPatientDataset(val_samples, task, img_size=args.img_size,
                                   max_frames=args.max_frames, train=False, seed=args.seed,
                                   lesion_crop=args.lesion_crop, bg_remove_prob=args.bg_remove_prob,
@@ -220,15 +259,17 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
         modality_dropout=args.modality_dropout, dropout=args.dropout,
         unfreeze_last_n=args.unfreeze_last_n, modalities=mods,
         aux_heads=args.aux_weight > 0 or args.ogm_alpha > 0, aux_detach=args.ogm_alpha > 0,
-        tower_backbones=args.tower_backbones,
+        tower_backbones=args.tower_backbones, align_dim=ALIGN_DIM if args.align_weight > 0 else 0,
     ).to(device)
+    queue = AlignQueue(mods) if args.align_weight > 0 else None
     if args.frozen_towers:
         # before the optimizer is built, so it never holds the backbone weights
         model.backbones.requires_grad_(False)
     use_aux = args.aux_weight > 0 or args.ogm_alpha > 0
     n_params = {"total": sum(p.numel() for p in model.parameters()),
                 "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad)}
-    normalizers = model_normalizers(args.tower_backbones, spec.modality_stats())
+    normalizers = model_normalizers(args.tower_backbones, spec.modality_stats(),
+                                    imagenet_for_modality=offline_variants is not None)
 
     ytr = np.array([
         classes.index(spec.label_of(train_ds.subtype[k], task)) for k in train_ds.patient_keys
@@ -282,7 +323,11 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
             masks_dev = {m: masks[m].to(device, non_blocking=True) for m in mods}
             labels = labels.to(device, non_blocking=True)
             with torch.amp.autocast("cuda", enabled=device.type == "cuda"):
-                if use_aux:
+                if args.align_weight > 0:
+                    logits, emb, both = model(images_norm, masks_dev, return_embed=True)
+                    main_loss = F.cross_entropy(logits, labels, weight=weight_tensor)
+                    loss = main_loss + args.align_weight * align_loss(emb, both, queue, mods)
+                elif use_aux:
                     logits, aux, avail = model(images_norm, masks_dev, return_aux=True)
                     main_loss = F.cross_entropy(logits, labels, weight=weight_tensor)
                     # OGM-GE's probes read detached streams, so their loss trains only them
@@ -344,6 +389,7 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
                     "input_variant": args.input_variant, "aux_heads": use_aux, "aux_detach": args.ogm_alpha > 0,
                     "dataset": spec.name, "modalities": mods,
                     "tower_backbones": args.tower_backbones, "frozen_towers": args.frozen_towers,
+                    "align_dim": ALIGN_DIM if args.align_weight > 0 else 0,
                 }, ckpt_dir / f"fold{fold_idx}_best.pt")
         history.append({"epoch": epoch + 1, "train_loss": train_loss, "val_loss": val_loss,
                          "lr": lr, "backbone_lr": backbone_lr, "acc": acc, "bal": bal})
@@ -422,7 +468,8 @@ def run_fold(train_samples, val_samples, args, task: str, classes: list[str],
     if device.type == "cuda":
         torch.cuda.empty_cache()
     return {
-        "fold": fold_idx, "n_train": len(train_ds), "n_val": len(val_ds), "n_test": len(test_ds),
+        "fold": fold_idx, "n_train": len(train_ds.patient_keys), "n_val": len(val_ds), "n_test": len(test_ds),
+        **({"n_train_examples": len(train_ds)} if offline_variants is not None else {}),
         "best": best, "history": history, "ablations": ablation_results,
         "n_params": n_params, "peak_mem_gb": peak_mem_gb,
     }
@@ -466,10 +513,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--warm-start", action="store_true",
                     help="two-tower only: start each tower from the finished single-modality run "
                          "(__mod-<M>) of the same backbone, task, seed and fold in --output-dir")
+    p.add_argument("--align-weight", type=float, default=0.0,
+                    help="two-tower only: weight of a cross-modal InfoNCE loss pulling each patient's "
+                         "WLE and EUS descriptors together")
     p.add_argument("--frozen-towers", action="store_true",
                     help="with --warm-start: keep both warm-started backbones fixed; train only the "
                          "attention pools, encoders and fusion head")
     p.add_argument("--img-size", type=int, default=224)
+    p.add_argument("--offline-augmentation", type=Path, metavar="CACHE",
+                   help="cache built by 53_two_tower_offline_augment for nested CAD-SEL CV")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--lr", type=float, default=1e-4)
     p.add_argument("--weight-decay", type=float, default=1e-4,
@@ -560,6 +612,8 @@ def main() -> None:
         raise SystemExit("--ogm-alpha needs --grad-accum 1")
     if args.warm_start and (args.external_test_centres or args.paired_only or args.input_variant):
         raise SystemExit("--warm-start needs the single-modality runs' own k-fold splits and inputs")
+    if args.align_weight > 0 and (len(args.mods) != 2 or args.aux_weight > 0 or args.ogm_alpha > 0):
+        raise SystemExit("--align-weight needs two modalities and no --aux-weight / --ogm-alpha")
     if args.frozen_towers and not args.warm_start:
         raise SystemExit("--frozen-towers keeps warm-started towers fixed; add --warm-start")
     if args.eus_backbone == args.backbone:
@@ -568,6 +622,28 @@ def main() -> None:
         raise SystemExit("--eus-backbone needs a two-tower run with an EUS stream (EUS-only: use --backbone)")
     args.tower_backbones = {m: args.eus_backbone if m == "EUS" and args.eus_backbone else args.backbone
                             for m in args.mods}
+    args.offline_cache = None
+    offline_tag = ""
+    if args.offline_augmentation is not None:
+        if (args.dataset != "cadsel" or args.inner_val_fraction != INNER_FRACTION
+                or args.n_splits != N_FOLDS or args.seed not in SEEDS):
+            raise SystemExit("--offline-augmentation needs CAD-SEL, 5 folds, --inner-val-fraction 0.2 "
+                             "and seed 42, 123 or 7")
+        if (args.warm_start or args.paired_only or args.external_test_centres or args.input_variant
+                or args.bg_remove_prob != 0):
+            raise SystemExit("--offline-augmentation is incompatible with warm starts, paired-only filtering, "
+                             "held-out centres, input variants and background removal")
+    samples = args.spec.manifest()
+    if args.offline_augmentation is not None:
+        try:
+            args.offline_cache = OfflineAugmentation(
+                args.offline_augmentation, samples, seed=args.seed, img_size=args.img_size,
+                lesion_crop=args.lesion_crop,
+            )
+        except (OSError, ValueError, KeyError) as exc:
+            raise SystemExit(f"--offline-augmentation: {exc}") from exc
+        offline_tag = (f"__offlineaug{RECIPE}-{args.offline_cache.factor}x-i{args.img_size}-"
+                       f"{args.offline_cache.cache_id[:16]}")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -596,6 +672,8 @@ def main() -> None:
         f"{'' if not args.eus_backbone else '__eus-' + args.eus_backbone}"
         f"{'__warmstart' if args.warm_start else ''}"
         f"{'__frozentowers' if args.frozen_towers else ''}"
+        f"{'' if args.align_weight == 0 else f'__align{args.align_weight:g}'}"
+        f"{offline_tag}"
         f"{'__keep1' if len(args.mods) == 2 else ''}"
         f"__s{args.seed}"
     )
@@ -603,7 +681,8 @@ def main() -> None:
     args.single_runs = None
     if args.warm_start:
         head = run_name
-        for tag in ("__warmstart", "__frozentowers", "__keep1", f"__eus-{args.eus_backbone}"):
+        for tag in ("__warmstart", "__frozentowers", "__keep1", f"__eus-{args.eus_backbone}",
+                    f"__align{args.align_weight:g}"):
             head = head.replace(tag, "")
         head, seed_tail = head.rsplit("__s", 1)
         prefix = f"joint_{args.backbone}__"
@@ -619,7 +698,6 @@ def main() -> None:
     ckpt_dir = (args.output_dir / run_name) if args.save_checkpoint else None
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    samples = args.spec.manifest()
     if args.paired_only:
         have = {}
         for s in samples:
@@ -687,7 +765,9 @@ def main() -> None:
             "input_variant": args.input_variant, "aux_weight": args.aux_weight, "ogm_alpha": args.ogm_alpha,
             "warm_start_from": args.single_runs,
             "eus_backbone": args.eus_backbone, "tower_backbones": args.tower_backbones,
-            "frozen_towers": args.frozen_towers,
+            "frozen_towers": args.frozen_towers, "align_weight": args.align_weight,
+            "align": ({"dim": ALIGN_DIM, "temperature": ALIGN_TEMP, "queue": ALIGN_QUEUE}
+                      if args.align_weight > 0 else None),
             "batch_size": args.batch_size, "grad_accum": args.grad_accum,
             "n_splits": args.n_splits, "seed": args.seed,
             "paired_only": args.paired_only, "n_patients": n_patients,
@@ -703,6 +783,13 @@ def main() -> None:
             "folds": fold_results,
             "elapsed_sec": round(sum(f.get("elapsed_sec", 0.0) for f in fold_results), 1),
         }
+        if args.offline_cache is not None:
+            result["offline_augmentation"] = {
+                "recipe": RECIPE,
+                "factor": args.offline_cache.factor,
+                "cache_sha256": args.offline_cache.cache_id,
+                "cnn_normalization": "imagenet",
+            }
         out_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
         return result
 

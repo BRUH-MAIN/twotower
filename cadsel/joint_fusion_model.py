@@ -249,9 +249,11 @@ def tower_normalizers(backbone: str = "efficientnet_b0", modalities=None, modali
     return {m: make_classification_normalizer(*stats) for m in modalities}
 
 
-def model_normalizers(tower_backbones: dict, modality_stats=None) -> dict:
+def model_normalizers(tower_backbones: dict, modality_stats=None, *, imagenet_for_modality=False) -> dict:
     """``tower_normalizers`` per modality when the towers differ:
     ``tower_backbones`` maps each modality to its tower backbone."""
+    if imagenet_for_modality:
+        modality_stats = {m: (IMAGENET_MEAN, IMAGENET_STD) for m in tower_backbones}
     return {m: tower_normalizers(b, [m], modality_stats)[m] for m, b in tower_backbones.items()}
 
 
@@ -268,7 +270,7 @@ class JointTwoTowerModel(nn.Module):
                  fusion: str = "gated", modality_dropout: float = 0.3,
                  dropout: float = 0.3, unfreeze_last_n: int = 4, modalities=None,
                  aux_heads: bool = False, aux_detach: bool = False,
-                 tower_backbones: dict | None = None) -> None:
+                 tower_backbones: dict | None = None, align_dim: int = 0) -> None:
         super().__init__()
         self.backbone_name = backbone
         # one tower per modality; a single modality gives the single-backbone model
@@ -284,7 +286,7 @@ class JointTwoTowerModel(nn.Module):
         self.head = FusionHead(
             self.feat_dims, n_classes,
             modality_dropout=modality_dropout, fusion=fusion, dropout=dropout,
-            modalities=self.modalities, aux_heads=aux_heads, aux_detach=aux_detach,
+            modalities=self.modalities, aux_heads=aux_heads, aux_detach=aux_detach, align_dim=align_dim,
         )
 
     def tower_parameters(self, modality: str):
@@ -294,7 +296,7 @@ class JointTwoTowerModel(nn.Module):
         yield from self.head.encoders[modality].parameters()
 
     def forward(self, images: dict[str, torch.Tensor], masks: dict[str, torch.Tensor],
-                return_aux: bool = False):
+                return_aux: bool = False, return_embed: bool = False):
         """``images[modality]``: (B, T, C, H, W) float, already normalised.
         ``masks[modality]``: (B, T), 1 for a real frame, 0 for padding.
 
@@ -318,4 +320,4 @@ class JointTwoTowerModel(nn.Module):
                 feats[real] = out.to(feats.dtype)
             batch[modality] = feats.reshape(B, T, -1) * mask.unsqueeze(-1)
             batch[f"{modality}_mask"] = mask
-        return self.head(batch, return_aux=return_aux)
+        return self.head(batch, return_aux=return_aux, return_embed=return_embed)
